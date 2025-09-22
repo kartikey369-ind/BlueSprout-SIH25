@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BlueSprout</title>
+  <link rel="icon" type="image/x-icon" href="dropp.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet" />
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <style>
+    /* Reset */
+    * {
+      padding: 0;
+      margin: 0;
+      border: none;
+      text-decoration: none;
+      font-family: "Fredoka", sans-serif;
+      letter-spacing: 1px;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f0f8ff; /* light background below hero */
+      color: #222;
+      scroll-behavior: smooth;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Navigation */
+    .navbar {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between; /* logo left, menu right */
+  align-items: center;
+  padding: 0 20px; /* slight inset from edges */
+  width: 100%;
+}
+
+.nav-logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo i {
+  color: rgb(0, 225, 225);
+  font-size: 2rem;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+.nav-link {
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s;
+}
+
+
+
+
+.nav-link:hover,
+.nav-link.active {
+  color: rgb(0, 225, 225);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(0, 225, 225);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+
+
+.mobile-menu-btn {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+  .mobile-menu-btn {
+    display: block;
+  }
+}
+
+    /* Hero Section */
+    #hero {
+      background-image: url('img/lake.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding-top: 80px;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.2);
+      z-index: 0;
+    }
+
+    .hero-section-container {
+      background-color: rgba(255, 255, 255, 0.1);
+      width: 85%;
+      max-width: 1000px;
+      border-radius: 30px;
+      border: 2px solid rgba(211, 211, 211, 0.2);
+      backdrop-filter: blur(8px);
+      position: relative;
+      z-index: 1;
+      padding: 20px;
+    }
+
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .left-content-container h3 {
+      font-size: 4rem;
+      letter-spacing: 20px;
+      color: white;
+    }
+
+    .left-content-container h1 {
+      font-size: 5rem;
+      font-weight: 800;
+      display: flex;
+      gap: 5px;
+      color: white;
+    }
+
+    h1 .color-change {
+      color: rgb(0, 225, 225);
+    }
+
+    .left-content-container p {
+      font-size: 1rem;
+      color: rgb(230, 230, 230);
+      line-height: 1.5;
+    }
+
+    .left-content-container p span {
+      font-weight: 600;
+      color: white;
+    }
+
+    .big-cta-btn {
+      margin-top: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 12px 25px;
+      border-radius: 50px;
+      background-color: rgb(0, 225, 225);
+      color: black;
+      cursor: pointer;
+      transition: background-color 0.3s, letter-spacing 0.3s;
+    }
+
+    .big-cta-btn:hover {
+      background-color: white;
+      letter-spacing: 3px;
+    }
+
+    .right-section img {
+      width: 100%;
+      max-width: 300px;
+      filter: drop-shadow(0 0 10px rgb(0, 225, 225))
+              drop-shadow(0 0 20px rgb(0, 225, 225));
+    }
+
+    .image-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: rotatePlanet 60s linear infinite;
+    }
+
+    @keyframes rotatePlanet {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Features Section */
+    .features {
+      padding: 100px 20px;
+      background-color: #f0f8ff;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 3rem;
+      margin-bottom: 60px;
+      color: #0a3d62;
+      font-weight: 700;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+    }
+
+    .feature-card {
+      background: #ffffff;
+      padding: 40px 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      color: #00e1e1;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #0a3d62;
+      font-weight: 600;
+    }
+
+    .feature-card p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .feature-button {
+      background-color: #00e1e1;
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .feature-button:hover {
+      background-color: #00baba;
+      transform: translateY(-3px);
+    }
+
+    /* Fade-in */
+    .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      .hero-content { grid-template-columns: 1fr; }
+      .features { padding: 80px 15px; }
+      .section-title { font-size: 2.5rem; margin-bottom: 40px; }
+      .feature-card { padding: 30px 20px; }
+      .nav-menu { display: none; }
+      .mobile-menu-btn { display: block; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="container nav-container">
+      <!-- Logo slightly inset on left -->
+      <div class="nav-logo"><i class="fas fa-tint"></i> BlueSprout</div>
+  
+      <!-- Navigation menu on right -->
+      <ul class="nav-menu">
+        <li><a href="index.html#hero" class="nav-link active">Home</a></li>
+        <li><a href="index.html#features" class="nav-link">Features</a></li>
+        <li><a href="aiassessment.html" class="nav-link">AI Assessment</a></li>
+        <li><a href="gis.html" class="nav-link">GIS Map</a></li>
+        <li><a href="login.html" class="nav-link">Water Tracker</a></li>
+        <li><a href="index.html#game" class="nav-link">Play Game</a></li>
+        <li><a href="login.html" id="logoutLink" class="nav-link">Login</a></li>
+      </ul>
+      
+  
+      <button class="mobile-menu-btn">☰</button>
+    </div>
+  </nav>
+
+  <!-- Hero Section (unchanged) -->
+  <section id="hero">
+    <div class="hero-section-container">
+      <div class="hero-content">
+        <div class="left-section">
+          <div class="left-content-container">
+            <h3>DROPS TO</h3>
+            <h1>
+              <span>D</span>
+              <span class="color-change">E</span>
+              <span>S</span>
+              <span class="color-change">T</span>
+              <span>I</span>
+              <span class="color-change">N</span>
+              <span>Y</span>
+              
+
+              
+            </h1>
+            <p>
+                <br>
+               <span>Turn your rooftop into a rainwater saver.</span> <br><br>
+                With BlueSprout, you can measure how much rainwater your home can collect, recharge the groundwater beneath you, reduce water bills, and contribute to a sustainable future.        </p>
+            <button class="big-cta-btn" onclick="scrollToSection('features')">Conserve with Us</button>
+          </div>
+        </div>
+        <div class="right-section">
+          <div class="image-wrap">
+            <img src="img/planet.png" alt="planet image" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section (Light UI) -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2 class="section-title fade-in">Our Features</h2>
+      <div class="features-grid">
+        <div class="feature-card fade-in">
+            <div class="feature-icon"><i class="fas fa-robot"></i></div>
+            <h3>AI-Powered Assessment</h3>
+            <p>Upload your rooftop image, get AI-powered recommendations for the best rainwater harvesting system.</p>
+            <button class="feature-button" onclick="window.location.href='aiassessment.html'">Assess Now</button>
+          </div>
+        <div class="feature-card fade-in">
+          <div class="feature-icon"><i class="fas fa-calculator"></i></div>
+          
+          <h3>Manual Assessment</h3>
+          <p>Calculate your rooftop's rainwater harvesting potential based on area, rainfall data, and local conditions.</p>
+          <button class="feature-button" onclick="window.location.href='manualassesment.html'">Calculate Now</button>
+        </div>
+        
+        <div class="feature-card fade-in">
+          <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+          <h3>Water Savings Tracker</h3>
+          <p>Monitor your water conservation progress and see the environmental impact of your efforts.</p>
+          <button class="feature-button" onclick="window.location.href='track.html'">Track Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Fade-in on scroll
+    const faders = document.querySelectorAll('.fade-in');
+    const appearOptions = { threshold: 0.2, rootMargin: "0px 0px -50px 0px" };
+    const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        appearOnScroll.unobserve(entry.target);
+      });
+    }, appearOptions);
+    faders.forEach(fader => { appearOnScroll.observe(fader); });
+
+    // Smooth scroll
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+  <!-- Statistics Section -->
+<section id="statistics" class="stats">
+  <div class="container">
+      <div class="stats-grid fade-in">
+          <div class="stat-item">
+              <h3 class="stat-number" data-target="2100000000">0</h3>
+              <p>People lack access to safely managed drinking water</p>
+          </div>
+          <div class="stat-item">
+              <h3 class="stat-number" data-target="40">0%</h3>
+              <p>Of global population affected by water scarcity</p>
+          </div>
+          <div class="stat-item">
+              <h3 class="stat-number" data-target="80">0%</h3>
+              <p>Of wastewater flows back to ecosystem without treatment</p>
+          </div>
+          <div class="stat-item">
+              <h3 class="stat-number" data-target="30">0%</h3>
+              <p>Water savings possible through rooftop rainwater harvesting</p>
+          </div>
+      </div>
+  </div>
+</section>
+
+<style>
+.stats {
+  background: linear-gradient(135deg, #00e1e1 0%, #a0f0f0 100%); /* richer cyan → light cyan */
+  color: #0a3d62; /* dark blue text */
+  padding: 80px 20px;
+  border-radius: 30px; /* optional: soft rounded edges for section */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08); /* subtle depth */
+}
+
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+  text-align: center;
+}
+
+.stat-item h3 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.stat-item p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Fade-in animation */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stat-item h3 {
+    font-size: 2.2rem;
+  }
+  .stat-item p {
+    font-size: 1rem;
+  }
+}
+</style>
+
+<script>
+  // Fade-in on scroll
+  const fadeElements = document.querySelectorAll('.fade-in');
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        fadeObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  fadeElements.forEach(el => fadeObserver.observe(el));
+
+  // Number counting animation
+  const statNumbers = document.querySelectorAll('.stat-number');
+
+  const statsObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if(!entry.isIntersecting) return;
+
+      const counter = entry.target;
+      const target = Number(counter.getAttribute('data-target'));
+      let count = 0;
+      let step = target / 200; // adjust speed
+
+      const updateCount = () => {
+        count += step;
+        if(count < target){
+          if(target >= 1000000000){
+            counter.innerText = (count/1000000000).toFixed(1) + 'B';
+          } else if(target >= 1000000){
+            counter.innerText = (count/1000000).toFixed(1) + 'M';
+          } else {
+            counter.innerText = Math.floor(count);
+          }
+
+          if(counter.getAttribute('data-target') < 100 && counter.innerText !== '2.1B') {
+            counter.innerText += '%';
+          }
+
+          requestAnimationFrame(updateCount);
+        } else {
+          if(target >= 1000000000){
+            counter.innerText = (target/1000000000).toFixed(1) + 'B';
+          } else if(target >= 1000000){
+            counter.innerText = (target/1000000).toFixed(1) + 'M';
+          } else {
+            counter.innerText = target;
+          }
+
+          if([40,80,30].includes(target)){
+            counter.innerText += '%';
+          }
+        }
+      };
+      updateCount();
+      observer.unobserve(counter);
+    });
+  }, { threshold: 0.5 });
+
+  statNumbers.forEach(num => statsObserver.observe(num));
+</script>
+
+
+
+<!-- Game Section -->
+<!-- Game Section -->
+<section id="game" class="game-section">
+  <div class="container">
+    <div class="game-container">
+
+      <!-- Game Description -->
+      <div class="game-content fade-in">
+        <h2>Learn Through Experience</h2>
+        <p>
+          Catch the rain, beat the challenge, and see if you’re ready for rooftop harvesting!
+        </p>
+      </div>
+
+      <!-- Game Preview -->
+      <div class="game-preview fade-in">
+        <div class="game-icon">
+          <i class="fas fa-gamepad"></i>
+        </div>
+        <h3>Interactive Water Game</h3>
+        <p>Challenge yourself and learn about water conservation in a fun, engaging way!</p>
+        <br>
+        <div class="image-container">
+          <img src="1.jpeg" alt="Game Preview" class="game-image">
+          <button class="play-btn-overlay" onclick="window.open('game.html')">▶ Play Game</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<section><!-- Chatbot Start -->
+  <style>
+    #chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
+      color: white;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0, 225, 225, 0.4);
+      z-index: 1000;
+      border: 3px solid #ffffff;
+      transition: all 0.3s ease;
+      animation: robotPulse 2s infinite;
+    }
+
+    #chat-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(0, 225, 225, 0.6);
+    }
+
+    @keyframes robotPulse {
+      0%, 100% { 
+        box-shadow: 0 6px 20px rgba(0, 225, 225, 0.4);
+      }
+      50% { 
+        box-shadow: 0 6px 20px rgba(0, 225, 225, 0.8), 0 0 0 10px rgba(0, 225, 225, 0.1);
+      }
+    }
+
+    #chat-button::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 8px;
+      background: #00e1e1;
+      border-radius: 10px 10px 0 0;
+      border: 2px solid #ffffff;
+      border-bottom: none;
+    }
+
+    #chat-button::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 6px;
+      background: #00e1e1;
+      border-radius: 0 0 15px 15px;
+      border: 2px solid #ffffff;
+      border-top: none;
+    }
+    #chat-notification {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 20px;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 999;
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 15px rgba(0, 225, 225, 0.3);
+      font-weight: 600;
+    }
+    #chat-popup {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 300px;
+      max-height: 400px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1000;
+    }
+    #chat-header {
+      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    #chat-messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background: #f7f7f7;
+    }
+    .chat-message {
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-size: 14px;
+    }
+    .suggestion {
+      background: #00bcd4;
+      color: white;
+      padding: 8px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      display: inline-block;
+      margin: 5px 2px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .suggestion:hover {
+      background: #0097a7;
+    }
+    #chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+    #userInput {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      font-size: 14px;
+    }
+    #chat-input button {
+      padding: 10px;
+      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    #chat-input button:hover {
+      background: linear-gradient(135deg, #00baba 0%, #009999 100%);
+      transform: translateY(-1px);
+    }
+  </style>
+  
+  <div id="chat-button">🤖</div>
+  <div id="chat-notification">Hey! Any doubt? I'm here!</div>
+  <div id="chat-popup">
+    <div id="chat-header">🤖 BlueSprout Assistant</div>
+    <div id="chat-messages">
+      <div class="chat-message"><strong>BLUEY:</strong> Hi! I'm your BlueSprout assistant. I can help you with rooftop rainwater harvesting, assessments, and water conservation. What would you like to know?</div>
+      <div class="suggestion" onclick="sendMessage('What is BlueSprout?')">What is BlueSprout?</div>
+      <div class="suggestion" onclick="sendMessage('How to assess my rooftop?')">How to assess my rooftop?</div>
+      <div class="suggestion" onclick="sendMessage('What is rainwater harvesting?')">What is rainwater harvesting?</div>
+      <div class="suggestion" onclick="sendMessage('How much water can I collect?')">How much water can I collect?</div>
+      <div class="suggestion" onclick="sendMessage('What are the benefits?')">What are the benefits?</div>
+      <div class="suggestion" onclick="sendMessage('How much does it cost?')">How much does it cost?</div>
+    </div>
+    <div id="chat-input">
+      <input type="text" id="userInput" placeholder="Type your message..." />
+      <button onclick="submitMessage()">Send</button>
+    </div>
+  </div>
+  
+  <script>
+    const chatButton = document.getElementById('chat-button');
+    const chatPopup = document.getElementById('chat-popup');
+    const chatNotification = document.getElementById('chat-notification');
+    const chatMessages = document.getElementById('chat-messages');
+    const userInput = document.getElementById('userInput');
+  
+    window.addEventListener('load', () => {
+      chatNotification.style.opacity = 1;
+      setTimeout(() => {
+        chatNotification.style.opacity = 0;
+        setTimeout(() => { chatNotification.style.display = 'none'; }, 300);
+      }, 4000);
+    });
+  
+    chatButton.addEventListener('click', () => {
+      if(chatPopup.style.display === 'flex') {
+        chatPopup.style.display = 'none';
+      } else {
+        chatPopup.style.display = 'flex';
+      }
+    });
+  
+    function sendMessage(text) {
+      appendMessage('You', text);
+      setTimeout(() => {
+        appendMessage('BLUEY', generateReply(text));
+      }, 500);
+    }
+  
+    function submitMessage() {
+      const text = userInput.value.trim();
+      if(text !== "") {
+        sendMessage(text);
+        userInput.value = '';
+      }
+    }
+  
+    function appendMessage(sender, text) {
+      const msg = document.createElement('div');
+      msg.className = 'chat-message';
+      msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  
+    function generateReply(text) {
+      text = text.toLowerCase();
+      
+      // BlueSprout Platform Questions
+      if(text.includes('bluesprout') || text.includes('what is bluesprout')) {
+        return "BlueSprout is a comprehensive platform for rooftop rainwater harvesting assessment and artificial recharge planning. We help individuals and communities assess their rainwater collection potential, get personalized recommendations, and contribute to groundwater conservation. Our platform includes AI-powered assessments, manual calculations, water tracking, and educational games.";
+      }
+      
+      // Assessment Questions
+      if(text.includes('assess') || text.includes('assessment') || text.includes('rooftop')) {
+        return "You can assess your rooftop in two ways: 1) AI Assessment - Upload a photo of your roof for AI-powered analysis, or 2) Manual Assessment - Enter details like roof area, rainfall data, and location for precise calculations. Both methods provide feasibility analysis, recommended tank sizes, and cost estimates.";
+      }
+      
+      if(text.includes('ai assessment') || text.includes('upload')) {
+        return "Our AI Assessment uses advanced image recognition to analyze your rooftop photo. Simply upload a clear image of your roof, and our AI will identify the roof area, material, slope, and provide recommendations for optimal rainwater harvesting setup. It's quick, accurate, and user-friendly!";
+      }
+      
+      if(text.includes('manual assessment') || text.includes('calculate')) {
+        return "Manual Assessment requires you to input: roof area (m²), annual rainfall (mm), number of dwellers, available open space, and roof material. Our algorithm calculates harvestable volume, recommended tank size, recharge capacity, and provides detailed cost-benefit analysis.";
+      }
+      
+      // Rainwater Harvesting Questions
+      if(text.includes('rainwater harvesting') || text.includes('what is rainwater')) {
+        return "Rainwater harvesting is the collection and storage of rainwater from rooftops, surfaces, or catchments for later use. It helps reduce water bills, provides backup water supply, reduces flooding, and recharges groundwater. Our platform helps you implement this sustainable practice effectively.";
+      }
+      
+      if(text.includes('how much water') || text.includes('water can i collect') || text.includes('capacity')) {
+        return "Water collection depends on roof area, annual rainfall, and runoff coefficient. Formula: Volume = Rainfall(mm) × Roof Area(m²) × Runoff Coefficient × 1000. For example, a 100m² roof in an area with 800mm annual rainfall can collect ~64,000 liters/year (assuming 0.8 runoff coefficient). Use our assessment tools for precise calculations!";
+      }
+      
+      if(text.includes('benefits') || text.includes('advantages') || text.includes('why')) {
+        return "Benefits include: 💧 Reduced water bills (30-50% savings), 🌱 Groundwater recharge, 🏠 Backup water supply, 🌊 Flood reduction, 🌍 Environmental sustainability, 💰 Cost-effective long-term solution, 🏘️ Community water security, and 📈 Increased property value. Our platform helps maximize these benefits!";
+      }
+      
+      if(text.includes('cost') || text.includes('price') || text.includes('expensive')) {
+        return "Costs vary by system size and complexity. Basic systems: ₹15,000-50,000, Medium systems: ₹50,000-1,50,000, Large systems: ₹1,50,000+. Factors include tank size, filtration, plumbing, and installation. Our platform provides detailed cost estimates and payback period calculations. Most systems pay for themselves in 3-5 years through water savings.";
+      }
+      
+      // Technical Questions
+      if(text.includes('tank size') || text.includes('storage')) {
+        return "Tank size depends on roof area, rainfall, and usage patterns. General rule: 60% of annual harvestable volume. For a 100m² roof with 800mm rainfall, recommended tank size is ~38,400 liters. Our assessment tools calculate optimal tank size based on your specific conditions and usage needs.";
+      }
+      
+      if(text.includes('recharge') || text.includes('groundwater') || text.includes('artificial')) {
+        return "Artificial recharge involves directing rainwater to recharge pits, trenches, or shafts to replenish groundwater. Benefits include improved water table levels, reduced flooding, and sustainable water management. Our platform calculates recharge capacity and recommends appropriate structures based on soil type and available space.";
+      }
+      
+      if(text.includes('maintenance') || text.includes('care') || text.includes('clean')) {
+        return "Regular maintenance includes: cleaning gutters monthly, inspecting tanks quarterly, checking filters, monitoring water quality, repairing leaks immediately, and cleaning first-flush diverters. Our water tracker helps monitor system performance and maintenance schedules.";
+      }
+      
+      if(text.includes('filter') || text.includes('quality') || text.includes('safe')) {
+        return "Water quality depends on roof material, environment, and filtration. Use first-flush diverters, mesh filters, and sand/charcoal filters. For drinking water, add UV treatment or reverse osmosis. Our platform provides water quality guidelines and filtration recommendations based on your location and usage.";
+      }
+      
+      // Game and Education
+      if(text.includes('game') || text.includes('play') || text.includes('learn')) {
+        return "Our interactive Rain Catcher game teaches water conservation through fun gameplay! Catch raindrops, avoid acid rain, build combos, and level up while learning about rainwater harvesting. It's educational, engaging, and helps spread awareness about water conservation. Try it out!";
+      }
+      
+      if(text.includes('track') || text.includes('monitor') || text.includes('progress')) {
+        return "Our Water Tracker helps you monitor your water savings, track environmental impact, set conservation goals, and measure the effectiveness of your rainwater harvesting system. It provides detailed analytics and helps optimize your water usage patterns.";
+      }
+      
+      // Location and Feasibility
+      if(text.includes('feasible') || text.includes('suitable') || text.includes('possible')) {
+        return "Most rooftops are suitable for rainwater harvesting! Key factors: roof area (minimum 20m²), rainfall (minimum 400mm annually), roof material (metal, tile, concrete work best), and local regulations. Our assessment tools evaluate feasibility and provide specific recommendations for your location.";
+      }
+      
+      if(text.includes('location') || text.includes('area') || text.includes('region')) {
+        return "BlueSprout works across India and supports regional languages for better accessibility. We use local rainfall data, groundwater information, and regional guidelines to provide accurate assessments. Our platform adapts to different climatic conditions and local water management practices.";
+      }
+      
+      // Contact and Support
+      if(text.includes('contact') || text.includes('help') || text.includes('support')) {
+        return "For additional support, you can: 📧 Contact us through our contact page, 📞 Call our helpline, 💬 Continue chatting with me, 📚 Check our FAQ section, or 📖 Download our comprehensive guides. We're here to help you succeed with rainwater harvesting!";
+      }
+      
+      if(text.includes('guide') || text.includes('manual') || text.includes('pdf')) {
+        return "We provide comprehensive guides: 'Rooftop Rainwater Guide' and 'Rainwater Harvesting Manual' available for download. These cover everything from basic concepts to advanced implementation, maintenance, and troubleshooting. Perfect for DIY enthusiasts and professionals alike!";
+      }
+      
+      // Default response
+      return "I'm here to help with all your rainwater harvesting questions! Try asking about assessments, costs, benefits, maintenance, or any specific concerns. You can also use our AI Assessment, Manual Assessment, or Water Tracker tools for detailed analysis. What else would you like to know?";
+    }
+  </script>
+  <!-- Chatbot End --></section>
+
+<style>
+/* Game Section */
+.game-section {
+  padding: 100px 20px;
+  background: #f0f8ff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.game-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center; /* changed from start to center to reduce space */
+}
+
+.game-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #0a3d62;
+}
+
+.game-content p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.game-preview {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px 20px; /* reduced padding to remove extra space */
+  text-align: center;
+  border: 3px dashed #00e1e1;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-preview:hover {
+  transform: scale(1.02);
+}
+
+.game-icon {
+  font-size: 4rem;
+  color: #00e1e1;
+  margin-bottom: 20px;
+  animation: bounce 2s infinite;
+}
+
+.game-preview h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #0a3d62;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px; /* adjusted max-width */
+  margin: 0 auto; /* remove extra top margin */
+}
+
+.game-image {
+  width: 100%;
+  border-radius: 15px;
+  display: block;
+  box-shadow: 0 5px 15px rgba(0, 225, 225, 0.3);
+}
+
+.play-btn-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 225, 225, 0.95);
+  color: white;
+  border: none;
+  padding: 12px 24px;  /* smaller padding */
+  border-radius: 40px;  /* slightly smaller rounding */
+  font-size: 1rem;      /* smaller font */
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.play-btn-overlay:hover {
+  background: rgba(0, 186, 186, 0.95);
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+
+/* Bounce animation */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-8px); }
+  60% { transform: translateY(-4px); }
+}
+
+/* Fade-in */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .game-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .game-preview {
+    padding: 20px;
+  }
+  .game-content h2 {
+    font-size: 2rem;
+  }
+}
+</style>
+
+<script>
+// Fade-in animation on scroll
+document.addEventListener("DOMContentLoaded", () => {
+  const faders = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  faders.forEach(fader => observer.observe(fader));
+});
+</script>
+
+
+
+<!-- Tips Section -->
+<section id="tips" class="tips">
+  <div class="container">
+      <h2 class="section-title fade-in">Rooftop Rainwater Harvesting Tips</h2>
+      <div class="tips-grid">
+          <div class="flip-card fade-in">
+              <div class="flip-card-inner">
+                  <div class="flip-card-front">
+                      <div class="tip-icon"><i class="fas fa-home"></i></div>
+                      <h4>Check Your Roof</h4>
+                      <p>Basic roof assessment for rainwater collection</p>
+                  </div>
+                  <div class="flip-card-back">
+              <h4><i class="fas fa-home"></i> Check Your Roof</h4>
+                      <ul>
+                          <li>Ensure your rooftop is suitable for rainwater collection</li>
+                          <li>Keep it clean and free of debris to maximize water quality</li>
+                          <li>Check for cracks, leaks, or structural issues</li>
+                          <li>Consider roof material - metal, tile, or concrete work best</li>
+                          <li>Ensure proper slope for water runoff</li>
+                      </ul>
+          </div>
+              </div>
+          </div>
+          
+          <div class="flip-card fade-in">
+              <div class="flip-card-inner">
+                  <div class="flip-card-front">
+                      <div class="tip-icon"><i class="fas fa-seedling"></i></div>
+                      <h4>Maintain Gutters & Pipes</h4>
+                      <p>Keep your collection system clean</p>
+                  </div>
+                  <div class="flip-card-back">
+              <h4><i class="fas fa-seedling"></i> Maintain Gutters & Pipes</h4>
+                      <ul>
+                          <li>Regularly clean and inspect gutters, downspouts, and storage tanks</li>
+                          <li>Prevent blockages and contamination</li>
+                          <li>Install gutter guards to reduce debris</li>
+                          <li>Check for rust or corrosion in metal components</li>
+                          <li>Ensure proper drainage and flow</li>
+                      </ul>
+          </div>
+              </div>
+          </div>
+          
+          <div class="flip-card fade-in">
+              <div class="flip-card-inner">
+                  <div class="flip-card-front">
+                      <div class="tip-icon"><i class="fas fa-shower"></i></div>
+                      <h4>Collect Rainwater Efficiently</h4>
+                      <p>Optimize your collection system</p>
+                  </div>
+                  <div class="flip-card-back">
+              <h4><i class="fas fa-shower"></i> Collect Rainwater Efficiently</h4>
+                      <ul>
+                          <li>Install tanks or barrels to capture rainwater from your rooftop</li>
+                          <li>Use first-flush diverters to remove dust and dirt from initial rainfall</li>
+                          <li>Calculate optimal tank size based on roof area and rainfall</li>
+                          <li>Install overflow systems for excess water</li>
+                          <li>Consider multiple collection points for large roofs</li>
+                      </ul>
+          </div>
+              </div>
+          </div>
+          
+          <div class="flip-card fade-in">
+              <div class="flip-card-inner">
+                  <div class="flip-card-front">
+                      <div class="tip-icon"><i class="fas fa-recycle"></i></div>
+                      <h4>Use Water Wisely</h4>
+                      <p>Maximize your water savings</p>
+                  </div>
+                  <div class="flip-card-back">
+              <h4><i class="fas fa-recycle"></i> Use Water Wisely</h4>
+                      <ul>
+                          <li>Use collected rainwater for gardening, flushing toilets, cleaning</li>
+                          <li>Install separate plumbing for non-drinking purposes</li>
+                          <li>Consider filtration for potable use if needed</li>
+                          <li>Monitor usage patterns to optimize collection</li>
+                          <li>Implement water-saving fixtures and appliances</li>
+                      </ul>
+          </div>
+              </div>
+          </div>
+          
+          <div class="flip-card fade-in">
+              <div class="flip-card-inner">
+                  <div class="flip-card-front">
+                      <div class="tip-icon"><i class="fas fa-wrench"></i></div>
+                      <h4>Recharge Groundwater</h4>
+                      <p>Help replenish underground water</p>
+                  </div>
+                  <div class="flip-card-back">
+              <h4><i class="fas fa-wrench"></i> Recharge Groundwater</h4>
+                      <ul>
+                          <li>Direct some rainwater to recharge pits, trenches, or soakaways</li>
+                          <li>Help replenish groundwater levels</li>
+                          <li>Install percolation systems in suitable soil areas</li>
+                          <li>Consider borewell recharge for deeper aquifers</li>
+                          <li>Consult local groundwater experts for best practices</li>
+                      </ul>
+          </div>
+              </div>
+          </div>
+          
+          <div class="flip-card fade-in">
+              <div class="flip-card-inner">
+                  <div class="flip-card-front">
+                      <div class="tip-icon"><i class="fas fa-lightbulb"></i></div>
+                      <h4>Monitor & Spread Awareness</h4>
+                      <p>Track progress and inspire others</p>
+                  </div>
+                  <div class="flip-card-back">
+              <h4><i class="fas fa-lightbulb"></i> Monitor & Spread Awareness</h4>
+                      <ul>
+                          <li>Check water storage levels regularly</li>
+                          <li>Clean tanks periodically and repair leaks immediately</li>
+                          <li>Track water savings and environmental impact</li>
+                          <li>Encourage your community to adopt rainwater harvesting</li>
+                          <li>Share success stories and best practices</li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<style>
+/* Tips Section CSS */
+.tips {
+  background: #f0f8ff; /* slightly brighter than white for light UI */
+  padding: 100px 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.8rem;
+  margin-bottom: 50px;
+  color: #0a3d62;
+  font-weight: 700;
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+/* Flip Card Styles */
+.flip-card {
+  background-color: transparent;
+  width: 100%;
+  height: 280px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 25px 20px;
+}
+
+.flip-card-front {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-left: 5px solid #00e1e1;
+  color: #0a3d62;
+}
+
+.flip-card-back {
+  background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
+  color: white;
+  transform: rotateY(180deg);
+  text-align: left;
+}
+
+.tip-icon {
+  font-size: 3rem;
+  color: #00e1e1;
+  margin-bottom: 15px;
+}
+
+.flip-card-front h4 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #0a3d62;
+  font-weight: 600;
+}
+
+.flip-card-front p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.flip-card-back h4 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.flip-card-back h4 i {
+  color: #ffffff;
+  font-size: 1.2rem;
+}
+
+.flip-card-back ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.flip-card-back ul li {
+  color: #ffffff;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  position: relative;
+  padding-left: 20px;
+}
+
+.flip-card-back ul li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+/* Fade-in on scroll */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered animation */
+.flip-card:nth-child(1) { transition-delay: 0.1s; }
+.flip-card:nth-child(2) { transition-delay: 0.2s; }
+.flip-card:nth-child(3) { transition-delay: 0.3s; }
+.flip-card:nth-child(4) { transition-delay: 0.4s; }
+.flip-card:nth-child(5) { transition-delay: 0.5s; }
+.flip-card:nth-child(6) { transition-delay: 0.6s; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tips {
+    padding: 80px 15px;
+  }
+  .section-title {
+    font-size: 2.2rem;
+    margin-bottom: 40px;
+  }
+  .tips-grid {
+    grid-template-columns: 1fr;
+  }
+  .flip-card {
+    height: 250px;
+  }
+  .flip-card-back ul li {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .flip-card {
+    height: 220px;
+  }
+  .tip-icon {
+    font-size: 2.5rem;
+  }
+  .flip-card-front h4 {
+    font-size: 1.2rem;
+  }
+  .flip-card-back h4 {
+    font-size: 1.1rem;
+  }
+}
+</style>
+
+<script>
+// Fade-in animation on scroll
+document.addEventListener("DOMContentLoaded", () => {
+  const faders = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  faders.forEach(fader => observer.observe(fader));
+});
+</script>
+
+
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+
+      <!-- About Section -->
+      <div class="footer-section about">
+        <h3>BlueSprout</h3>
+        <p>Empowering communities to conserve rainwater and manage rooftop water resources effectively. Every rooftop can contribute to a sustainable water future.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html#hero">Home</a></li>
+          <li><a href="index.html#features">Features</a></li>
+          <li><a href="aiassessment.html">AI Assessment</a></li>
+          <li><a href="manualassesment.html">Manual Assessment</a></li>
+          <li><a href="index.html#game">Play our Game</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div class="footer-section">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="1.pdf" target="_blank">Rooftop Rainwater Guide</a></li>
+          <li><a href="2.pdf" target="_blank">Rainwater Harvesting Manual</a></li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div class="footer-section">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="pp.html">Privacy Policy</a></li>
+          <li><a href="ourstory.html">Our Story</a></li>
+
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 BlueSprout. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+/* Footer CSS */
+footer {
+  background: #1a1a2e;
+  color: white;
+  padding: 60px 0 20px 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+/* About section with centered socials */
+footer .footer-section.about .social-links {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.footer-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: rgb(0, 225, 225); /* Accent color */
+}
+
+.footer-section p {
+  line-height: 1.6;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: inline-block;
+}
+
+.footer-section ul li a:hover {
+  color: rgb(0, 225, 225);
+  transform: translateX(5px);
+}
+
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgb(0, 225, 225); /* Accent color */
+  color: white;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+  transform: translateY(-3px);
+  background: #00baba; /* Slightly darker on hover */
+  box-shadow: 0 5px 15px rgba(0, 225, 225, 0.4);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 30px;
+  border-top: 1px solid #333;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .social-links {
+    justify-content: center;
+  }
+}
+</style>
+
+
+
+
+
+
+</body>
+</html>

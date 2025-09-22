@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Savings Tracker - BlueSprout</title>
+    <link rel="icon" type="image/x-icon" href="dropp.png">
+
+    <meta name="description" content="Track your daily water conservation efforts and see the impact of your sustainable practices with interactive visualizations.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <style>
+:root {
+    --primary-cyan: #00bcd4;
+    --primary-dark: #0a192f;
+    --white: #ffffff;
+    --light-gray: #f5f5f5;
+    --dark-gray: #333;
+    --success: #4caf50;
+    --warning: #ff9800;
+    --error: #f44336;
+    --primary-blue: #00bcd4;
+    --secondary-blue: #4fc3f7;
+    --light-blue: rgba(0, 188, 212, 0.1);
+    --text-light: #666;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --space-2: 8px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --font-base: 'Poppins', sans-serif;
+    --font-display: 'Fredoka', sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: all 0.3s ease;
+    --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+    --shadow-md: 0 10px 30px rgba(0,0,0,0.1);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* Reset & Base */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body { 
+    background: linear-gradient(135deg, #ffffff 0%, #00b3cb 100%);
+    min-height: 100vh;
+    color: var(--dark-gray); 
+    line-height: 1.6; 
+    font-family: var(--font-base);
+}
+
+/* Animated Background */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.raindrop {
+    position: absolute;
+    background: rgba(0, 188, 212, 0.1);
+    border-radius: 50%;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+/* Navbar */
+.navbar {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.nav-logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.nav-logo a {
+    color: rgb(0, 225, 225) !important;
+    text-decoration: none;
+}
+
+.nav-logo i {
+  color: rgb(0, 225, 225);
+  font-size: 2rem;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+.nav-link {
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s;
+  text-decoration: none;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: rgb(0, 225, 225);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(0, 225, 225);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.mobile-menu-btn {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+    padding: 8rem 0 4rem;
+    text-align: center;
+    animation: slideInUp 0.8s ease-out;
+}
+
+.hero-content h1 {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-cyan), #4fc3f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.9);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Section Styles */
+.section {
+    padding: 4rem 0;
+}
+
+.bg-light {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+}
+
+.tracker-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    animation: slideInUp 0.8s ease-out;
+    transition: var(--transition);
+}
+
+.tracker-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0, 188, 212, 0.2);
+}
+
+.tracker-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+}
+
+.tracker-card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-4) auto;
+    font-size: 1.5rem;
+    color: white;
+    box-shadow: 0 5px 20px rgba(0, 188, 212, 0.3);
+}
+
+.tracker-value {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: var(--space-2);
+    animation: countUp 1s ease-out;
+}
+
+.tracker-label {
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Progress Section */
+.progress-section {
+    background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(79, 195, 247, 0.05));
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    margin-bottom: var(--space-8);
+    text-align: center;
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-lg);
+}
+
+.progress-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary-blue) 0deg, var(--secondary-blue) 180deg, #e5e7eb 180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-4) auto;
+    position: relative;
+    animation: rotate 2s ease-out;
+    box-shadow: 0 10px 30px rgba(0, 188, 212, 0.2);
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.progress-inner {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--primary-blue);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Forms */
+.savings-form {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: var(--space-8);
+    backdrop-filter: blur(20px);
+    animation: slideInUp 0.8s ease-out;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-6);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-input {
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: var(--transition);
+    background: white;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-cyan);
+    box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.1);
+    transform: translateY(-2px);
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.input-group .form-input {
+    flex: 1;
+}
+
+.input-group .unit {
+    color: var(--text-light);
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 1rem;
+    background: var(--light-blue);
+    border-radius: var(--radius-md);
+    border: 2px solid #e0e0e0;
+}
+
+.text-primary {
+    color: var(--primary-cyan);
+}
+
+.text-success {
+    color: var(--success);
+}
+
+/* Buttons */
+.btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-cyan), #4fc3f7);
+    color: white;
+    box-shadow: 0 5px 20px rgba(0, 188, 212, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 188, 212, 0.4);
+}
+
+.btn-lg {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.2rem;
+}
+
+/* Charts */
+.chart-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: var(--space-8);
+    backdrop-filter: blur(20px);
+    animation: slideInUp 0.8s ease-out;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 300px;
+    margin: var(--space-4) 0;
+}
+
+/* Tips */
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-6);
+}
+
+.tip-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--primary-blue);
+    transition: var(--transition);
+    backdrop-filter: blur(20px);
+}
+
+.tip-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.tip-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--light-blue), rgba(0, 188, 212, 0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-3);
+    color: var(--primary-blue);
+    font-size: 1.2rem;
+    box-shadow: 0 5px 15px rgba(0, 188, 212, 0.2);
+}
+
+.tip-card h4 {
+    color: var(--primary-cyan);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.tip-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.tip-card ul li {
+    padding: 0.5rem 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+/* Achievement Badges */
+.achievement-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--success), #66bb6a);
+    color: white;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    margin: var(--space-1);
+    animation: bounce 0.5s ease-out;
+    box-shadow: 0 3px 15px rgba(76, 175, 80, 0.3);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Motivational Message */
+.motivational-message {
+    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    color: white;
+    padding: var(--space-6);
+    border-radius: var(--radius-xl);
+    text-align: center;
+    margin: var(--space-8) 0;
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(20px);
+}
+
+.motivational-message h3 {
+    margin-bottom: 1rem;
+    color: white;
+}
+
+/* Card */
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(20px);
+    margin: 2rem 0;
+}
+
+/* Footer */
+.footer {
+    background: var(--primary-dark);
+    color: white;
+    padding: 3rem 0 1.5rem;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h3 {
+    color: var(--primary-cyan);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: #ccc;
+    text-decoration: none;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.footer-links a:hover {
+    color: var(--primary-cyan);
+    transform: translateX(5px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ccc;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-menu { 
+        display: none; 
+        flex-direction: column;
+        background: rgba(0, 0, 0, 0.9);
+        position: absolute;
+        top: 80px;
+        right: 20px;
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        min-width: 200px;
+    }
+    
+    .nav-menu.show { 
+        display: flex; 
+    }
+    
+    .mobile-menu-btn { 
+        display: block; 
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+    
+    .hero {
+        padding: 6rem 0 2rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section {
+        padding: 2rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .savings-form, .chart-container, .progress-section {
+        padding: 1.5rem;
+    }
+    
+    .tracker-card {
+        padding: 1.5rem;
+    }
+    
+    .tip-card {
+        padding: 1.5rem;
+    }
+}
+
+/* Accessibility */
+*:focus {
+    outline: 2px solid var(--primary-cyan);
+    outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-animation" id="backgroundAnimation"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+          <!-- Logo slightly inset on left -->
+          <div class="nav-logo"><i class="fas fa-tint"></i> BlueSprout</div>
+      
+          <!-- Navigation menu on right -->
+          <ul id="navMenu" class="nav-menu">
+            <li><a href="index.html#hero" class="nav-link">Home</a></li>
+      <li><a href="index.html#features" class="nav-link">Features</a></li>
+      <li><a href="aiassessment.html" class="nav-link">AI Assessment</a></li>
+      <li><a href="gis.html" class="nav-link">GIS Map</a></li>
+      <li><a href="login.html" class="nav-link">Water Tracker</a></li>
+      <li><a href="index.html#game" class="nav-link">Play Game</a></li>
+      <li><a href="login.html" id="logoutLink" class="nav-link">Login</a></li>
+    
+          </ul>
+          
+      
+          <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+      </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content text-center">
+                <h1>Water Savings Tracker</h1>
+                <p>Monitor your daily water conservation efforts and see the real impact of your sustainable choices. Every small action contributes to a larger change!</p>
+                <li>
+                    <button id="logoutBtn" style="
+                      background: #00bcd4; 
+                      color: white; 
+                      border: none; 
+                      border-radius: 8px; 
+                      padding: 0.5rem 1rem; 
+                      cursor: pointer; 
+                      font-size: 1rem;
+                      font-family: 'Poppins', sans-serif;
+                      transition: 0.3s;
+                    ">
+                      Login
+                    </button>
+                  </li>
+                  
+                  <script>
+                    document.getElementById("logoutBtn").addEventListener("click", () => {
+                      // Example: redirect to a page after logout
+                      window.location.href = "login.html";
+                    });
+                  </script>
+                  
+                <div class="motivational-message" style="max-width: 600px; margin: 2rem auto;">
+                    <h3 style="margin-bottom: 1rem; color: white;">🌟 Every Drop You Save Makes a Difference! 🌟</h3>
+                    <p style="margin: 0; color: rgba(255,255,255,0.9);">
+                        Track your conservation efforts and watch your positive impact grow day by day.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section class="section">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 3rem;">
+                <h2>Your Impact Dashboard</h2>
+                <p>Here's how your water conservation efforts are making a difference</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="tracker-card">
+                    <div class="tracker-card-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="tracker-value" id="total-water-saved">0</div>
+                    <div class="tracker-label">Liters Saved</div>
+                </div>
+                
+                <div class="tracker-card">
+                    <div class="tracker-card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="tracker-value" id="people-served">0</div>
+                    <div class="tracker-label">People Served</div>
+                    <small style="color: var(--text-light); font-size: var(--font-size-xs);">
+                        (Based on 50L/person/day)
+                    </small>
+                </div>
+                
+                <div class="tracker-card">
+                    <div class="tracker-card-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="tracker-value" id="co2-reduced">0</div>
+                    <div class="tracker-label">kg CO₂ Reduced</div>
+                    <small style="color: var(--text-light); font-size: var(--font-size-xs);">
+                        (Water treatment impact)
+                    </small>
+                </div>
+                
+                <div class="tracker-card">
+                    <div class="tracker-card-icon">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="tracker-value" id="cost-saved">0</div>
+                    <div class="tracker-label">Money Saved (₹)</div>
+                    <small style="color: var(--text-light); font-size: var(--font-size-xs);">
+                        (Approximate savings)
+                    </small>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section">
+                <h3 style="margin-bottom: 2rem;">This Month's Goal Progress</h3>
+                <div class="progress-circle">
+                    <div class="progress-inner" id="progress-percentage">0%</div>
+                </div>
+                <p style="margin-top: 1rem;">Keep it up! You're making excellent progress toward your monthly conservation goal.</p>
+                <p style="margin-top: 0.5rem; color: var(--text-light);">
+                    Current streak: <strong id="streakDays">0</strong> days
+                </p>
+                
+                <div id="achievement-badges" style="margin-top: 2rem;">
+                    <!-- Achievement badges will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section class="section">
+        <div class="container">
+            <div class="savings-form">
+                <h2 style="text-align:center; margin-bottom: 1.5rem;">Preferences & Goals</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-bullseye text-primary"></i> Monthly Goal (Liters)</label>
+                        <div class="input-group">
+                            <input type="number" id="monthlyGoal" class="form-input" min="100" step="50" placeholder="e.g., 1000">
+                            <span class="unit">L</span>
+                        </div>
+                        <small style="color: var(--text-light); font-size: var(--font-size-sm);">We use this to track your progress.</small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-indian-rupee-sign text-primary"></i> Water Price (₹/L)</label>
+                        <div class="input-group">
+                            <input type="number" id="pricePerLiter" class="form-input" min="0" step="0.01" placeholder="0.05">
+                            <span class="unit">₹/L</span>
+                        </div>
+                        <small style="color: var(--text-light); font-size: var(--font-size-sm);">Used to estimate money saved.</small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-bell text-primary"></i> Daily Reminder</label>
+                        <div class="input-group">
+                            <input type="time" id="reminderTime" class="form-input">
+                            <button type="button" class="btn btn-primary" id="enableReminder">Enable</button>
+                        </div>
+                        <small style="color: var(--text-light); font-size: var(--font-size-sm);">Get a reminder to log your savings.</small>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top: 1rem;">
+                    <button type="button" class="btn btn-primary" id="exportCsv"><i class="fas fa-file-csv"></i> Export CSV</button>
+                    <button type="button" class="btn btn-primary" id="resetData"><i class="fas fa-trash"></i> Reset Data</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Log Water Savings Section -->
+    <section class="section bg-light">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 3rem;">
+                <h2>Log Today's Water Savings</h2>
+                <p>Record the water you've saved through various conservation activities</p>
+            </div>
+            
+            <form class="savings-form" data-form-type="savings-tracker" id="savingsForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="shorterShowers" class="form-label">
+                            <i class="fas fa-shower text-primary"></i>
+                            Shorter Showers
+                        </label>
+                        <div class="input-group">
+                            <input type="number" id="shorterShowers" name="shorterShowers" 
+                                   class="form-input" min="0" max="500" placeholder="0">
+                            <span class="unit">Liters</span>
+                        </div>
+                        <small style="color: var(--text-light); font-size: var(--font-size-sm);">
+                            Reduced shower time by 2-3 minutes saves ~20-30L
+                        </small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="waterGardening" class="form-label">
+                            <i class="fas fa-seedling text-primary"></i>
+                            Efficient Gardening
+                        </label>
+                        <div class="input-group">
+                            <input type="number" id="waterGardening" name="waterGardening" 
+                                   class="form-input" min="0" max="500" placeholder="0">
+                            <span class="unit">Liters</span>
+                        </div>
+                        <small style="color: var(--text-light); font-size: var(--font-size-sm);">
+                            Using drip irrigation, mulching, or watering at optimal times
+                        </small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="fixedLeaks" class="form-label">
+                            <i class="fas fa-wrench text-primary"></i>
+                            Fixed Leaks
+                        </label>
+                        <div class="input-group">
+                            <input type="number" id="fixedLeaks" name="fixedLeaks" 
+                                   class="form-input" min="0" max="1000" placeholder="0">
+                            <span class="unit">Liters</span>
+                        </div>
+                        <small style="color: var(--text-light); font-size: var(--font-size-sm);">
+                            A dripping tap can waste 15L/day, leaky toilet 200L/day
+                        </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dishwashing" class="form-label">
+                        <i class="fas fa-utensils text-primary"></i>
+                        Efficient Dishwashing
+                    </label>
+                    <div class="input-group">
+                        <input type="number" id="dishwashing" name="dishwashing" 
+                               class="form-input" min="0" max="200" placeholder="0">
+                        <span class="unit">Liters</span>
+                    </div>
+                    <small style="color: var(--text-light); font-size: var(--font-size-sm);">
+                        Using dishwasher efficiently or washing dishes in basin
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="rainwaterCollection" class="form-label">
+                        <i class="fas fa-cloud-rain text-primary"></i>
+                        Rainwater Collection
+                    </label>
+                    <div class="input-group">
+                        <input type="number" id="rainwaterCollection" name="rainwaterCollection" 
+                               class="form-input" min="0" max="1000" placeholder="0">
+                        <span class="unit">Liters</span>
+                    </div>
+                    <small style="color: var(--text-light); font-size: var(--font-size-sm);">
+                        Water collected and reused for plants or cleaning
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="greywater" class="form-label">
+                        <i class="fas fa-recycle text-primary"></i>
+                        Greywater Reuse
+                    </label>
+                    <div class="input-group">
+                        <input type="number" id="greywater" name="greywater" 
+                               class="form-input" min="0" max="300" placeholder="0">
+                        <span class="unit">Liters</span>
+                    </div>
+                    <small style="color: var(--text-light); font-size: var(--font-size-sm);">
+                        Reusing water from washing machine, kitchen, etc.
+                    </small>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus-circle"></i>
+                    Log Water Savings
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Charts Section -->
+<section class="section">
+    <div class="container">
+        <div class="text-center" style="margin-bottom: 3rem;">
+            <h2>Your Progress Over Time</h2>
+            <p>Visualize your water conservation journey</p>
+        </div>
+        
+        <div class="chart-container">
+            <h3 style="text-align: center; margin-bottom: 1rem;">Daily Water Savings (Last 7 Days)</h3>
+            <div class="chart-wrapper">
+                <canvas id="dailyChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h3 style="text-align: center; margin-bottom: 1rem;">Savings by Category (This Month)</h3>
+            <div class="chart-wrapper">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Water Conservation Tips -->
+<section class="section bg-light">
+    <div class="container">
+        <div class="text-center" style="margin-bottom: 3rem;">
+            <h2>Water Conservation Tips</h2>
+            <p>Simple ways to save more water every day</p>
+        </div>
+        
+        <div class="tips-grid">
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-shower"></i>
+                </div>
+                <h4>Bathroom Conservation</h4>
+                <ul>
+                    <li><i class="fas fa-check-circle text-success"></i> Take 5-minute showers instead of baths</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Turn off water while brushing teeth</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Install low-flow showerheads</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Fix leaky faucets immediately</li>
+                </ul>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-kitchen-set"></i>
+                </div>
+                <h4>Kitchen Efficiency</h4>
+                <ul>
+                    <li><i class="fas fa-check-circle text-success"></i> Run dishwasher only when full</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Use a basin for washing dishes</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Keep drinking water in fridge</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Steam vegetables instead of boiling</li>
+                </ul>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h4>Garden & Outdoor</h4>
+                <ul>
+                    <li><i class="fas fa-check-circle text-success"></i> Water plants early morning or evening</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Use mulch to retain moisture</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Choose drought-resistant plants</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Install drip irrigation systems</li>
+                </ul>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-recycle"></i>
+                </div>
+                <h4>Reuse & Recycle</h4>
+                <ul>
+                    <li><i class="fas fa-check-circle text-success"></i> Collect rainwater in containers</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Reuse pasta/rice cooking water for plants</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Use greywater for toilet flushing</li>
+                    <li><i class="fas fa-check-circle text-success"></i> Install water-efficient appliances</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section><!-- Chatbot Start -->
+    <style>
+      #chat-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #00bcd4;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 1000;
+      }
+      #chat-notification {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        background: #00bcd4;
+        color: white;
+        padding: 12px 18px;
+        border-radius: 20px;
+        font-size: 14px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 999;
+      }
+      #chat-popup {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 300px;
+        max-height: 400px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 1000;
+      }
+      #chat-header {
+        background: #00bcd4;
+        color: white;
+        padding: 12px;
+        text-align: center;
+        font-weight: bold;
+      }
+      #chat-messages {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        background: #f7f7f7;
+      }
+      .chat-message {
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        font-size: 14px;
+      }
+      .suggestion {
+        background: #00bcd4;
+        color: white;
+        padding: 8px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        display: inline-block;
+        margin: 5px 2px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .suggestion:hover {
+        background: #0097a7;
+      }
+      #chat-input {
+        display: flex;
+        border-top: 1px solid #ddd;
+      }
+      #userInput {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        font-size: 14px;
+      }
+      #chat-input button {
+        padding: 10px;
+        background: #00bcd4;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
+    
+    <div id="chat-button">💬</div>
+    <div id="chat-notification">Hey! Any doubt? I'm here!</div>
+    <div id="chat-popup">
+      <div id="chat-header">BlueSprout Assistant</div>
+      <div id="chat-messages">
+        <div class="chat-message"><strong>BLUEY:</strong> Hi! I’m here to help you with BlueSprout.</div>
+        <div class="suggestion" onclick="sendMessage('How can I trace my roof?')">How can I trace my roof?</div>
+        <div class="suggestion" onclick="sendMessage('What is rainwater harvesting?')">What is rainwater harvesting?</div>
+        <div class="suggestion" onclick="sendMessage('How do I measure area?')">How do I measure area?</div>
+      </div>
+      <div id="chat-input">
+        <input type="text" id="userInput" placeholder="Type your message..." />
+        <button onclick="submitMessage()">Send</button>
+      </div>
+    </div>
+    
+    <script>
+      const chatButton = document.getElementById('chat-button');
+      const chatPopup = document.getElementById('chat-popup');
+      const chatNotification = document.getElementById('chat-notification');
+      const chatMessages = document.getElementById('chat-messages');
+      const userInput = document.getElementById('userInput');
+    
+      window.addEventListener('load', () => {
+        chatNotification.style.opacity = 1;
+        setTimeout(() => {
+          chatNotification.style.opacity = 0;
+          setTimeout(() => { chatNotification.style.display = 'none'; }, 300);
+        }, 4000);
+      });
+    
+      chatButton.addEventListener('click', () => {
+        if(chatPopup.style.display === 'flex') {
+          chatPopup.style.display = 'none';
+        } else {
+          chatPopup.style.display = 'flex';
+        }
+      });
+    
+      function sendMessage(text) {
+        appendMessage('You', text);
+        setTimeout(() => {
+          appendMessage('BLUEY', generateReply(text));
+        }, 500);
+      }
+    
+      function submitMessage() {
+        const text = userInput.value.trim();
+        if(text !== "") {
+          sendMessage(text);
+          userInput.value = '';
+        }
+      }
+    
+      function appendMessage(sender, text) {
+        const msg = document.createElement('div');
+        msg.className = 'chat-message';
+        msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+        chatMessages.appendChild(msg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    
+      function generateReply(text) {
+        text = text.toLowerCase();
+        if(text.includes('trace')) return "You can trace your rooftop by selecting points on the map.";
+        if(text.includes('rainwater')) return "Rainwater harvesting helps collect and store rainwater from rooftops.";
+        if(text.includes('measure')) return "After tracing, click on 'Calculate Area' to measure your rooftop.";
+        return "Let me check that for you or you can contact us for further assistance!";
+      }
+    </script>
+    <!-- Chatbot End --></section>
+
+<footer>
+    <div class="container">
+      <div class="footer-content">
+  
+        <!-- About Section -->
+        <div class="footer-section about">
+          <h3>BlueSprout</h3>
+          <p>Empowering communities to conserve rainwater and manage rooftop water resources effectively. Every rooftop can contribute to a sustainable water future.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+  
+        <!-- Quick Links -->
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html#hero">Home</a></li>
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="assesment1.html">Manual Assessment</a></li>
+            <li><a href="assesment2.html">AI Assessment</a></li>
+            <li><a href="index.html#game">Play our Game</a></li>
+          </ul>
+        </div>
+  
+        <!-- Resources -->
+        <div class="footer-section">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="1.pdf" target="_blank">Rooftop Rainwater Guide</a></li>
+            <li><a href="2.pdf" target="_blank">Rainwater Harvesting Manual</a></li>
+            <li><a href="https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=1914351" target="_blank">Government Schemes</a></li>
+            <li><a href="https://neer.co.in/rainwater-harvesting-success-stories-from-around-the-globe/" target="_blank">Success Stories</a></li>
+          </ul>
+        </div>
+  
+        <!-- Support -->
+        <div class="footer-section">
+          <h3>Support</h3>
+          <ul>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQs</a></li>
+            <li><a href="pp.html">Privacy Policy</a></li>
+            <li><a href="ourstory.html">Our Story</a></li>
+
+          </ul>
+        </div>
+  
+      </div>
+  
+      <div class="footer-bottom">
+        <p>&copy; 2025 BlueSprout. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <style>
+    /* Footer CSS */
+    footer {
+      background: #1a1a2e;
+      color: white;
+      padding: 60px 0 20px 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    /* About section with centered socials */
+    footer .footer-section.about .social-links {
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: left;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .footer-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: rgb(0, 225, 225); /* Accent color */
+    }
+    
+    .footer-section p {
+      line-height: 1.6;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+    
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .footer-section ul li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-section ul li a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: inline-block;
+    }
+    
+    .footer-section ul li a:hover {
+      color: rgb(0, 225, 225);
+      transform: translateX(5px);
+    }
+    
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgb(0, 225, 225); /* Accent color */
+      color: white;
+      border-radius: 50%;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      transform: translateY(-3px);
+      background: #00baba; /* Slightly darker on hover */
+      box-shadow: 0 5px 15px rgba(0, 225, 225, 0.4);
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid #333;
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive Footer */
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    
+      .social-links {
+        justify-content: center;
+      }
+    }
+    </style>
+
+<script>
+    // Water Savings Tracker JavaScript
+    class WaterTracker {
+        constructor() {
+            this.data = this.loadData();
+            this.monthlyGoal = 1000; // liters
+            this.init();
+        }
+
+        init() {
+            this.updateDashboard();
+            this.createCharts();
+            this.createAnimatedBackground();
+            this.bindEvents();
+            this.updateAchievements();
+        }
+
+        loadData() {
+            const stored = localStorage.getItem('waterSavingsData');
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            return {
+                totalSaved: 0,
+                dailyRecords: [],
+                categoryTotals: {
+                    shorterShowers: 0,
+                    waterGardening: 0,
+                    fixedLeaks: 0,
+                    dishwashing: 0,
+                    rainwaterCollection: 0,
+                    greywater: 0
+                },
+                achievements: []
+            };
+        }
+
+        saveData() {
+            localStorage.setItem('waterSavingsData', JSON.stringify(this.data));
+        }
+
+        updateDashboard() {
+            // Animate counters
+            this.animateCounter('total-water-saved', this.data.totalSaved);
+            this.animateCounter('people-served', Math.floor(this.data.totalSaved / 50));
+            const co2 = Number((this.data.totalSaved * 0.002).toFixed(1));
+            this.animateCounter('co2-reduced', co2);
+            const pricePerL = Number(localStorage.getItem('pricePerLiter') || 0.05);
+            this.animateCounter('cost-saved', Math.floor(this.data.totalSaved * pricePerL));
+
+            // Update progress
+            const goal = Number(localStorage.getItem('monthlyGoal') || this.monthlyGoal);
+            const progressPercentage = Math.min((this.data.totalSaved / goal) * 100, 100);
+            document.getElementById('progress-percentage').textContent = Math.floor(progressPercentage) + '%';
+            
+            // Update progress circle
+            const progressCircle = document.querySelector('.progress-circle');
+            const angle = (progressPercentage / 100) * 360;
+            progressCircle.style.background = `conic-gradient(var(--primary-blue) ${angle}deg, #e5e7eb ${angle}deg)`;
+            // Update streak
+            document.getElementById('streakDays').textContent = this.calculateStreak();
+        }
+
+        animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const currentValue = parseInt(element.textContent) || 0;
+            const increment = Math.ceil((targetValue - currentValue) / 50);
+            
+            if (currentValue < targetValue) {
+                element.textContent = Math.min(currentValue + increment, targetValue);
+                setTimeout(() => this.animateCounter(elementId, targetValue), 30);
+            }
+        }
+
+        bindEvents() {
+            // Form submission
+            document.getElementById('savingsForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.logSavings();
+            });
+
+            // Mobile menu
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const navMenu = document.getElementById('navMenu');
+            if (mobileBtn && navMenu) {
+                mobileBtn.addEventListener('click', () => navMenu.classList.toggle('show'));
+                document.addEventListener('click', (e) => {
+                    if (!mobileBtn.contains(e.target) && !navMenu.contains(e.target)) navMenu.classList.remove('show');
+                });
+            }
+
+            // Preferences
+            const goalInput = document.getElementById('monthlyGoal');
+            const priceInput = document.getElementById('pricePerLiter');
+            goalInput.value = localStorage.getItem('monthlyGoal') || this.monthlyGoal;
+            priceInput.value = localStorage.getItem('pricePerLiter') || 0.05;
+            goalInput.addEventListener('change', () => { localStorage.setItem('monthlyGoal', goalInput.value); this.updateDashboard(); });
+            priceInput.addEventListener('change', () => { localStorage.setItem('pricePerLiter', priceInput.value); this.updateDashboard(); });
+
+            // CSV Export
+            document.getElementById('exportCsv').addEventListener('click', () => this.exportCsv());
+            // Reset Data
+            document.getElementById('resetData').addEventListener('click', () => this.resetData());
+
+            // Reminder
+            document.getElementById('enableReminder').addEventListener('click', () => this.enableReminder());
+        }
+
+        logSavings() {
+            const form = document.getElementById('savingsForm');
+            const formData = new FormData(form);
+            const today = new Date().toISOString().split('T')[0];
+            
+            let dailyTotal = 0;
+            const dailyRecord = { date: today, categories: {} };
+
+            // Process each category
+            for (let [key, value] of formData.entries()) {
+                const amount = parseInt(value) || 0;
+                dailyTotal += amount;
+                this.data.categoryTotals[key] = (this.data.categoryTotals[key] || 0) + amount;
+                dailyRecord.categories[key] = amount;
+            }
+
+            if (dailyTotal > 0) {
+                this.data.totalSaved += dailyTotal;
+                
+                // Update or add daily record
+                const existingRecordIndex = this.data.dailyRecords.findIndex(record => record.date === today);
+                if (existingRecordIndex >= 0) {
+                    this.data.dailyRecords[existingRecordIndex] = dailyRecord;
+                } else {
+                    this.data.dailyRecords.push(dailyRecord);
+                }
+
+                // Keep only last 30 days
+                if (this.data.dailyRecords.length > 30) {
+                    this.data.dailyRecords = this.data.dailyRecords.slice(-30);
+                }
+
+                this.saveData();
+                this.updateDashboard();
+                this.updateCharts();
+                this.checkAchievements(dailyTotal);
+                this.updateStreak(today, dailyTotal);
+                
+                // Show success message
+                this.showSuccessMessage(`Great! You've logged ${dailyTotal} liters saved today! 🎉`);
+                form.reset();
+            } else {
+                this.showErrorMessage('Please enter at least one water saving amount.');
+            }
+        }
+
+        calculateStreak() {
+            // Count consecutive days from today backwards with any logged total > 0
+            let streak = 0;
+            for (let i = 0; i < 365; i++) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const ds = d.toISOString().split('T')[0];
+                const rec = this.data.dailyRecords.find(r => r.date === ds);
+                const total = rec ? Object.values(rec.categories).reduce((s, v) => s + v, 0) : 0;
+                if (total > 0) streak++; else break;
+            }
+            return streak;
+        }
+
+        updateStreak(today, dailyTotal) {
+            // Ensure today's record exists for streak calculation
+            if (dailyTotal > 0) {
+                // Already handled in logSavings via dailyRecords update
+                document.getElementById('streakDays').textContent = this.calculateStreak();
+            }
+        }
+
+        exportCsv() {
+            const rows = [['Date','Shorter Showers','Efficient Gardening','Fixed Leaks','Dishwashing','Rainwater Collection','Greywater','Total']];
+            this.data.dailyRecords.forEach(r => {
+                const total = Object.values(r.categories).reduce((s,v)=>s+v,0);
+                rows.push([
+                    r.date,
+                    r.categories.shorterShowers||0,
+                    r.categories.waterGardening||0,
+                    r.categories.fixedLeaks||0,
+                    r.categories.dishwashing||0,
+                    r.categories.rainwaterCollection||0,
+                    r.categories.greywater||0,
+                    total
+                ]);
+            });
+            const csv = rows.map(r => r.join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'water_savings.csv'; a.click(); URL.revokeObjectURL(url);
+        }
+
+        resetData() {
+            if (!confirm('This will clear all your saved data. Continue?')) return;
+            localStorage.removeItem('waterSavingsData');
+            this.data = this.loadData();
+            this.saveData();
+            this.updateDashboard();
+            this.updateCharts();
+            this.updateAchievements();
+            this.showSuccessMessage('All data has been reset.');
+        }
+
+        enableReminder() {
+            const time = document.getElementById('reminderTime').value;
+            if (!time) { this.showErrorMessage('Please choose a time for reminder.'); return; }
+            localStorage.setItem('reminderTime', time);
+            this.showSuccessMessage('Daily reminder set. Your browser may prompt for notification permission.');
+            if ('Notification' in window) {
+                Notification.requestPermission().then((perm) => {
+                    if (perm === 'granted') this.scheduleReminder(time);
+                });
+            }
+        }
+
+        scheduleReminder(time) {
+            // Lightweight: check every minute and show notification at set time
+            if (this._reminderInterval) clearInterval(this._reminderInterval);
+            this._reminderInterval = setInterval(() => {
+                const now = new Date();
+                const hh = String(now.getHours()).padStart(2,'0');
+                const mm = String(now.getMinutes()).padStart(2,'0');
+                const set = localStorage.getItem('reminderTime');
+                if (set && `${hh}:${mm}` === set) {
+                    if ('Notification' in window && Notification.permission === 'granted') {
+                        new Notification('BlueSprout', { body: 'Time to log your water savings today!' });
+                    } else {
+                        this.showMessage('Time to log your water savings today!', 'success');
+                    }
+                }
+            }, 60000);
+        }
+
+        checkAchievements(dailyTotal) {
+            const achievements = [
+                { id: 'first_log', name: 'First Drop', description: 'Logged your first water savings!', condition: () => this.data.totalSaved > 0 },
+                { id: 'daily_hero', name: 'Daily Hero', description: 'Saved over 50L in a single day!', condition: () => dailyTotal >= 50 },
+                { id: 'water_warrior', name: 'Water Warrior', description: 'Total savings reached 500L!', condition: () => this.data.totalSaved >= 500 },
+                { id: 'conservation_champion', name: 'Conservation Champion', description: 'Total savings reached 1000L!', condition: () => this.data.totalSaved >= 1000 },
+                { id: 'eco_legend', name: 'Eco Legend', description: 'Total savings reached 2500L!', condition: () => this.data.totalSaved >= 2500 }
+            ];
+
+            achievements.forEach(achievement => {
+                if (achievement.condition() && !this.data.achievements.includes(achievement.id)) {
+                    this.data.achievements.push(achievement.id);
+                    this.showAchievement(achievement);
+                }
+            });
+
+            this.updateAchievements();
+        }
+
+        updateAchievements() {
+            const container = document.getElementById('achievement-badges');
+            container.innerHTML = '';
+
+            const achievements = {
+                'first_log': { name: '🚰 First Drop', description: 'Logged first savings!' },
+                'daily_hero': { name: '🌟 Daily Hero', description: 'Saved 50L+ in one day!' },
+                'water_warrior': { name: '⚔️ Water Warrior', description: 'Reached 500L total!' },
+                'conservation_champion': { name: '🏆 Conservation Champion', description: 'Reached 1000L total!' },
+                'eco_legend': { name: '👑 Eco Legend', description: 'Reached 2500L total!' }
+            };
+
+            this.data.achievements.forEach(achievementId => {
+                const achievement = achievements[achievementId];
+                if (achievement) {
+                    const badge = document.createElement('span');
+                    badge.className = 'achievement-badge';
+                    badge.innerHTML = `${achievement.name}<br><small>${achievement.description}</small>`;
+                    container.appendChild(badge);
+                }
+            });
+        }
+
+        showAchievement(achievement) {
+            // Create achievement notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, var(--success), #66bb6a);
+                color: white;
+                padding: 2rem;
+                border-radius: 1rem;
+                text-align: center;
+                z-index: 10000;
+                animation: achievementPop 3s ease-out;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            `;
+            notification.innerHTML = `
+                <h3>🎉 Achievement Unlocked! 🎉</h3>
+                <h4>${achievement.name}</h4>
+                <p>${achievement.description}</p>
+            `;
+            
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+
+            // Add CSS for achievement animation
+            if (!document.getElementById('achievement-styles')) {
+                const style = document.createElement('style');
+                style.id = 'achievement-styles';
+                style.textContent = `
+                    @keyframes achievementPop {
+                        0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+                        20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+                        100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        createCharts() {
+            this.createDailyChart();
+            this.createCategoryChart();
+        }
+
+        createDailyChart() {
+            const ctx = document.getElementById('dailyChart').getContext('2d');
+            const last7Days = this.getLast7Days();
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: last7Days.map(record => {
+                        const date = new Date(record.date);
+                        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                    }),
+                    datasets: [{
+                        label: 'Water Saved (Liters)',
+                        data: last7Days.map(record => record.total),
+                        borderColor: 'rgb(0, 188, 212)',
+                        backgroundColor: 'rgba(0, 188, 212, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        createCategoryChart() {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            
+            const categoryLabels = {
+                shorterShowers: 'Shorter Showers',
+                waterGardening: 'Efficient Gardening',
+                fixedLeaks: 'Fixed Leaks',
+                dishwashing: 'Efficient Dishwashing',
+                rainwaterCollection: 'Rainwater Collection',
+                greywater: 'Greywater Reuse'
+            };
+
+            const data = Object.entries(this.data.categoryTotals)
+                .filter(([key, value]) => value > 0)
+                .map(([key, value]) => ({
+                    label: categoryLabels[key],
+                    value: value
+                }));
+
+            if (data.length > 0) {
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.map(item => item.label),
+                        datasets: [{
+                            data: data.map(item => item.value),
+                            backgroundColor: [
+                                'rgb(0, 188, 212)',
+                                'rgb(79, 195, 247)',
+                                'rgb(76, 175, 80)',
+                                'rgb(255, 152, 0)',
+                                'rgb(156, 39, 176)',
+                                'rgb(233, 30, 99)'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            } else {
+                ctx.canvas.parentElement.innerHTML = '<p style="text-align: center; color: var(--text-light); margin-top: 2rem;">No data to display yet. Start logging your water savings!</p>';
+            }
+        }
+
+        updateCharts() {
+            // Destroy existing charts and recreate them
+            Chart.getChart('dailyChart')?.destroy();
+            Chart.getChart('categoryChart')?.destroy();
+            this.createCharts();
+        }
+
+        getLast7Days() {
+            const result = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                
+                const record = this.data.dailyRecords.find(r => r.date === dateStr);
+                const total = record ? Object.values(record.categories).reduce((sum, val) => sum + val, 0) : 0;
+                
+                result.push({
+                    date: dateStr,
+                    total: total
+                });
+            }
+            return result;
+        }
+
+        createAnimatedBackground() {
+            const container = document.getElementById('backgroundAnimation');
+            
+            // Create animated raindrops
+            for (let i = 0; i < 20; i++) {
+                const raindrop = document.createElement('div');
+                raindrop.className = 'raindrop';
+                raindrop.style.left = Math.random() * 100 + '%';
+                raindrop.style.width = (Math.random() * 3 + 2) + 'px';
+                raindrop.style.height = raindrop.style.width;
+                raindrop.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                raindrop.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(raindrop);
+            }
+        }
+
+        showSuccessMessage(message) {
+            this.showMessage(message, 'success');
+        }
+
+        showErrorMessage(message) {
+            this.showMessage(message, 'error');
+        }
+
+        showMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                animation: slideInRight 0.5s ease-out;
+                ${type === 'success' ? 'background: var(--success);' : 'background: var(--error);'}
+            `;
+            messageDiv.textContent = message;
+            
+            document.body.appendChild(messageDiv);
+            setTimeout(() => messageDiv.remove(), 4000);
+
+            // Add CSS for message animation
+            if (!document.getElementById('message-styles')) {
+                const style = document.createElement('style');
+                style.id = 'message-styles';
+                style.textContent = `
+                    @keyframes slideInRight {
+                        from { opacity: 0; transform: translateX(100%); }
+                        to { opacity: 1; transform: translateX(0); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+    }
+
+    // Initialize the water tracker when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        new WaterTracker();
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+
+    </script>
+</body>
+</html>

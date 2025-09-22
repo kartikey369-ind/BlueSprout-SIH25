@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlueSprout - AI Assessment</title>
+<link rel="icon" type="image/x-icon" href="dropp.png">
+
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+:root {
+    --primary-cyan: #00bcd4;
+    --primary-dark: #0a192f;
+    --white: #ffffff;
+    --light-gray: #f5f5f5;
+    --dark-gray: #333;
+    --success: #4caf50;
+    --warning: #ff9800;
+    --error: #f44336;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --space-2: 8px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --font-base: 'Poppins', sans-serif;
+    --font-display: 'Fredoka', sans-serif;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+    --shadow-md: 0 10px 30px rgba(0,0,0,0.1);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* Reset & Base */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body { 
+    background: linear-gradient(135deg, #ffffff 0%, #00b3cb 100%);
+    min-height: 100vh;
+    color: var(--dark-gray); 
+    line-height: 1.6; 
+    font-family: var(--font-base);
+}
+
+/* Animated Background */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.raindrop {
+    position: absolute;
+    background: rgba(0, 188, 212, 0.1);
+    border-radius: 50%;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+/* Navbar */
+.navbar {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.nav-logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.nav-logo i {
+  color: rgb(0, 225, 225);
+  font-size: 2rem;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+.nav-link {
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s;
+  text-decoration: none;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: rgb(0, 225, 225);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(0, 225, 225);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.mobile-menu-btn {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Main Content */
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 2rem 2rem;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.header h1 {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-cyan), #4fc3f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    animation: slideInUp 0.8s ease-out;
+}
+
+.header p {
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.9);
+    max-width: 600px;
+    margin: 0 auto;
+    animation: slideInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Main Card */
+.main-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    animation: slideInUp 0.8s ease-out 0.6s both;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Calculator Section */
+.calculator-section {
+    padding: 2rem 0;
+}
+
+.calculator-section h3 {
+    font-size: 1.5rem;
+    color: var(--primary-cyan);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+    justify-content: center;
+}
+
+/* Form Elements */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-input {
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: var(--transition);
+    background: white;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-cyan);
+    box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Canvas Styling */
+.canvas-container {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+#roofCanvas {
+    border: 2px solid var(--primary-cyan);
+    border-radius: var(--radius-md);
+    max-width: 100%;
+    height: auto;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+#roofCanvas:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+/* Buttons */
+.btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    min-width: 140px;
+    justify-content: center;
+    margin: 1rem auto;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-cyan), #4fc3f7);
+    color: white;
+    box-shadow: 0 5px 20px rgba(0, 188, 212, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 188, 212, 0.4);
+}
+
+/* Tips */
+.tip {
+    background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(0, 188, 212, 0.05));
+    border-left: 4px solid var(--primary-cyan);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    margin: 2rem 0;
+    position: relative;
+}
+
+.tip::before {
+    content: '💡';
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 1.2rem;
+}
+
+.tip span {
+    margin-left: 2rem;
+    display: block;
+    color: var(--dark-gray);
+    font-style: italic;
+}
+
+/* Recommendations */
+.recommendations {
+    margin-top: 2rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.recommendations h4 {
+    color: var(--primary-cyan);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rec-item {
+    background: linear-gradient(135deg, rgba(0, 188, 212, 0.08), rgba(0, 188, 212, 0.04));
+    border-left: 4px solid var(--primary-cyan);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 0.75rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.rec-item:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-md);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Footer */
+footer {
+    background: var(--primary-dark);
+    color: white;
+    padding: 3rem 2rem 1.5rem;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary-cyan);
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-logo i {
+    font-size: 2rem;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-links a {
+    color: #ccc;
+    text-decoration: none;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.footer-links a:hover {
+    color: var(--primary-cyan);
+    transform: translateY(-2px);
+}
+
+.footer-socials {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.footer-socials a {
+    color: white;
+    background: var(--primary-cyan);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.footer-socials a:hover {
+    background: #4fc3f7;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(0, 188, 212, 0.3);
+}
+
+.footer-bottom {
+    color: #ccc;
+    font-size: 0.9rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-menu { 
+        display: none; 
+        flex-direction: column;
+        background: rgba(0, 0, 0, 0.9);
+        position: absolute;
+        top: 80px;
+        right: 20px;
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        min-width: 200px;
+    }
+    
+    .nav-menu.show { 
+        display: flex; 
+    }
+    
+    .mobile-menu-btn { 
+        display: block; 
+    }
+    
+    .main-container { 
+        padding: 5rem 1rem 1rem; 
+    }
+    
+    .header h1 { 
+        font-size: 2rem; 
+    }
+    
+    .header p { 
+        font-size: 1rem; 
+    }
+    
+    .main-card {
+        padding: 1.5rem;
+        margin: 0 0.5rem 2rem;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-card {
+        padding: 1rem;
+    }
+    
+    .calculator-section {
+        padding: 1rem 0;
+    }
+}
+
+/* Accessibility */
+*:focus {
+    outline: 2px solid var(--primary-cyan);
+    outline-offset: 2px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    :root {
+        --primary-cyan: #0066cc;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Map specific styles */
+body {
+    font-family: 'Fredoka', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    color: #2c3e50;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 20px auto;
+    background: rgba(255,255,255,0.95);
+    padding: 20px;
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #4fc3f7;
+    margin-bottom: 20px;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+.controls input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 150px;
+}
+
+.controls button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    background: #4fc3f7;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.controls button:hover { 
+    background: #29b6f6; 
+}
+
+.controls button[onclick="useMyLocation()"] {
+    background: #4caf50;
+}
+
+.controls button[onclick="useMyLocation()"]:hover {
+    background: #45a049;
+}
+
+#map { 
+    height: 70vh; 
+    width: 100%; 
+    border-radius: 15px; 
+    margin-bottom: 15px; 
+}
+
+#area {
+    margin-top: 10px;
+    font-weight:600;
+    text-align:center;
+    color:#2c3e50;
+}
+
+.recommendations {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    background: #fdfdfd;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.rec-item {
+    background: #fff;
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-left: 4px solid #4fc3f7;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.instructions {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+}
+
+.spinner {
+    display: none;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.spinner div {
+    width: 10px;
+    height: 10px;
+    background-color: #4fc3f7;
+    border-radius: 50%;
+    display: inline-block;
+    animation: bounce 0.6s infinite alternate;
+}
+
+@keyframes bounce {
+    to { transform: translateY(-10px); }
+}
+
+/* Chat Styles */
+#chat-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #00bcd4;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+#chat-notification {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background: #00bcd4;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 20px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 999;
+}
+
+#chat-popup {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 300px;
+    max-height: 400px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+#chat-header {
+    background: #00bcd4;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#chat-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background: #f7f7f7;
+}
+
+.chat-message {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    font-size: 14px;
+}
+
+.suggestion {
+    background: #00bcd4;
+    color: white;
+    padding: 8px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    display: inline-block;
+    margin: 5px 2px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.suggestion:hover {
+    background: #0097a7;
+}
+
+#chat-input {
+    display: flex;
+    border-top: 1px solid #ddd;
+}
+
+#userInput {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    font-size: 14px;
+}
+
+#chat-input button {
+    padding: 10px;
+    background: #00bcd4;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Footer CSS */
+footer {
+    background: #1a1a2e;
+    color: white;
+    padding: 60px 0 20px 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+/* About section with centered socials */
+footer .footer-section.about .social-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.footer-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: rgb(0, 225, 225);
+}
+
+.footer-section p {
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    display: inline-block;
+}
+
+.footer-section ul li a:hover {
+    color: rgb(0, 225, 225);
+    transform: translateX(5px);
+}
+
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgb(0, 225, 225);
+    color: white;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    transform: translateY(-3px);
+    background: #00baba;
+    box-shadow: 0 5px 15px rgba(0, 225, 225, 0.4);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid #333;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="background-animation" id="backgroundAnimation"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="in.html" class="nav-logo">
+      <i class="fas fa-tint"></i> BlueSprout
+    </a>
+    <ul id="navMenu" class="nav-menu">
+        <li><a href="index.html#hero" class="nav-link ">Home</a></li>
+        <li><a href="index.html#features" class="nav-link">Features</a></li>
+        <li><a href="aiassessment.html" class="nav-link">AI Assessment</a></li>
+        <li><a href="gis.html" class="nav-link">GIS Map</a></li>
+        <li><a href="login.html" class="nav-link">Water Tracker</a></li>
+        <li><a href="index.html#game" class="nav-link">Play Game</a></li>
+        <li><a href="login.html" id="logoutLink" class="nav-link">Login</a></li>
+    </ul>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+</nav>
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+
+<div class="container">
+  <br><br><br><br>
+  
+  <h1><i class="fas fa-robot"></i> Advanced Rooftop Tracer</h1>
+  <div class="header">
+    <p>Enter coordinates or trace your roof on the map to measure its area.</p>
+  </div>
+  <div class="instructions" id="instructions"></div>
+
+  <div class="controls">
+   
+    <button onclick="useMyLocation()" style="background: #4caf50;">Use My Location</button>
+    <button onclick="startDrawing()">Trace Rooftop</button>
+    <button onclick="undoLast()">Undo Last Point</button>
+    <button onclick="clearMap()">Clear</button>
+    <button onclick="toggleMapStyle()">Toggle View</button>
+  </div>
+
+  <div id="map"></div>
+  
+  <!-- Advanced Location Options -->
+  <div class="tip" style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top: 15px;">
+    <span><strong>Advanced Location Options</strong> (optional): Enter coordinates manually</span>
+    <button id="toggleLocationAdvanced" class="btn btn-primary" style="min-width:auto; padding:8px 14px; font-size:12px"><i class="fas fa-map-marker-alt"></i> Show</button>
+  </div>
+  <div id="advancedLocationSection" style="display:none; margin-top: 10px;">
+    <div class="controls">
+      <input type="text" id="lat" placeholder="Latitude">
+      <input type="text" id="lng" placeholder="Longitude">
+      <button onclick="goToLocation()">Go to Coordinates</button>
+    </div>
+  </div>
+  
+  <div id="area">Area: 0 m²</div>
+  <div class="spinner" id="spinner"><div></div></div>
+  <div class="recommendations" id="map-recs"></div>
+</div>
+
+<!-- Main Container -->
+<div class="main-container">
+  <!-- Header -->
+  <div class="header">
+    <h1><i class="fas fa-robot"></i> AI-Powered Manual Roof Assessment</h1>
+    <p>Upload your roof image and our AI will help you calculate the area and provide personalized rainwater harvesting recommendations</p>
+  </div>
+
+  <!-- Main Card -->
+  <div class="main-card">
+    <div class="calculator-section">
+      <h3><i class="fas fa-calculator"></i> Smart Roof Area Calculator</h3>
+      
+      <div class="tip">
+        <span><strong>Quick Start:</strong> 1) Upload a roof photo. 2) Click around the roof to trace it. 3) Press "Compute Full Plan". Or just enter your known roof area below.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="roofImage">
+          <i class="fas fa-upload"></i> Upload Roof Image
+        </label>
+        <input type="file" id="roofImage" class="form-input" accept="image/*">
+      </div>
+
+      <div class="canvas-container">
+        <canvas id="roofCanvas" width="600" height="400"></canvas>
+      </div>
+
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap">
+        <button id="calcArea" class="btn btn-primary" title="Calculate area from the traced points on the image">
+          <i class="fas fa-magic"></i> Calculate Traced Area
+        </button>
+        <button id="clearTrace" class="btn btn-primary" title="Clear all traced points">
+          <i class="fas fa-undo"></i> Clear Trace
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fas fa-ruler-combined"></i> Known Roof Area (m²) — optional
+        </label>
+        <input type="number" id="knownArea" class="form-input" placeholder="If you know exact area, enter here">
+        <span style="font-size:12px; color:#555; margin-top:6px">If filled, we will use this instead of traced area.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="roofType">
+          <i class="fas fa-home"></i> Roof Type
+        </label>
+        <select id="roofType" class="form-input">
+          <option value="rcc">RCC/Concrete</option>
+          <option value="metal">Metal Sheet</option>
+          <option value="tile">Tile/Slate</option>
+          <option value="asbestos">Asbestos/Fiber</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fas fa-users"></i> Number of Dwellers
+        </label>
+        <input type="number" id="numDwellers" class="form-input" placeholder="e.g., 4" value="4">
+        <span style="font-size:12px; color:#555; margin-top:6px">Used to estimate household water demand.</span>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fas fa-tint"></i> Per-capita Daily Demand (liters)
+        </label>
+        <input type="number" id="perCapitaDemand" class="form-input" placeholder="e.g., 70" value="70">
+        <span style="font-size:12px; color:#555; margin-top:6px">Typical range 50–90 L/day depending on usage.</span>
+      </div>
+
+      <div class="tip" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+        <span><strong>Advanced Options</strong> (optional): set soil infiltration, open space and monthly rainfall.</span>
+        <button id="toggleAdvanced" class="btn btn-primary" style="min-width:auto; padding:8px 14px"><i class="fas fa-sliders-h"></i> Show</button>
+      </div>
+      <div id="advancedSection" style="display:none">
+        <div class="form-group">
+          <label>
+            <i class="fas fa-seedling"></i> Infiltration Rate (mm/hr)
+          </label>
+          <input type="number" id="infiltrationRate" class="form-input" placeholder="Simple field test result" value="20">
+        </div>
+
+        <div class="form-group">
+          <label>
+            <i class="fas fa-square"></i> Available Open Space for AR (m²)
+          </label>
+          <input type="number" id="openSpace" class="form-input" placeholder="Area available for recharge structures" value="20">
+        </div>
+
+        <div class="tip">
+          <span>Monthly Rainfall (mm). You can tweak values below to match local data.</span>
+        </div>
+        <div class="controls" id="rainfallInputs"></div>
+      </div>
+
+      <button id="computePlan" class="btn btn-primary">
+        <i class="fas fa-calculator"></i> Compute Full Plan
+      </button>
+      <button id="downloadPdf" class="btn btn-primary" style="display:none">
+        <i class="fas fa-file-pdf"></i> Download PDF Report
+      </button>
+
+      <div class="recommendations" id="recs"></div>
+      <div id="successBanner" class="rec-item" style="display:none; background:#e8fff3; border-left-color:#4caf50">
+        ✅ Plan ready! Review details below or download the PDF.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chatbot Start -->
+<div id="chat-button">💬</div>
+<div id="chat-notification">Hey! Any doubt? I'm here!</div>
+<div id="chat-popup">
+  <div id="chat-header">BlueSprout Assistant</div>
+  <div id="chat-messages">
+    <div class="chat-message"><strong>BLUEY:</strong> Hi! I'm here to help you with BlueSprout.</div>
+    <div class="suggestion" onclick="sendMessage('How can I trace my roof?')">How can I trace my roof?</div>
+    <div class="suggestion" onclick="sendMessage('What is rainwater harvesting?')">What is rainwater harvesting?</div>
+    <div class="suggestion" onclick="sendMessage('How do I measure area?')">How do I measure area?</div>
+  </div>
+  <div id="chat-input">
+    <input type="text" id="userInput" placeholder="Type your message..." />
+    <button onclick="submitMessage()">Send</button>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <!-- About Section -->
+      <div class="footer-section about">
+        <h3>BlueSprout</h3>
+        <p>Empowering communities to conserve rainwater and manage rooftop water resources effectively. Every rooftop can contribute to a sustainable water future.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html#hero">Home</a></li>
+          <li><a href="index.html#features">Features</a></li>
+          <li><a href="aiassessment.html">Manual Assessment</a></li>
+          <li><a href="manualassesment.html">AI Assessment</a></li>
+          <li><a href="index.html#game">Play our Game</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div class="footer-section">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="1.pdf" target="_blank">Rooftop Rainwater Guide</a></li>
+          <li><a href="2.pdf" target="_blank">Rainwater Harvesting Manual</a></li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div class="footer-section">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="pp.html">Privacy Policy</a></li>
+          <li><a href="ourstory.html">Our Story</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 BlueSprout. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+
+<script>
+// Map initialization
+let satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri',
+    maxZoom: 22
+});
+
+let street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+});
+
+let map = L.map('map', {
+    layers: [satellite],
+    zoomControl: true,
+    minZoom: 5,
+    maxZoom: 19
+}).setView([20.5937, 78.9629], 5);
+
+let currentLayer = 'satellite';
+let drawnItems = new L.FeatureGroup().addTo(map);
+let drawControl = new L.Control.Draw({
+    edit: { featureGroup: drawnItems },
+    draw: { polygon: true, polyline: false, rectangle: false, circle: false, marker: false, circlemarker: false }
+});
+map.addControl(drawControl);
+
+let userMarker = null;
+
+// Map event handlers
+map.on(L.Draw.Event.CREATED, function(e) {
+    const layer = e.layer;
+    drawnItems.clearLayers();
+    drawnItems.addLayer(layer);
+    calculateMapArea(layer);
+});
+
+// Use My Location function
+function useMyLocation() {
+    if (!navigator.geolocation) {
+        alert('Geolocation is not supported by this browser.');
+        return;
+    }
+
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting Location...';
+    btn.disabled = true;
+
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lng;
+            
+            map.setView([lat, lng], 20);
+            
+            if(userMarker) map.removeLayer(userMarker);
+            userMarker = L.marker([lat, lng], {
+                icon: L.icon({
+                    iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-green.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34]
+                })
+            }).addTo(map).bindPopup("Your current location").openPopup();
+            
+            document.getElementById('instructions').textContent = 'Location found! You can now trace your rooftop.';
+            
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        },
+        function(error) {
+            let message = 'Unable to retrieve your location. ';
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    message += 'Please allow location access and try again.';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    message += 'Location information is unavailable.';
+                    break;
+                case error.TIMEOUT:
+                    message += 'Location request timed out.';
+                    break;
+                default:
+                    message += 'An unknown error occurred.';
+                    break;
+            }
+            alert(message + ' You can manually enter an address instead.');
+            
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000
+        }
+    );
+}
+
+// Toggle advanced location options
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.getElementById('toggleLocationAdvanced');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', (e) => {
+            const section = document.getElementById('advancedLocationSection');
+            const showing = section.style.display === 'block';
+            section.style.display = showing ? 'none' : 'block';
+            e.currentTarget.innerHTML = showing ? '<i class="fas fa-map-marker-alt"></i> Show' : '<i class="fas fa-map-marker-alt"></i> Hide';
+        });
+    }
+});
+
+// Other map functions
+function toggleMapStyle() {
+    if(currentLayer === 'satellite') {
+        map.removeLayer(satellite);
+        map.addLayer(street);
+        currentLayer = 'street';
+    } else {
+        map.removeLayer(street);
+        map.addLayer(satellite);
+        currentLayer = 'satellite';
+    }
+}
+
+function startDrawing() {
+    new L.Draw.Polygon(map, drawControl.options.draw.polygon).enable();
+}
+
+function calculateMapArea(layer) {
+    const geojson = layer.toGeoJSON();
+    const area = turf.area(geojson);
+    document.getElementById('area').innerText = 'Area: ' + area.toFixed(2) + ' m²';
+    generateMapRecommendations(area);
+}
+
+function generateMapRecommendations(area) {
+    const recs = [];
+    const tankSize = area * 0.8 * 0.2;
+    recs.push(`Estimated roof area: ${area.toFixed(2)} m²`);
+    recs.push(`Install approx. ${Math.round(tankSize)} m³ storage tank`);
+    if(area >= 50) recs.push("Build a large recharge pit for groundwater restoration.");
+    else if(area >= 20) recs.push("Install a medium recharge well for efficient collection.");
+    else recs.push("Focus on rooftop storage units due to limited space.");
+    recs.push("Ideal installation: April-May (pre-monsoon)");
+    recs.push("Monthly maintenance: ₹200 - ₹500");
+    document.getElementById('map-recs').innerHTML = recs.map(r=>`<div class="rec-item">${r}</div>`).join('');
+}
+
+function goToLocation() {
+    const lat = parseFloat(document.getElementById('lat').value);
+    const lng = parseFloat(document.getElementById('lng').value);
+    if (!isNaN(lat) && !isNaN(lng)) {
+        map.setView([lat, lng], 20);
+        if(userMarker) map.removeLayer(userMarker);
+        userMarker = L.marker([lat, lng], {
+            icon: L.icon({
+                iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-red.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34]
+            })
+        }).addTo(map).bindPopup("Your location").openPopup();
+    } else {
+        alert("Please enter valid coordinates.");
+    }
+}
+
+async function geocodeAddress() {
+    const query = document.getElementById('address').value.trim();
+    if (!query) { alert('Please enter an address.'); return; }
+    try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
+        const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+            const { lat, lon, display_name } = data[0];
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lon;
+            map.setView([parseFloat(lat), parseFloat(lon)], 20);
+            if(userMarker) map.removeLayer(userMarker);
+            userMarker = L.marker([parseFloat(lat), parseFloat(lon)], {
+                icon: L.icon({
+                    iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-red.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34]
+                })
+            }).addTo(map).bindPopup(display_name || 'Selected location').openPopup();
+            document.getElementById('instructions').textContent = 'Location found. You can now trace your rooftop.';
+        } else {
+            alert('No results found for this address. Try a nearby landmark.');
+        }
+    } catch (err) {
+        alert('Failed to look up address. Please check your connection and try again.');
+        console.error(err);
+    }
+}
+
+function undoLast() {
+    if(drawnItems.getLayers().length > 0) {
+        let layer = drawnItems.getLayers()[0];
+        if(layer._latlngs[0].length > 3){
+            layer._latlngs[0].pop();
+            layer.redraw();
+            calculateArea(layer);
+        } else {
+            alert("Cannot undo. A polygon needs at least 3 points.");
+        }
+    }
+}
+
+function clearMap() {
+    drawnItems.clearLayers();
+    document.getElementById('area').innerText = 'Area: 0 m²';
+    document.getElementById('map-recs').innerHTML = '';
+}
+
+// Background Animation
+function createRaindrops() {
+    const background = document.getElementById('backgroundAnimation');
+    const numberOfDrops = 20;
+    
+    for (let i = 0; i < numberOfDrops; i++) {
+        const raindrop = document.createElement('div');
+        raindrop.className = 'raindrop';
+        raindrop.style.left = Math.random() * 100 + '%';
+        raindrop.style.width = raindrop.style.height = Math.random() * 10 + 5 + 'px';
+        raindrop.style.animationDuration = Math.random() * 3 + 2 + 's';
+        raindrop.style.animationDelay = Math.random() * 2 + 's';
+        background.appendChild(raindrop);
+    }
+}
+
+createRaindrops();
+
+// Mobile Menu Toggle
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const navMenu = document.getElementById('navMenu');
+
+mobileMenuBtn.addEventListener('click', () => {
+    navMenu.classList.toggle('show');
+});
+
+document.addEventListener('click', (e) => {
+    if (!mobileMenuBtn.contains(e.target) && !navMenu.contains(e.target)) {
+        navMenu.classList.remove('show');
+    }
+});
+
+// Roof Calculator Logic
+const canvas = document.getElementById('roofCanvas');
+const ctx = canvas.getContext('2d');
+let img = new Image();
+let points = [];
+let isImageLoaded = false;
+
+document.getElementById('roofImage').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+img.onload = () => {
+    const aspectRatio = img.width / img.height;
+    const maxWidth = canvas.parentElement.clientWidth - 40;
+    const maxHeight = 400;
+    
+    if (aspectRatio > maxWidth / maxHeight) {
+        canvas.width = Math.min(maxWidth, img.width);
+        canvas.height = canvas.width / aspectRatio;
+    } else {
+        canvas.height = Math.min(maxHeight, img.height);
+        canvas.width = canvas.height * aspectRatio;
+    }
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    points = [];
+    isImageLoaded = true;
+};
+
+canvas.addEventListener('click', (e) => {
+    if (!isImageLoaded) {
+        alert('Please upload an image first!');
+        return;
+    }
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+    
+    points.push({ x, y });
+    drawPoints();
+});
+
+function drawPoints() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    
+    if (points.length === 0) return;
+    
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+    }
+    if (points.length > 2) {
+        ctx.lineTo(points[0].x, points[0].y);
+    }
+    ctx.strokeStyle = '#00bcd4';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    
+    points.forEach((point, index) => {
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = '#f44336';
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 12px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(index + 1, point.x, point.y + 4);
+    });
+}
+
+function calculateImageArea() {
+    if (points.length < 3) return 0;
+    
+    let area = 0;
+    const n = points.length;
+    
+    for (let i = 0; i < n; i++) {
+        const j = (i + 1) % n;
+        area += points[i].x * points[j].y;
+        area -= points[j].x * points[i].y;
+    }
+    
+    return Math.abs(area / 2);
+}
+
+function generateImageRecommendations(roofArea) {
+    const recommendations = [];
+    const areaM2 = roofArea * 0.01;
+    const annualRainfall = 1200;
+    const collectionEfficiency = 0.8;
+    
+    const annualCollection = (areaM2 * annualRainfall * collectionEfficiency) / 1000;
+    
+    recommendations.push(`🏠 <strong>Estimated Roof Area:</strong> ${areaM2.toFixed(2)} m²`);
+    recommendations.push(`💧 <strong>Annual Water Collection Potential:</strong> ${annualCollection.toFixed(0)} cubic meters`);
+    
+    const tankSize = Math.min(annualCollection * 0.3, areaM2 * 0.05);
+    recommendations.push(`🛢️ <strong>Recommended Storage Tank:</strong> ${tankSize.toFixed(1)} cubic meters`);
+    
+    if (areaM2 >= 50) {
+        recommendations.push(`⚡ <strong>System Type:</strong> Advanced setup with first-flush diverter and filtration`);
+        recommendations.push(`🏗️ <strong>Infrastructure:</strong> Build underground recharge pit for groundwater replenishment`);
+    } else if (areaM2 >= 25) {
+        recommendations.push(`🔧 <strong>System Type:</strong> Medium-scale setup with basic filtration`);
+        recommendations.push(`🕳️ <strong>Infrastructure:</strong> Install recharge well (15-20 feet deep)`);
+    } else if (areaM2 >= 10) {
+        recommendations.push(`🏡 <strong>System Type:</strong> Basic rooftop collection system`);
+        recommendations.push(`💾 <strong>Infrastructure:</strong> Rooftop storage with overflow to garden`);
+    } else {
+        recommendations.push(`🪣 <strong>System Type:</strong> Simple barrel collection system`);
+        recommendations.push(`🌱 <strong>Usage:</strong> Perfect for garden irrigation and plant watering`);
+    }
+    
+    const costEstimate = areaM2 * 150;
+    const monthlySavings = annualCollection * 15;
+    
+    recommendations.push(`💰 <strong>Estimated Setup Cost:</strong> ₹${costEstimate.toFixed(0)}`);
+    recommendations.push(`💵 <strong>Annual Water Bill Savings:</strong> ₹${monthlySavings.toFixed(0)}`);
+    recommendations.push(`📅 <strong>Best Installation Time:</strong> April-May (before monsoon season)`);
+    recommendations.push(`🔧 <strong>Maintenance Cost:</strong> ₹200-500 per month`);
+    
+    const co2Savings = annualCollection * 0.5;
+    recommendations.push(`🌍 <strong>Environmental Impact:</strong> Save ${co2Savings.toFixed(1)} kg CO2 annually`);
+    
+    return recommendations;
+}
+
+document.getElementById('calcArea').addEventListener('click', () => {
+    if (!isImageLoaded) {
+        alert('Please upload an image first!');
+        return;
+    }
+    
+    if (points.length < 3) {
+        alert('Please select at least 3 points to outline your roof area!');
+        return;
+    }
+    
+    const area = calculateImageArea();
+    const recommendations = generateImageRecommendations(area);
+    
+    const recsContainer = document.getElementById('recs');
+    recsContainer.innerHTML = `
+        <h4><i class="fas fa-lightbulb"></i> AI-Powered Recommendations</h4>
+        ${recommendations.map(rec => `<div class="rec-item">${rec}</div>`).join('')}
+        <div class="tip">
+            <span><strong>Next Steps:</strong> Contact a local rainwater harvesting expert for detailed planning and installation. Consider getting a professional site survey for precise measurements.</span>
+        </div>
+    `;
+    
+    recsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+canvas.addEventListener('dblclick', () => {
+    if (confirm('Clear all points and start over?')) {
+        points = [];
+        if (isImageLoaded) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && points.length > 0) {
+        points.pop();
+        drawPoints();
+    }
+});
+
+document.getElementById('clearTrace').addEventListener('click', () => {
+    points = [];
+    if (isImageLoaded) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+});
+
+document.getElementById('toggleAdvanced').addEventListener('click', (e) => {
+    const section = document.getElementById('advancedSection');
+    const showing = section.style.display === 'block';
+    section.style.display = showing ? 'none' : 'block';
+    e.currentTarget.innerHTML = showing ? '<i class="fas fa-sliders-h"></i> Show' : '<i class="fas fa-sliders-h"></i> Hide';
+});
+
+// Monthly Rainfall UI and Defaults
+const defaultMonthlyRainfallMm = [8, 10, 15, 25, 60, 150, 280, 260, 180, 50, 15, 8];
+const monthLabels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function renderRainfallInputs(values = defaultMonthlyRainfallMm) {
+    const container = document.getElementById('rainfallInputs');
+    container.innerHTML = values.map((v, i) => `
+        <div style="display:flex; flex-direction:column; align-items:flex-start">
+            <label style="font-size:12px; color:#555">${monthLabels[i]}</label>
+            <input type="number" class="form-input" style="width:100px" value="${v}" data-month-index="${i}" />
+        </div>
+    `).join('');
+}
+
+renderRainfallInputs();
+
+function getMonthlyRainfallFromUI() {
+    const inputs = Array.from(document.querySelectorAll('#rainfallInputs input[type="number"]'));
+    const arr = new Array(12).fill(0);
+    inputs.forEach(input => {
+        const idx = parseInt(input.getAttribute('data-month-index'));
+        const val = parseFloat(input.value);
+        arr[idx] = isNaN(val) ? 0 : val;
+    });
+    return arr;
+}
+
+function getRunoffCoefficient(roofType) {
+    switch (roofType) {
+        case 'metal': return 0.9;
+        case 'tile': return 0.8;
+        case 'asbestos': return 0.75;
+        case 'rcc':
+        default: return 0.85;
+    }
+}
+
+function computeAnnualPlan(params) {
+    const {
+        roofAreaM2,
+        roofType,
+        monthlyRainMm,
+        collectionEfficiency = 0.8,
+        firstFlushLossFraction = 0.03,
+        dwellers,
+        perCapitaLitersPerDay,
+        infiltrationRateMmHr,
+        openSpaceM2
+    } = params;
+
+    const runoffCoeff = getRunoffCoefficient(roofType);
+    const monthlyCaptureM3 = monthlyRainMm.map(mm => (mm/1000) * roofAreaM2 * runoffCoeff * collectionEfficiency * (1 - firstFlushLossFraction));
+    const annualCaptureM3 = monthlyCaptureM3.reduce((a,b)=>a+b,0);
+
+    const dailyDemandM3 = (dwellers * perCapitaLitersPerDay) / 1000;
+    const monthlyDemandM3 = new Array(12).fill(dailyDemandM3 * 30);
+    const annualDemandM3 = monthlyDemandM3.reduce((a,b)=>a+b,0);
+
+    const suggestedStorageM3 = Math.min(dailyDemandM3 * 30, annualCaptureM3 * 0.3);
+
+    const infiltrationCapacityM3PerHr = (infiltrationRateMmHr / 1000) * openSpaceM2;
+    const standardPitIntakeM3Hr = Math.max(0.5, infiltrationCapacityM3PerHr * 0.5);
+    const requiredIntakeM3Hr = Math.max(0.8, (Math.max(...monthlyCaptureM3) / (30*24)));
+    const numPits = Math.max(1, Math.ceil(requiredIntakeM3Hr / standardPitIntakeM3Hr));
+
+    const recommendations = {
+        monthlyCaptureM3,
+        annualCaptureM3,
+        dailyDemandM3,
+        monthlyDemandM3,
+        annualDemandM3,
+        suggestedStorageM3,
+        ar: {
+            type: infiltrationRateMmHr >= 25 ? 'Recharge shaft with bore' : (infiltrationRateMmHr >= 10 ? 'Recharge pit with trench' : 'Multiple pits with silt trap'),
+            numPits,
+            pitDimensions: '1.2 m diameter x 2.0 m depth (typical)',
+            filterMedia: 'Pebbles + sand + gravel layers',
+            estimatedCost: numPits * 15000
+        },
+        costEstimates: {
+            storage: suggestedStorageM3 * 8000,
+            collection: roofAreaM2 * 200,
+            filtration: 5000,
+            ar: numPits * 15000,
+            maintenance: 3000
+        }
+    };
+
+    return recommendations;
+}
+
+document.getElementById('computePlan').addEventListener('click', () => {
+    const roofAreaFromTrace = calculateImageArea() * 0.01;
+    const knownArea = parseFloat(document.getElementById('knownArea').value);
+    const roofAreaM2 = knownArea || roofAreaFromTrace || 0;
+    
+    if (roofAreaM2 <= 0) {
+        alert('Please either trace your roof on the image or enter a known roof area.');
+        return;
+    }
+
+    const params = {
+        roofAreaM2,
+        roofType: document.getElementById('roofType').value,
+        monthlyRainMm: getMonthlyRainfallFromUI(),
+        dwellers: parseInt(document.getElementById('numDwellers').value) || 4,
+        perCapitaLitersPerDay: parseInt(document.getElementById('perCapitaDemand').value) || 70,
+        infiltrationRateMmHr: parseFloat(document.getElementById('infiltrationRate').value) || 20,
+        openSpaceM2: parseFloat(document.getElementById('openSpace').value) || 20
+    };
+
+    const plan = computeAnnualPlan(params);
+    displayPlan(plan, params);
+    
+    document.getElementById('successBanner').style.display = 'block';
+    document.getElementById('downloadPdf').style.display = 'block';
+});
+
+function displayPlan(plan, params) {
+    const recsContainer = document.getElementById('recs');
+    const totalCost = Object.values(plan.costEstimates).reduce((a,b)=>a+b,0);
+    
+    recsContainer.innerHTML = `
+        <h4><i class="fas fa-chart-line"></i> Annual Rainwater Harvesting Plan</h4>
+        
+        <div class="rec-item">
+            <strong>Roof Analysis:</strong> ${params.roofAreaM2.toFixed(1)} m² ${params.roofType.toUpperCase()} roof
+        </div>
+        
+        <div class="rec-item">
+            <strong>Annual Collection Potential:</strong> ${plan.annualCaptureM3.toFixed(1)} m³ 
+            (${(plan.annualCaptureM3 * 1000).toFixed(0)} liters)
+        </div>
+        
+        <div class="rec-item">
+            <strong>Household Demand:</strong> ${plan.annualDemandM3.toFixed(1)} m³/year 
+            (${params.dwellers} people × ${params.perCapitaLitersPerDay}L/day)
+        </div>
+        
+        <div class="rec-item">
+            <strong>Recommended Storage:</strong> ${plan.suggestedStorageM3.toFixed(1)} m³ tank
+            <br><em>Sufficient for ${Math.floor(plan.suggestedStorageM3 / plan.dailyDemandM3)} days backup</em>
+        </div>
+        
+        <div class="rec-item">
+            <strong>Artificial Recharge System:</strong> ${plan.ar.type}
+            <br><em>${plan.ar.numPits} pit(s) recommended - ${plan.ar.pitDimensions}</em>
+            <br><em>Filter layers: ${plan.ar.filterMedia}</em>
+        </div>
+        
+        <div class="rec-item">
+            <strong>Total Investment:</strong> ₹${totalCost.toLocaleString()}
+            <br><em>Storage: ₹${plan.costEstimates.storage.toLocaleString()} | AR: ₹${plan.costEstimates.ar.toLocaleString()} | Others: ₹${(plan.costEstimates.collection + plan.costEstimates.filtration).toLocaleString()}</em>
+        </div>
+        
+        <div class="rec-item">
+            <strong>Monthly Savings:</strong> ₹${Math.floor(plan.annualCaptureM3 * 15 / 12).toLocaleString()}
+            <br><em>ROI Period: ${Math.ceil(totalCost / (plan.annualCaptureM3 * 15))} years</em>
+        </div>
+    `;
+}
+
+// PDF Generation (placeholder)
+document.getElementById('downloadPdf').addEventListener('click', () => {
+    alert('PDF generation feature coming soon! For now, please screenshot the recommendations.');
+});
+
+// Chatbot functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const chatButton = document.getElementById('chat-button');
+    const chatPopup = document.getElementById('chat-popup');
+    const chatNotification = document.getElementById('chat-notification');
+    let chatOpen = false;
+
+    setTimeout(() => {
+        chatNotification.style.opacity = '1';
+        setTimeout(() => chatNotification.style.opacity = '0', 3000);
+    }, 5000);
+
+    chatButton.addEventListener('click', () => {
+        chatOpen = !chatOpen;
+        chatPopup.style.display = chatOpen ? 'flex' : 'none';
+        chatButton.innerHTML = chatOpen ? '×' : '💬';
+    });
+
+    window.sendMessage = function(message) {
+        addMessage('You', message);
+        setTimeout(() => {
+            const responses = {
+                'How can I trace my roof?': 'Upload a roof image, then click around the roof edges to trace the outline. The AI will calculate the area for you!',
+                'What is rainwater harvesting?': 'It\'s collecting and storing rainwater from rooftops for later use. Great for water conservation and reducing bills!',
+                'How do I measure area?': 'You can either trace your roof on the uploaded image or enter the known area directly in the input field.'
+            };
+            addMessage('BLUEY', responses[message] || 'I can help with roof tracing, area calculation, and rainwater harvesting questions. What would you like to know?');
+        }, 1000);
+    };
+
+    window.submitMessage = function() {
+        const input = document.getElementById('userInput');
+        if (input.value.trim()) {
+            sendMessage(input.value);
+            input.value = '';
+        }
+    };
+
+    function addMessage(sender, text) {
+        const messagesDiv = document.getElementById('chat-messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'chat-message';
+        messageDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    document.getElementById('userInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') submitMessage();
+    });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - BlueSprout</title>
+    <link rel="icon" type="image/x-icon" href="dropp.png">
+
+</head>
+<body>
+    <!-- Navbar -->
+     <style>/* BlueSprout - Main Stylesheet */
+        /* Design System and Base Styles */
+        
+        :root {
+          /* Colors */
+          --primary-blue: #4fc3f7;
+          --secondary-blue: #29b6f6;
+          --dark-blue: #0277bd;
+          --light-blue: #e1f5fe;
+          --white: #ffffff;
+          --light-gray: #f5f5f5;
+          --text-dark: #333333;
+          --text-light: #666666;
+          --success: #4caf50;
+          --warning: #ff9800;
+          --error: #f44336;
+          
+          /* Typography */
+          --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          --font-size-xs: 0.75rem;
+          --font-size-sm: 0.875rem;
+          --font-size-base: 1rem;
+          --font-size-lg: 1.125rem;
+          --font-size-xl: 1.25rem;
+          --font-size-2xl: 1.5rem;
+          --font-size-3xl: 1.875rem;
+          --font-size-4xl: 2.25rem;
+          --font-size-5xl: 3rem;
+          
+          /* Spacing */
+          --space-1: 0.25rem;
+          --space-2: 0.5rem;
+          --space-3: 0.75rem;
+          --space-4: 1rem;
+          --space-5: 1.25rem;
+          --space-6: 1.5rem;
+          --space-8: 2rem;
+          --space-10: 2.5rem;
+          --space-12: 3rem;
+          --space-16: 4rem;
+          --space-20: 5rem;
+          
+          /* Border Radius */
+          --radius-sm: 0.375rem;
+          --radius-md: 0.5rem;
+          --radius-lg: 0.75rem;
+          --radius-xl: 1rem;
+          --radius-2xl: 1.5rem;
+          
+          /* Shadows */
+          --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+          --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+          --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+          --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+          
+          /* Transitions */
+          --transition-fast: 0.15s ease-in-out;
+          --transition-normal: 0.3s ease-in-out;
+          --transition-slow: 0.5s ease-in-out;
+        }
+        
+        /* Reset and Base Styles */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
+        html {
+          scroll-behavior: smooth;
+          font-size: 16px;
+        }
+        
+        body {
+          font-family: var(--font-primary);
+          line-height: 1.6;
+          color: var(--text-dark);
+          background-color: var(--white);
+        }
+        
+        img {
+          max-width: 100%;
+          height: auto;
+        }
+        
+        a {
+          text-decoration: none;
+          color: inherit;
+        }
+        
+        button {
+          font-family: inherit;
+          cursor: pointer;
+          border: none;
+          outline: none;
+        }
+        
+        /* Typography */
+        h1 {
+          font-size: var(--font-size-4xl);
+          font-weight: 700;
+          line-height: 1.2;
+          margin-bottom: var(--space-6);
+        }
+        
+        h2 {
+          font-size: var(--font-size-3xl);
+          font-weight: 600;
+          line-height: 1.3;
+          margin-bottom: var(--space-5);
+        }
+        
+        h3 {
+          font-size: var(--font-size-2xl);
+          font-weight: 600;
+          line-height: 1.4;
+          margin-bottom: var(--space-4);
+        }
+        
+        h4 {
+          font-size: var(--font-size-xl);
+          font-weight: 500;
+          margin-bottom: var(--space-3);
+        }
+        
+        p {
+          margin-bottom: var(--space-4);
+          color: var(--text-light);
+        }
+        
+        /* Layout Components */
+        .container {
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 var(--space-4);
+        }
+        
+        .section {
+          padding: var(--space-16) 0;
+        }
+        
+        .section-sm {
+          padding: var(--space-12) 0;
+        }
+        
+        .grid {
+          display: grid;
+          gap: var(--space-6);
+        }
+        
+        .grid-2 {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .grid-3 {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .grid-4 {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        
+        .flex {
+          display: flex;
+        }
+        
+        .flex-center {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .flex-between {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        
+        .flex-col {
+          display: flex;
+          flex-direction: column;
+        }
+        
+        /* Button Components */
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: var(--space-3) var(--space-6);
+          font-size: var(--font-size-base);
+          font-weight: 500;
+          border-radius: var(--radius-lg);
+          transition: all var(--transition-normal);
+          cursor: pointer;
+          text-decoration: none;
+          border: none;
+          outline: none;
+        }
+        
+        .btn-primary {
+          background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+          color: var(--white);
+          box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-secondary {
+          background: var(--white);
+          color: var(--primary-blue);
+          border: 2px solid var(--primary-blue);
+        }
+        
+        .btn-secondary:hover {
+          background: var(--primary-blue);
+          color: var(--white);
+        }
+        
+        .btn-lg {
+          padding: var(--space-4) var(--space-8);
+          font-size: var(--font-size-lg);
+        }
+        
+        .btn-sm {
+          padding: var(--space-2) var(--space-4);
+          font-size: var(--font-size-sm);
+        }
+        
+        /* Card Components */
+        .card {
+          background: var(--white);
+          border-radius: var(--radius-xl);
+          box-shadow: var(--shadow-md);
+          padding: var(--space-6);
+          transition: all var(--transition-normal);
+        }
+        
+        .card:hover {
+          transform: translateY(-4px);
+          box-shadow: var(--shadow-xl);
+        }
+        
+        .card-header {
+          margin-bottom: var(--space-4);
+        }
+        
+        .card-body {
+          margin-bottom: var(--space-4);
+        }
+        
+        .card-footer {
+          margin-top: var(--space-4);
+        }
+        
+        /* Navigation */
+        .navbar {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 1000;
+          border-bottom: 1px solid rgba(79, 195, 247, 0.1);
+        }
+        
+        .nav-container {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: var(--space-4);
+        }
+        
+        .nav-logo {
+          font-size: var(--font-size-xl);
+          font-weight: 700;
+          color: var(--primary-blue);
+        }
+        
+        .nav-menu {
+          display: flex;
+          list-style: none;
+          gap: var(--space-6);
+        }
+        
+        .nav-link {
+          color: var(--text-dark);
+          font-weight: 500;
+          transition: color var(--transition-fast);
+          position: relative;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+          color: var(--primary-blue);
+        }
+        
+        .nav-link::after {
+          content: '';
+          position: absolute;
+          bottom: -4px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: var(--primary-blue);
+          transition: width var(--transition-normal);
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+          width: 100%;
+        }
+        
+        .mobile-menu-btn {
+          display: none;
+          background: none;
+          border: none;
+          font-size: var(--font-size-xl);
+          color: var(--primary-blue);
+          cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+          background: linear-gradient(135deg, var(--light-blue) 0%, rgba(79, 195, 247, 0.1) 100%);
+          padding: var(--space-20) 0 var(--space-16) 0;
+          margin-top: 80px;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .hero::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="water" patternUnits="userSpaceOnUse" width="20" height="20"><circle cx="10" cy="10" r="1" fill="rgba(79,195,247,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23water)"/></svg>');
+          pointer-events: none;
+        }
+        
+        .hero-content {
+          text-align: center;
+          max-width: 800px;
+          margin: 0 auto;
+          position: relative;
+          z-index: 1;
+        }
+        
+        .hero h1 {
+          font-size: var(--font-size-5xl);
+          background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin-bottom: var(--space-6);
+        }
+        
+        .hero p {
+          font-size: var(--font-size-lg);
+          margin-bottom: var(--space-8);
+          max-width: 600px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        
+        /* Statistics Section */
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: var(--space-6);
+          margin: var(--space-16) 0;
+        }
+        
+        .stat-card {
+          text-align: center;
+          padding: var(--space-8);
+          background: var(--white);
+          border-radius: var(--radius-xl);
+          box-shadow: var(--shadow-lg);
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .stat-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+        }
+        
+        .stat-number {
+          font-size: var(--font-size-4xl);
+          font-weight: 700;
+          color: var(--primary-blue);
+          margin-bottom: var(--space-2);
+          display: block;
+        }
+        
+        .stat-label {
+          font-size: var(--font-size-base);
+          color: var(--text-light);
+          font-weight: 500;
+        }
+        
+        /* Form Components */
+        .form-group {
+          margin-bottom: var(--space-5);
+        }
+        
+        .form-label {
+          display: block;
+          margin-bottom: var(--space-2);
+          font-weight: 500;
+          color: var(--text-dark);
+        }
+        
+        .form-input {
+          width: 100%;
+          padding: var(--space-3) var(--space-4);
+          border: 2px solid #e5e7eb;
+          border-radius: var(--radius-md);
+          font-size: var(--font-size-base);
+          transition: border-color var(--transition-fast);
+          background: var(--white);
+        }
+        
+        .form-input:focus {
+          border-color: var(--primary-blue);
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.1);
+        }
+        
+        .form-select {
+          appearance: none;
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+          background-position: right 0.5rem center;
+          background-repeat: no-repeat;
+          background-size: 1.5em 1.5em;
+          padding-right: 2.5rem;
+        }
+        
+        .form-textarea {
+          resize: vertical;
+          min-height: 100px;
+        }
+        
+        /* Footer */
+        .footer {
+          background: var(--text-dark);
+          color: var(--white);
+          padding: var(--space-16) 0 var(--space-8) 0;
+        }
+        
+        .footer-content {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: var(--space-8);
+          margin-bottom: var(--space-8);
+        }
+        
+        .footer-section h3 {
+          color: var(--primary-blue);
+          margin-bottom: var(--space-4);
+        }
+        
+        .footer-links {
+          list-style: none;
+        }
+        
+        .footer-links li {
+          margin-bottom: var(--space-2);
+        }
+        
+        .footer-links a {
+          color: #d1d5db;
+          transition: color var(--transition-fast);
+        }
+        
+        .footer-links a:hover {
+          color: var(--primary-blue);
+        }
+        
+        .footer-bottom {
+          border-top: 1px solid #374151;
+          padding-top: var(--space-8);
+          text-align: center;
+          color: #9ca3af;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fadeInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes fadeInRight {
+          from {
+            opacity: 0;
+            transform: translateX(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes pulse {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+        }
+        
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        
+        .animate-fade-in-up {
+          animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .animate-fade-in-left {
+          animation: fadeInLeft 0.8s ease-out;
+        }
+        
+        .animate-fade-in-right {
+          animation: fadeInRight 0.8s ease-out;
+        }
+        
+        .animate-pulse {
+          animation: pulse 2s infinite;
+        }
+        
+        .animate-spin {
+          animation: spin 1s linear infinite;
+        }
+        
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        
+        .text-primary { color: var(--primary-blue); }
+        .text-secondary { color: var(--secondary-blue); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-error { color: var(--error); }
+        
+        .bg-primary { background-color: var(--primary-blue); }
+        .bg-light { background-color: var(--light-gray); }
+        .bg-white { background-color: var(--white); }
+        
+        .hidden { display: none; }
+        .block { display: block; }
+        .inline-block { display: inline-block; }
+        
+        .mt-4 { margin-top: var(--space-4); }
+        .mb-4 { margin-bottom: var(--space-4); }
+        .ml-4 { margin-left: var(--space-4); }
+        .mr-4 { margin-right: var(--space-4); }
+        
+        .pt-4 { padding-top: var(--space-4); }
+        .pb-4 { padding-bottom: var(--space-4); }
+        .pl-4 { padding-left: var(--space-4); }
+        .pr-4 { padding-right: var(--space-4); }
+        
+        .rounded { border-radius: var(--radius-md); }
+        .rounded-lg { border-radius: var(--radius-lg); }
+        .rounded-xl { border-radius: var(--radius-xl); }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+          .grid-4 {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          
+          .hero h1 {
+            font-size: var(--font-size-4xl);
+          }
+        }
+        
+        @media (max-width: 768px) {
+          .container {
+            padding: 0 var(--space-3);
+          }
+          
+          .nav-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            flex-direction: column;
+            padding: var(--space-4);
+            box-shadow: var(--shadow-lg);
+          }
+          
+          .nav-menu.active {
+            display: flex;
+          }
+          
+          .mobile-menu-btn {
+            display: block;
+          }
+          
+          .grid-2,
+          .grid-3,
+          .grid-4 {
+            grid-template-columns: 1fr;
+          }
+          
+          .hero {
+            padding: var(--space-16) 0 var(--space-12) 0;
+          }
+          
+          .hero h1 {
+            font-size: var(--font-size-3xl);
+          }
+          
+          .section {
+            padding: var(--space-12) 0;
+          }
+          
+          .stats-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .hero h1 {
+            font-size: var(--font-size-2xl);
+          }
+          
+          .btn-lg {
+            padding: var(--space-3) var(--space-6);
+            font-size: var(--font-size-base);
+          }
+          
+          .stat-number {
+            font-size: var(--font-size-3xl);
+          }
+        }
+        
+        /* Print Styles */
+        @media print {
+          .navbar,
+          .mobile-menu-btn {
+            display: none;
+          }
+          
+          .hero {
+            margin-top: 0;
+          }
+          
+          body {
+            font-size: 12pt;
+            line-height: 1.4;
+          }
+        }</style>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="in.html" class="nav-logo">
+      <i class="fas fa-tint"></i> BlueSprout
+    </a>
+    <ul class="nav-menu">
+      <li><a href="index.html#hero" class="nav-link">Home</a></li>
+      <li><a href="index.html#features" class="nav-link">Features</a></li>
+      <li><a href="aiassessment.html" class="nav-link">AI Assessment</a></li>
+      <li><a href="gis.html" class="nav-link">GIS Map</a></li>
+      <li><a href="login.html" class="nav-link">Water Tracker</a></li>
+      <li><a href="index.html#game" class="nav-link">Play Game</a></li>
+      <li><a href="login.html" id="logoutLink" class="nav-link">Login</a></li>
+      </ul>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+</nav>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content text-center">
+                <h1>Contact Us</h1>
+                <p>Get in touch with the BlueSprout team!</p>
+            </div>
+        </div>
+    </section>
+    <section><!-- Chatbot Start -->
+        <style>
+          #chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #00bcd4;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+          }
+          #chat-notification {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: #00bcd4;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 999;
+          }
+          #chat-popup {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            max-height: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+          }
+          #chat-header {
+            background: #00bcd4;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+          }
+          #chat-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background: #f7f7f7;
+          }
+          .chat-message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            font-size: 14px;
+          }
+          .suggestion {
+            background: #00bcd4;
+            color: white;
+            padding: 8px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+            margin: 5px 2px;
+            cursor: pointer;
+            transition: background 0.3s;
+          }
+          .suggestion:hover {
+            background: #0097a7;
+          }
+          #chat-input {
+            display: flex;
+            border-top: 1px solid #ddd;
+          }
+          #userInput {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            font-size: 14px;
+          }
+          #chat-input button {
+            padding: 10px;
+            background: #00bcd4;
+            color: white;
+            border: none;
+            cursor: pointer;
+          }
+        </style>
+        
+        <div id="chat-button">💬</div>
+        <div id="chat-notification">Hey! Any doubt? I'm here!</div>
+        <div id="chat-popup">
+          <div id="chat-header">BlueSprout Assistant</div>
+          <div id="chat-messages">
+            <div class="chat-message"><strong>BLUEY:</strong> Hi! I’m here to help you with BlueSprout.</div>
+            <div class="suggestion" onclick="sendMessage('How can I trace my roof?')">How can I trace my roof?</div>
+            <div class="suggestion" onclick="sendMessage('What is rainwater harvesting?')">What is rainwater harvesting?</div>
+            <div class="suggestion" onclick="sendMessage('How do I measure area?')">How do I measure area?</div>
+          </div>
+          <div id="chat-input">
+            <input type="text" id="userInput" placeholder="Type your message..." />
+            <button onclick="submitMessage()">Send</button>
+          </div>
+        </div>
+        
+        <script>
+          const chatButton = document.getElementById('chat-button');
+          const chatPopup = document.getElementById('chat-popup');
+          const chatNotification = document.getElementById('chat-notification');
+          const chatMessages = document.getElementById('chat-messages');
+          const userInput = document.getElementById('userInput');
+        
+          window.addEventListener('load', () => {
+            chatNotification.style.opacity = 1;
+            setTimeout(() => {
+              chatNotification.style.opacity = 0;
+              setTimeout(() => { chatNotification.style.display = 'none'; }, 300);
+            }, 4000);
+          });
+        
+          chatButton.addEventListener('click', () => {
+            if(chatPopup.style.display === 'flex') {
+              chatPopup.style.display = 'none';
+            } else {
+              chatPopup.style.display = 'flex';
+            }
+          });
+        
+          function sendMessage(text) {
+            appendMessage('You', text);
+            setTimeout(() => {
+              appendMessage('BLUEY', generateReply(text));
+            }, 500);
+          }
+        
+          function submitMessage() {
+            const text = userInput.value.trim();
+            if(text !== "") {
+              sendMessage(text);
+              userInput.value = '';
+            }
+          }
+        
+          function appendMessage(sender, text) {
+            const msg = document.createElement('div');
+            msg.className = 'chat-message';
+            msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+            chatMessages.appendChild(msg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          }
+        
+          function generateReply(text) {
+            text = text.toLowerCase();
+            if(text.includes('trace')) return "You can trace your rooftop by selecting points on the map.";
+            if(text.includes('rainwater')) return "Rainwater harvesting helps collect and store rainwater from rooftops.";
+            if(text.includes('measure')) return "After tracing, click on 'Calculate Area' to measure your rooftop.";
+            return "Let me check that for you or you can contact us for further assistance!";
+          }
+        </script>
+        <!-- Chatbot End --></section>
+    <section class="section">
+        <div class="container">
+            <form class="card" data-form-type="contact">
+                <h3>Send us a message</h3>
+                <div class="form-group">
+                    <label class="form-label">Name *</label>
+                    <input type="text" name="name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email *</label>
+                    <input type="email" name="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message *</label>
+                    <textarea name="message" class="form-input form-textarea" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+
+
+
+    
+    <script src="../js/main.js"></script>
+</body>
+</html>

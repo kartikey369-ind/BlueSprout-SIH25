@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/x-icon" href="dropp.png">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Tracker - Welcome</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffffff 0%, #00b3cb 100%);
+      font-family: 'Poppins', sans-serif;
+      color: #0a192f;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 3rem;
+      color: #ffffff;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, #00bcd4, #4fc3f7);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      cursor: pointer;
+      margin-top: 2rem;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 188, 212, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="welcome">Hello ...</h1>
+  <button id="logoutBtn">Logout</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyBmFzWeb3havTS9hwsXwO7V0ztA5mHZGEY",
+      authDomain: "blue-sprout.firebaseapp.com",
+      projectId: "blue-sprout",
+      storageBucket: "blue-sprout.firebasestorage.app",
+      messagingSenderId: "352837881696",
+      appId: "1:352837881696:web:9ca7d22172a45ad5e2d805"
+    };
+  
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+  
+    // Check user login
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+  
+        let name = "there";
+        if (userSnap.exists()) {
+          name = userSnap.data().name || "there";
+        }
+  
+        document.getElementById("welcome").textContent = `Hello ${name}, welcome back 👋`;
+  
+        // Wait 3 seconds before redirect
+        setTimeout(() => {
+          window.location.href = "track2.html";
+        }, 3000);
+      } else {
+        // Not logged in, redirect to login
+        window.location.href = "login.html";
+      }
+    });
+  
+    // Logout button
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      signOut(auth).then(() => {
+        alert("Logged out!");
+        window.location.href = "index.html";
+      }).catch((error) => {
+        console.error(error);
+      });
+    });
+  </script>
+  
+</body>
+</html>

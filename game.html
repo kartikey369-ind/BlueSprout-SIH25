@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="dropp.png">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlueSprout · Rain Catcher Arcade</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+/* Reset & base */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Fredoka', sans-serif; }
+body { background-color: #f0f8ff; color: #222; overflow-x: hidden; }
+
+/* Theme tokens */
+:root {
+  --primary: #00e1e1;
+  --primary-dark: #00b5b5;
+  --ink: #0a3d62;
+  --bg: #f0f8ff;
+  --card: rgba(255,255,255,0.8);
+  --glass: rgba(255,255,255,0.1);
+}
+
+/* Navbar */
+.navbar {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.nav-logo { font-size: 1.8rem; font-weight: bold; color: white; display: flex; align-items: center; gap: 10px; }
+.nav-logo i { color: rgb(0,225,225); font-size: 2rem; }
+
+.nav-menu { display: flex; gap: 25px; list-style: none; }
+.nav-link { color: white; font-size: 1rem; font-weight: 500; position: relative; transition: color 0.3s; }
+.nav-link:hover, .nav-link.active { color: rgb(0,225,225); }
+.nav-link::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background-color: rgb(0,225,225); transform: scaleX(0); transform-origin: right; transition: transform 0.3s ease; }
+.nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); transform-origin: left; }
+.mobile-menu-btn { display: none; font-size: 1.5rem; background: none; color: white; cursor: pointer; }
+@media (max-width: 768px) { .nav-menu { display: none; flex-direction: column; background: rgba(0,0,0,0.8); position: absolute; top: 80px; right: 0; width: 200px; padding: 10px 0; border-radius: 0 0 10px 10px; } .mobile-menu-btn { display: block; } }
+
+/* Hero */
+.hero {
+  margin-top: 100px;
+  padding: 40px 20px 10px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+  align-items: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero-title { color: var(--ink); font-size: 2.4rem; line-height: 1.2; }
+.hero-sub { color: #2c597a; margin-top: 10px; font-size: 1.05rem; }
+.hero-cta {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
+.btn {
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+.btn:hover { background: #08415f; transform: translateY(-1px); }
+.btn.secondary { background: var(--primary); color: #003c3c; }
+.btn.secondary:hover { background: var(--primary-dark); }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; padding-top: 120px; }
+}
+
+/* Game Container */
+#gameContainer {
+  position: relative;
+  width: 90%;
+  max-width: 700px;
+  height: 400px;
+  margin: 20px auto;
+  border-radius: 30px;
+  background: linear-gradient(to top, #a0e7ff, #ffffff);
+  border: 2px solid rgba(0, 225, 225, 0.5);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* Raindrops */
+.raindrop {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #00e1e1;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00e1e1;
+}
+
+/* House */
+#house {
+  position: absolute;
+  bottom: 0;
+  width: 120px;
+  cursor: pointer;
+  filter: drop-shadow(0 0 15px #00e1e1);
+}
+
+/* Info Panel */
+#infoPanel {
+  width: 90%;
+  max-width: 700px;
+  margin: 0 auto 20px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  border: 2px solid rgba(0,225,225,0.3);
+  padding: 15px 20px;
+  color: #0a3d62;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#infoPanel div { font-size: 1rem; font-weight: 600; }
+
+/* Water Tank */
+#waterTankContainer {
+  width: 90%;
+  max-width: 700px;
+  height: 30px;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(0,225,225,0.3);
+  border-radius: 20px;
+  margin: 0 auto 50px;
+  overflow: hidden;
+  position: relative;
+}
+#waterTank { width: 0%; height: 100%; background: #00e1e1; transition: width 0.2s; }
+#tankInfo { position: absolute; width: 100%; text-align: center; line-height: 30px; font-weight: bold; color: #0a3d62; }
+
+/* Cards & HUD */
+.section {
+  width: 95%;
+  max-width: 1100px;
+  margin: 40px auto;
+}
+.card {
+  background: var(--card);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+.card-header { padding: 18px 20px; border-bottom: 1px solid rgba(0,0,0,0.06); display: flex; align-items: center; gap: 10px; }
+.card-title { font-size: 1.4rem; color: var(--ink); font-weight: 700; }
+.card-body { padding: 18px 20px; }
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+.col-6 { grid-column: span 6; }
+.col-4 { grid-column: span 4; }
+.col-12 { grid-column: span 12; }
+@media (max-width: 900px) { .col-6, .col-4 { grid-column: span 12; } }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.label { font-weight: 700; color: var(--ink); font-size: 0.95rem; }
+.hint { color: #2c597a; font-size: 0.85rem; }
+.input, .select {
+  padding: 12px 12px;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 12px;
+  background: #fff;
+  font-size: 1rem;
+}
+.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
+.muted { color: #2c597a; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,1px,1px); white-space: nowrap; border: 0; }
+
+.hud { width: 90%; max-width: 700px; margin: 10px auto; display: flex; justify-content: space-between; align-items: center; gap: 10px; color: var(--ink); font-weight: 700; }
+.hud .left, .hud .right { display: flex; gap: 12px; align-items: center; }
+.pill { background: #fff; padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 1500; }
+.overlay.active { display: flex; }
+.overlay .panel { background: #ffffff; border-radius: 18px; padding: 24px 20px; width: min(520px, 92%); text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
+.overlay h2 { color: var(--ink); margin-bottom: 8px; font-size: 1.8rem; }
+.overlay p { color: #2c597a; margin-bottom: 14px; }
+.big-btn { background: var(--primary); color: #003c3c; border: none; padding: 14px 20px; border-radius: 14px; font-weight: 800; font-size: 1.05rem; cursor: pointer; }
+.big-btn:hover { background: var(--primary-dark); }
+
+/* Drop variants & particles */
+.raindrop.normal { background: #00e1e1; box-shadow: 0 0 10px #00e1e1; }
+.raindrop.gold { background: #ffd54f; box-shadow: 0 0 12px #ffd54f; }
+.raindrop.acid { background: #ff6b6b; box-shadow: 0 0 12px #ff6b6b; }
+.particle { position: absolute; width: 6px; height: 6px; border-radius: 50%; pointer-events: none; }
+
+/* Footer */
+footer {
+  background: #1a1a2e;
+  color: white;
+  padding: 60px 0 20px 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+/* About section with centered socials */
+footer .footer-section.about .social-links {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.footer-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: rgb(0, 225, 225); /* Accent color */
+}
+
+.footer-section p {
+  line-height: 1.6;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: inline-block;
+}
+
+.footer-section ul li a:hover {
+  color: rgb(0, 225, 225);
+  transform: translateX(5px);
+}
+
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgb(0, 225, 225); /* Accent color */
+  color: white;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+  transform: translateY(-3px);
+  background: #00baba; /* Slightly darker on hover */
+  box-shadow: 0 5px 15px rgba(0, 225, 225, 0.4);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 30px;
+  border-top: 1px solid #333;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .social-links {
+    justify-content: center;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo"><i class="fas fa-tint"></i> BlueSprout</div>
+    <ul class="nav-menu">
+      <li><a href="index.html#hero" class="nav-link active">Home</a></li>
+        <li><a href="index.html#features" class="nav-link">Features</a></li>
+        <li><a href="aiassessment.html" class="nav-link">AI Assessment</a></li>
+        <li><a href="gis.html" class="nav-link">GIS Map</a></li>
+        <li><a href="login.html" class="nav-link">Water Tracker</a></li>
+        <li><a href="index.html#game" class="nav-link">Play Game</a></li>
+        <li><a href="login.html" id="logoutLink" class="nav-link">Login</a></li>
+    </ul>
+    <button class="mobile-menu-btn">☰</button>
+  </div>
+</nav>
+
+<section class="hero" id="hero">
+  <div>
+    <h1 class="hero-title">BlueSprout Rain Catcher</h1>
+    <p class="hero-sub">Catch glowing drops, dodge acid rain, chain combos, and level up!</p>
+    <div class="hero-cta">
+      <a class="btn secondary" href="#gameContainer"><i class="fas fa-play"></i> Start Playing</a>
+    </div>
+  </div>
+  <div class="card" style="max-width:700px; margin:20px auto; padding:16px;">
+    <h3 style="color:#0a3d62; margin-bottom:8px;">📖 Instructions</h3>
+    <p style="color:#2c597a; font-size:0.95rem; line-height:1.6;">
+      Catch the <b>blue drops</b> to fill your water tank. <b><br>Gold drops</b> give extra points. 
+      <br>Avoid the <b>red acid rain</b> or you lose a life! <br>Use <b>A/D or ←/→</b> keys (or drag on mobile) 
+      to move the house. <br>Build combos to score faster!
+    </p>
+  </div>
+  
+  </div>
+</section>
+
+<div id="infoPanel">
+  <div id="timer">Time: 20s</div>
+  <div id="waterSaved">Water saved: 0 L</div>
+  <div id="instructions">Catch raindrops with your house to fill the tank!</div>
+</div>
+<!-- HUD -->
+<div class="hud" aria-live="polite">
+  <div class="left">
+    <div class="pill" id="hudScore">Score: 0</div>
+    <div class="pill" id="hudCombo">Combo: ×1</div>
+    <div class="pill" id="hudLevel">Level: 1</div>
+  </div>
+  <div class="right">
+    <div class="pill" id="hudLives">❤❤❤</div>
+    <button class="btn" id="pauseBtn" aria-pressed="false"><i class="fas fa-pause"></i> Pause</button>
+    <button class="btn secondary" id="muteBtn" aria-pressed="false"><i class="fas fa-volume-up"></i> Sound</button>
+  </div>
+  <span class="sr-only" id="srUpdate"></span>
+</div>
+
+<div id="gameContainer">
+  <img src="house.png" id="house" alt="House">
+</div>
+
+<div id="waterTankContainer">
+  <div id="waterTank"></div>
+  <div id="tankInfo">0 / 50 L</div>
+</div>
+
+
+
+<!-- Overlays -->
+<div class="overlay active" id="startOverlay">
+  <div class="panel">
+    <h2>Rain Catcher Arcade</h2>
+    <p>How to Play:</p>
+    <ul style="text-align:left; margin:0 auto; max-width:400px; color:#2c597a; line-height:1.5;">
+      <li>🎮 Move house with <b>A/D</b> or <b>←/→</b> keys</li>
+      <li>📱 On mobile: drag the house left or right</li>
+      <li>💧 Catch <span style="color:#00e1e1;font-weight:bold;">blue drops</span> to save water</li>
+      <li>🌟 Catch <span style="color:#ffd54f;font-weight:bold;">gold drops</span> for bonus points</li>
+      <li>☠ Avoid <span style="color:#ff6b6b;font-weight:bold;">red acid rain</span> – you lose a life</li>
+      <li>🔥 Chain catches to build <b>combo multiplier</b></li>
+      <li>⏸ Use Pause button anytime</li>
+    </ul>
+    <button class="big-btn" id="startBtn"><i class="fas fa-play"></i> Start</button>
+  </div>
+  <span class="sr-only">Game paused. Press Start to play.</span>
+</div>
+
+
+<div class="overlay" id="gameOverOverlay">
+  <div class="panel">
+    <h2>Game Over</h2>
+    <p id="finalStats">You saved 0 litres!</p>
+    <button class="big-btn" id="restartBtn"><i class="fas fa-redo"></i> Restart</button>
+  </div>
+</div>
+
+<!-- Enhanced Chatbot -->
+<section>
+  <style>
+    #chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
+      color: white;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0, 225, 225, 0.4);
+      z-index: 1000;
+      border: 3px solid #ffffff;
+      transition: all 0.3s ease;
+      animation: robotPulse 2s infinite;
+    }
+
+    #chat-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(0, 225, 225, 0.6);
+    }
+
+    @keyframes robotPulse {
+      0%, 100% { 
+        box-shadow: 0 6px 20px rgba(0, 225, 225, 0.4);
+      }
+      50% { 
+        box-shadow: 0 6px 20px rgba(0, 225, 225, 0.8), 0 0 0 10px rgba(0, 225, 225, 0.1);
+      }
+    }
+
+    #chat-button::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 8px;
+      background: #00e1e1;
+      border-radius: 10px 10px 0 0;
+      border: 2px solid #ffffff;
+      border-bottom: none;
+    }
+
+    #chat-button::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 6px;
+      background: #00e1e1;
+      border-radius: 0 0 15px 15px;
+      border: 2px solid #ffffff;
+      border-top: none;
+    }
+
+    #chat-notification {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 20px;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 999;
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 15px rgba(0, 225, 225, 0.3);
+      font-weight: 600;
+    }
+
+    #chat-popup {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 300px;
+      max-height: 400px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1000;
+    }
+
+    #chat-header {
+      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    #chat-messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background: #f7f7f7;
+    }
+
+    .chat-message {
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-size: 14px;
+    }
+
+    .suggestion {
+      background: #00e1e1;
+      color: white;
+      padding: 8px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      display: inline-block;
+      margin: 5px 2px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .suggestion:hover {
+      background: #00baba;
+    }
+
+    #chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      font-size: 14px;
+    }
+
+    #chat-input button {
+      padding: 10px;
+      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    #chat-input button:hover {
+      background: linear-gradient(135deg, #00baba 0%, #009999 100%);
+      transform: translateY(-1px);
+    }
+  </style>
+  
+  <div id="chat-button">🤖</div>
+  <div id="chat-notification">Hey! Any doubt? I'm here!</div>
+  <div id="chat-popup">
+    <div id="chat-header">🤖 BlueSprout Assistant</div>
+    <div id="chat-messages">
+      <div class="chat-message"><strong>BLUEY:</strong> Hi! I'm your BlueSprout assistant. I can help you with rooftop rainwater harvesting, assessments, and water conservation. What would you like to know?</div>
+      <div class="suggestion" onclick="sendMessage('What is BlueSprout?')">What is BlueSprout?</div>
+      <div class="suggestion" onclick="sendMessage('How to assess my rooftop?')">How to assess my rooftop?</div>
+      <div class="suggestion" onclick="sendMessage('What is rainwater harvesting?')">What is rainwater harvesting?</div>
+      <div class="suggestion" onclick="sendMessage('How much water can I collect?')">How much water can I collect?</div>
+      <div class="suggestion" onclick="sendMessage('What are the benefits?')">What are the benefits?</div>
+      <div class="suggestion" onclick="sendMessage('How much does it cost?')">How much does it cost?</div>
+    </div>
+    <div id="chat-input">
+      <input type="text" id="userInput" placeholder="Type your message..." />
+      <button onclick="submitMessage()">Send</button>
+    </div>
+  </div>
+  
+  <script>
+    const chatButton = document.getElementById('chat-button');
+    const chatPopup = document.getElementById('chat-popup');
+    const chatNotification = document.getElementById('chat-notification');
+    const chatMessages = document.getElementById('chat-messages');
+    const userInput = document.getElementById('userInput');
+  
+    window.addEventListener('load', () => {
+      chatNotification.style.opacity = 1;
+      setTimeout(() => {
+        chatNotification.style.opacity = 0;
+        setTimeout(() => { chatNotification.style.display = 'none'; }, 300);
+      }, 4000);
+    });
+  
+    chatButton.addEventListener('click', () => {
+      if(chatPopup.style.display === 'flex') {
+        chatPopup.style.display = 'none';
+      } else {
+        chatPopup.style.display = 'flex';
+      }
+    });
+  
+    function sendMessage(text) {
+      appendMessage('You', text);
+      setTimeout(() => {
+        appendMessage('BLUEY', generateReply(text));
+      }, 500);
+    }
+  
+    function submitMessage() {
+      const text = userInput.value.trim();
+      if(text !== "") {
+        sendMessage(text);
+        userInput.value = '';
+      }
+    }
+  
+    function appendMessage(sender, text) {
+      const msg = document.createElement('div');
+      msg.className = 'chat-message';
+      msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  
+    function generateReply(text) {
+      text = text.toLowerCase();
+      
+      // BlueSprout Platform Questions
+      if(text.includes('bluesprout') || text.includes('what is bluesprout')) {
+        return "BlueSprout is a comprehensive platform for rooftop rainwater harvesting assessment and artificial recharge planning. We help individuals and communities assess their rainwater collection potential, get personalized recommendations, and contribute to groundwater conservation. Our platform includes AI-powered assessments, manual calculations, water tracking, and educational games.";
+      }
+      
+      // Assessment Questions
+      if(text.includes('assess') || text.includes('assessment') || text.includes('rooftop')) {
+        return "You can assess your rooftop in two ways: 1) AI Assessment - Upload a photo of your roof for AI-powered analysis, or 2) Manual Assessment - Enter details like roof area, rainfall data, and location for precise calculations. Both methods provide feasibility analysis, recommended tank sizes, and cost estimates.";
+      }
+      
+      if(text.includes('ai assessment') || text.includes('upload')) {
+        return "Our AI Assessment uses advanced image recognition to analyze your rooftop photo. Simply upload a clear image of your roof, and our AI will identify the roof area, material, slope, and provide recommendations for optimal rainwater harvesting setup. It's quick, accurate, and user-friendly!";
+      }
+      
+      if(text.includes('manual assessment') || text.includes('calculate')) {
+        return "Manual Assessment requires you to input: roof area (m²), annual rainfall (mm), number of dwellers, available open space, and roof material. Our algorithm calculates harvestable volume, recommended tank size, recharge capacity, and provides detailed cost-benefit analysis.";
+      }
+      
+      // Rainwater Harvesting Questions
+      if(text.includes('rainwater harvesting') || text.includes('what is rainwater')) {
+        return "Rainwater harvesting is the collection and storage of rainwater from rooftops, surfaces, or catchments for later use. It helps reduce water bills, provides backup water supply, reduces flooding, and recharges groundwater. Our platform helps you implement this sustainable practice effectively.";
+      }
+      
+      if(text.includes('how much water') || text.includes('water can i collect') || text.includes('capacity')) {
+        return "Water collection depends on roof area, annual rainfall, and runoff coefficient. Formula: Volume = Rainfall(mm) × Roof Area(m²) × Runoff Coefficient × 1000. For example, a 100m² roof in an area with 800mm annual rainfall can collect ~64,000 liters/year (assuming 0.8 runoff coefficient). Use our assessment tools for precise calculations!";
+      }
+      
+      if(text.includes('benefits') || text.includes('advantages') || text.includes('why')) {
+        return "Benefits include: 💧 Reduced water bills (30-50% savings), 🌱 Groundwater recharge, 🏠 Backup water supply, 🌊 Flood reduction, 🌍 Environmental sustainability, 💰 Cost-effective long-term solution, 🏘️ Community water security, and 📈 Increased property value. Our platform helps maximize these benefits!";
+      }
+      
+      if(text.includes('cost') || text.includes('price') || text.includes('expensive')) {
+        return "Costs vary by system size and complexity. Basic systems: ₹15,000-50,000, Medium systems: ₹50,000-1,50,000, Large systems: ₹1,50,000+. Factors include tank size, filtration, plumbing, and installation. Our platform provides detailed cost estimates and payback period calculations. Most systems pay for themselves in 3-5 years through water savings.";
+      }
+      
+      // Technical Questions
+      if(text.includes('tank size') || text.includes('storage')) {
+        return "Tank size depends on roof area, rainfall, and usage patterns. General rule: 60% of annual harvestable volume. For a 100m² roof with 800mm rainfall, recommended tank size is ~38,400 liters. Our assessment tools calculate optimal tank size based on your specific conditions and usage needs.";
+      }
+      
+      if(text.includes('recharge') || text.includes('groundwater') || text.includes('artificial')) {
+        return "Artificial recharge involves directing rainwater to recharge pits, trenches, or shafts to replenish groundwater. Benefits include improved water table levels, reduced flooding, and sustainable water management. Our platform calculates recharge capacity and recommends appropriate structures based on soil type and available space.";
+      }
+      
+      if(text.includes('maintenance') || text.includes('care') || text.includes('clean')) {
+        return "Regular maintenance includes: cleaning gutters monthly, inspecting tanks quarterly, checking filters, monitoring water quality, repairing leaks immediately, and cleaning first-flush diverters. Our water tracker helps monitor system performance and maintenance schedules.";
+      }
+      
+      if(text.includes('filter') || text.includes('quality') || text.includes('safe')) {
+        return "Water quality depends on roof material, environment, and filtration. Use first-flush diverters, mesh filters, and sand/charcoal filters. For drinking water, add UV treatment or reverse osmosis. Our platform provides water quality guidelines and filtration recommendations based on your location and usage.";
+      }
+      
+      // Game and Education
+      if(text.includes('game') || text.includes('play') || text.includes('learn')) {
+        return "Our interactive Rain Catcher game teaches water conservation through fun gameplay! Catch raindrops, avoid acid rain, build combos, and level up while learning about rainwater harvesting. It's educational, engaging, and helps spread awareness about water conservation. Try it out!";
+      }
+      
+      if(text.includes('track') || text.includes('monitor') || text.includes('progress')) {
+        return "Our Water Tracker helps you monitor your water savings, track environmental impact, set conservation goals, and measure the effectiveness of your rainwater harvesting system. It provides detailed analytics and helps optimize your water usage patterns.";
+      }
+      
+      // Location and Feasibility
+      if(text.includes('feasible') || text.includes('suitable') || text.includes('possible')) {
+        return "Most rooftops are suitable for rainwater harvesting! Key factors: roof area (minimum 20m²), rainfall (minimum 400mm annually), roof material (metal, tile, concrete work best), and local regulations. Our assessment tools evaluate feasibility and provide specific recommendations for your location.";
+      }
+      
+      if(text.includes('location') || text.includes('area') || text.includes('region')) {
+        return "BlueSprout works across India and supports regional languages for better accessibility. We use local rainfall data, groundwater information, and regional guidelines to provide accurate assessments. Our platform adapts to different climatic conditions and local water management practices.";
+      }
+      
+      // Contact and Support
+      if(text.includes('contact') || text.includes('help') || text.includes('support')) {
+        return "For additional support, you can: 📧 Contact us through our contact page, 📞 Call our helpline, 💬 Continue chatting with me, 📚 Check our FAQ section, or 📖 Download our comprehensive guides. We're here to help you succeed with rainwater harvesting!";
+      }
+      
+      if(text.includes('guide') || text.includes('manual') || text.includes('pdf')) {
+        return "We provide comprehensive guides: 'Rooftop Rainwater Guide' and 'Rainwater Harvesting Manual' available for download. These cover everything from basic concepts to advanced implementation, maintenance, and troubleshooting. Perfect for DIY enthusiasts and professionals alike!";
+      }
+      
+      // Default response
+      return "I'm here to help with all your rainwater harvesting questions! Try asking about assessments, costs, benefits, maintenance, or any specific concerns. You can also use our AI Assessment, Manual Assessment, or Water Tracker tools for detailed analysis. What else would you like to know?";
+    }
+  </script>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+
+      <!-- About Section -->
+      <div class="footer-section about">
+        <h3>BlueSprout</h3>
+        <p>Empowering communities to conserve rainwater and manage rooftop water resources effectively. Every rooftop can contribute to a sustainable water future.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html#hero">Home</a></li>
+          <li><a href="index.html#features">Features</a></li>
+          <li><a href="aiassesment.html">AI Assessment</a></li>
+          <li><a href="manualassesment.html">Manual Assessment</a></li>
+          <li><a href="index.html#game">Play our Game</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div class="footer-section">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="1.pdf" target="_blank">Rooftop Rainwater Guide</a></li>
+          <li><a href="2.pdf" target="_blank">Rainwater Harvesting Manual</a></li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div class="footer-section">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="faq.html">FAQs</a></li>
+          <li><a href="pp.html">Privacy Policy</a></li>
+          <li><a href="ourstory.html">Our Story</a></li>
+
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 BlueSprout. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Mobile menu toggle
+const menuBtn = document.querySelector('.mobile-menu-btn');
+const navMenu = document.querySelector('.nav-menu');
+menuBtn.addEventListener('click', () => {
+  navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+});
+
+// Game logic
+const gameContainer = document.getElementById('gameContainer');
+const house = document.getElementById('house');
+const waterSavedDisplay = document.getElementById('waterSaved');
+const timerDisplay = document.getElementById('timer');
+const waterTank = document.getElementById('waterTank');
+const tankInfo = document.getElementById('tankInfo');
+const hudScore = document.getElementById('hudScore');
+const hudCombo = document.getElementById('hudCombo');
+const hudLevel = document.getElementById('hudLevel');
+const hudLives = document.getElementById('hudLives');
+const pauseBtn = document.getElementById('pauseBtn');
+const muteBtn = document.getElementById('muteBtn');
+const startOverlay = document.getElementById('startOverlay');
+const gameOverOverlay = document.getElementById('gameOverOverlay');
+const startBtn = document.getElementById('startBtn');
+const restartBtn = document.getElementById('restartBtn');
+const srUpdate = document.getElementById('srUpdate');
+
+let waterSaved = 0;
+let timeLeft = 20;
+let gameOver = false;
+const maxWater = 50;
+
+// Arcade state
+let score = 0;
+let combo = 1;
+let comboTimer = 0;
+let level = 1;
+let lives = 3;
+let paused = true;
+let muted = false;
+
+// Audio (WebAudio simple beeps)
+let audioCtx;
+function beep(freq, duration, type='sine', gain=0.04) {
+  if (muted) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = type; osc.frequency.value = freq;
+    g.gain.value = gain;
+    osc.connect(g); g.connect(audioCtx.destination);
+    osc.start();
+    setTimeout(() => { osc.stop(); osc.disconnect(); g.disconnect(); }, duration);
+  } catch (_) {}
+}
+
+// Touch & keyboard
+gameContainer.addEventListener('touchmove', e => {
+  const t = e.touches[0];
+  const rect = gameContainer.getBoundingClientRect();
+  let x = t.clientX - rect.left - house.offsetWidth / 2;
+  x = Math.max(0, Math.min(rect.width - house.offsetWidth, x));
+  house.style.left = x + 'px';
+}, { passive: true });
+let keyLeft = false, keyRight = false;
+document.addEventListener('keydown', e => { if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keyLeft = true; if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keyRight = true;});
+document.addEventListener('keyup', e => { if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keyLeft = false; if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keyRight = false;});
+function keyboardMove() {
+  const rect = gameContainer.getBoundingClientRect();
+  const speed = 6 + level;
+  let cur = parseFloat(house.style.left || '0');
+  if (keyLeft) cur -= speed; if (keyRight) cur += speed;
+  cur = Math.max(0, Math.min(rect.width - house.offsetWidth, cur));
+  house.style.left = cur + 'px';
+}
+
+// Timer
+const timerInterval = setInterval(() => {
+    if(gameOver || paused) return;
+    timeLeft--;
+    timerDisplay.innerText = `Time: ${timeLeft}s`;
+    comboTimer = Math.max(0, comboTimer - 1);
+    if(comboTimer === 0) { combo = 1; hudCombo.innerText = `Combo: ×${combo}`; }
+    if(timeLeft <= 0) { endGame(); }
+}, 1000);
+
+function spawnParticle(x, y, color) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.background = color;
+  p.style.left = x + 'px'; p.style.top = y + 'px';
+  gameContainer.appendChild(p);
+  const dx = (Math.random()*2-1) * 3;
+  const dy = (Math.random()*2-1) * 3;
+  let life = 24;
+  const iv = setInterval(() => {
+    if (--life <= 0) { p.remove(); clearInterval(iv); return; }
+    const nx = parseFloat(p.style.left) + dx;
+    const ny = parseFloat(p.style.top) + dy;
+    p.style.left = nx + 'px'; p.style.top = ny + 'px';
+    p.style.opacity = String(life/24);
+  }, 16);
+}
+
+function createRaindrop() {
+    if(gameOver || paused) return;
+    const drop = document.createElement('div');
+    drop.classList.add('raindrop');
+    const r = Math.random();
+    let type = 'normal';
+    if (r > 0.9) type = 'gold'; else if (r < 0.12) type = 'acid';
+    drop.classList.add(type);
+    const size = type === 'gold' ? 22 : 20;
+    drop.style.width = size + 'px'; drop.style.height = size + 'px';
+    drop.dataset.type = type;
+    drop.style.left = Math.random() * (gameContainer.offsetWidth - size) + 'px';
+    drop.style.top = '0px';
+    gameContainer.appendChild(drop);
+
+    const fallSpeed = 3.2 + level * 0.6 + (type === 'gold' ? -0.5 : 0) + (type === 'acid' ? 0.8 : 0);
+    const dropInterval = setInterval(() => {
+        if (paused) return;
+        let dropY = parseFloat(drop.style.top);
+        dropY += fallSpeed;
+        drop.style.top = dropY + 'px';
+
+        keyboardMove();
+
+        const dropX = parseFloat(drop.style.left);
+        const houseLeft = parseFloat(house.style.left || '0');
+        const houseRight = houseLeft + house.offsetWidth;
+        const dropRight = dropX + size;
+
+        if(dropY + size >= gameContainer.offsetHeight - house.offsetHeight &&
+           dropRight >= houseLeft &&
+           dropX <= houseRight) {
+            const t = drop.dataset.type;
+            if (t === 'acid') {
+              lives -= 1; combo = 1; comboTimer = 0; hudCombo.innerText = `Combo: ×${combo}`;
+              hudLives.innerText = '❤'.repeat(Math.max(0, lives));
+              beep(140, 120, 'sawtooth', 0.06);
+              spawnParticle(dropX, dropY, '#ff6b6b');
+              if (lives <= 0) { endGame(); }
+            } else {
+              const points = t === 'gold' ? 10 : 3;
+              combo = Math.min(10, combo + 1); comboTimer = 5;
+              score += points * combo;
+              waterSaved++;
+              waterSavedDisplay.innerText = `Water saved: ${waterSaved} L`;
+              hudScore.innerText = `Score: ${score}`;
+              hudCombo.innerText = `Combo: ×${combo}`;
+              let fillPercent = Math.min((waterSaved / maxWater) * 100, 100);
+              waterTank.style.width = fillPercent + '%';
+              tankInfo.innerText = `${waterSaved} / ${maxWater} L`;
+              beep(t === 'gold' ? 880 : 520, 100, 'triangle');
+              for (let i=0;i<6;i++) spawnParticle(dropX, dropY, t==='gold'?'#ffd54f':'#00e1e1');
+            }
+            drop.remove();
+            clearInterval(dropInterval);
+        }
+
+        if(dropY > gameContainer.offsetHeight) {
+            if (drop.dataset.type !== 'acid') {
+              combo = Math.max(1, combo-1); hudCombo.innerText = `Combo: ×${combo}`;
+            }
+            drop.remove();
+            clearInterval(dropInterval);
+        }
+    }, 16);
+}
+
+let spawner = setInterval(createRaindrop, 800);
+
+function levelUpIfNeeded() {
+  const thresholds = [100, 250, 450, 700, 1000, 1400, 1900];
+  const nextIdx = Math.min(thresholds.length-1, level-1);
+  if (score >= thresholds[nextIdx]) {
+    level += 1;
+    hudLevel.innerText = `Level: ${level}`;
+    beep(660, 160, 'square', 0.05);
+    clearInterval(spawner);
+    const interval = Math.max(280, 800 - level*60);
+    spawner = setInterval(createRaindrop, interval);
+  }
+}
+setInterval(() => { if (!paused && !gameOver) levelUpIfNeeded(); }, 1000);
+
+function startGame() {
+  score = 0; combo = 1; comboTimer = 0; level = 1; lives = 3; paused = false; gameOver = false; timeLeft = 20;
+  hudScore.innerText = 'Score: 0'; hudCombo.innerText = 'Combo: ×1'; hudLevel.innerText = 'Level: 1'; hudLives.innerText = '❤❤❤';
+  waterSaved = 0; waterSavedDisplay.innerText = 'Water saved: 0 L'; waterTank.style.width = '0%'; tankInfo.innerText = '0 / 50 L';
+  timerDisplay.innerText = `Time: ${timeLeft}s`;
+  startOverlay.classList.remove('active');
+  gameOverOverlay.classList.remove('active');
+  srUpdate.textContent = 'Game started';
+}
+
+function endGame() {
+  gameOver = true; paused = true;
+  document.querySelectorAll('.raindrop').forEach(d => d.remove());
+  document.querySelectorAll('.particle').forEach(p => p.remove());
+  document.getElementById('finalStats').innerText = `Score: ${score} · Water saved: ${waterSaved} L · Level ${level}`;
+  gameOverOverlay.classList.add('active');
+  beep(220, 180, 'sine', 0.05);
+}
+
+pauseBtn.addEventListener('click', () => {
+  paused = !paused; pauseBtn.setAttribute('aria-pressed', String(paused));
+  pauseBtn.innerHTML = paused ? '<i class="fas fa-play"></i> Resume' : '<i class="fas fa-pause"></i> Pause';
+  if (paused) srUpdate.textContent = 'Game paused'; else srUpdate.textContent = 'Game resumed';
+});
+
+muteBtn.addEventListener('click', () => {
+  muted = !muted; muteBtn.setAttribute('aria-pressed', String(muted));
+  muteBtn.innerHTML = muted ? '<i class="fas fa-volume-mute"></i> Muted' : '<i class="fas fa-volume-up"></i> Sound';
+});
+
+startBtn.addEventListener('click', startGame);
+restartBtn.addEventListener('click', () => { startGame(); });
+
+</script>
+
+</body>
+</html>

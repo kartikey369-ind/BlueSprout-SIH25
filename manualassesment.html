@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="dropp.png">
+
+<title>BlueSprout - Smart Rainwater Harvesting Assessment</title>
+<meta name="description" content="Complete rainwater harvesting assessment with calculations, recommendations, and multilingual support.">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fredoka:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+    --primary-cyan: #00bcd4;
+    --primary-dark: #0a192f;
+    --white: #ffffff;
+    --light-gray: #f5f5f5;
+    --dark-gray: #333;
+    --success: #4caf50;
+    --warning: #ff9800;
+    --error: #f44336;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --space-2: 8px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --font-base: 'Poppins', sans-serif;
+    --font-display: 'Fredoka', sans-serif;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+    --shadow-md: 0 10px 30px rgba(0,0,0,0.1);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* Reset & Base */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body { 
+    background: linear-gradient(135deg, #ffffff 0%, #00b3cb 100%);
+    min-height: 100vh;
+    color: var(--dark-gray); 
+    line-height: 1.6; 
+    font-family: var(--font-base);
+}
+
+/* Animated Background */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.raindrop {
+    position: absolute;
+    background: rgba(0, 188, 212, 0.1);
+    border-radius: 50%;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+/* Navbar */
+/* Navbar - same as homepage */
+.navbar {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between; /* logo left, menu right */
+  align-items: center;
+  padding: 0 20px; /* slight inset from edges */
+  width: 100%;
+}
+
+.nav-logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo i {
+  color: rgb(0, 225, 225);
+  font-size: 2rem;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+.nav-link {
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: rgb(0, 225, 225);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(0, 225, 225);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.mobile-menu-btn {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+  .mobile-menu-btn {
+    display: block;
+  }
+}
+
+
+/* Main Content */
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 2rem 2rem;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.header h1 {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-cyan), #4fc3f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    animation: slideInUp 0.8s ease-out;
+}
+
+.header p {
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.9);
+    max-width: 600px;
+    margin: 0 auto;
+    animation: slideInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Language Bar */
+.language-bar {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    animation: slideInUp 0.8s ease-out 0.4s both;
+}
+
+.lang-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+}
+
+.lang-btn:hover,
+.lang-btn.active {
+    background: var(--primary-cyan);
+    border-color: var(--primary-cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 188, 212, 0.3);
+}
+
+/* Main Card */
+.main-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    animation: slideInUp 0.8s ease-out 0.6s both;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    background: rgba(0, 188, 212, 0.1);
+}
+
+.tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark-gray);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
+
+.tab-btn:hover,
+.tab-btn.active {
+    background: var(--primary-cyan);
+    color: white;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-cyan);
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    padding: 2rem;
+    min-height: 600px;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Step Indicator */
+.step-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.step {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #999;
+    transition: var(--transition);
+    position: relative;
+}
+
+.step.active {
+    background: var(--primary-cyan);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 5px 20px rgba(0, 188, 212, 0.3);
+}
+
+.step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 2rem;
+    height: 3px;
+    background: #e0e0e0;
+    transform: translateY(-50%);
+}
+
+.step.active:not(:last-child)::after {
+    background: var(--primary-cyan);
+}
+
+/* Form Sections */
+.form-section {
+    display: none;
+}
+
+.form-section.active {
+    display: block;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.form-section h3 {
+    font-size: 1.5rem;
+    color: var(--primary-cyan);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Form Elements */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-input,
+.form-select {
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: var(--transition);
+    background: white;
+}
+
+.form-input:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--primary-cyan);
+    box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.1);
+    transform: translateY(-2px);
+}
+
+.form-input:invalid {
+    border-color: var(--error);
+}
+
+/* Tips */
+.tip {
+    background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(0, 188, 212, 0.05));
+    border-left: 4px solid var(--primary-cyan);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    margin: 2rem 0;
+    position: relative;
+}
+
+.tip::before {
+    content: '💡';
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 1.2rem;
+}
+
+.tip span {
+    margin-left: 2rem;
+    display: block;
+    color: var(--dark-gray);
+    font-style: italic;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+}
+
+.btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-cyan), #4fc3f7);
+    color: white;
+    box-shadow: 0 5px 20px rgba(0, 188, 212, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 188, 212, 0.4);
+}
+
+.btn-secondary {
+    background: #f5f5f5;
+    color: var(--dark-gray);
+    border: 2px solid #e0e0e0;
+}
+
+.btn-secondary:hover {
+    background: #e0e0e0;
+    transform: translateY(-2px);
+}
+
+/* Summary */
+.summary-card {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin: 2rem 0;
+    border: 2px solid rgba(0, 188, 212, 0.2);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-item strong {
+    color: var(--primary-cyan);
+}
+
+/* Results */
+.results-container {
+    margin-top: 2rem;
+}
+
+.result-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.result-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+.result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(0, 188, 212, 0.3);
+}
+
+.result-card h4 {
+    color: var(--primary-cyan);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.result-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--success);
+    margin-bottom: 0.5rem;
+}
+
+.result-unit {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Progress Bar */
+.progress-container {
+    background: #f0f0f0;
+    border-radius: var(--radius-lg);
+    height: 20px;
+    overflow: hidden;
+    margin: 1rem 0;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-cyan), #4fc3f7);
+    border-radius: var(--radius-lg);
+    transition: width 1s ease-out;
+    position: relative;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Guide Content */
+.guide-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.guide-section {
+    background: linear-gradient(135deg, rgba(0, 188, 212, 0.05), rgba(0, 188, 212, 0.02));
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid var(--primary-cyan);
+}
+
+.guide-section h3 {
+    color: var(--primary-cyan);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.guide-section p {
+    line-height: 1.8;
+    color: var(--dark-gray);
+}
+
+.guide-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.guide-step {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.guide-step:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.guide-step-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.guide-step h4 {
+    color: var(--primary-cyan);
+    margin-bottom: 0.5rem;
+}
+
+/* Loading Animation */
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-cyan);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-menu { display: none; }
+    .mobile-menu-btn { display: block; }
+    
+    .main-container { padding: 5rem 1rem 1rem; }
+    
+    .header h1 { font-size: 2rem; }
+    .header p { font-size: 1rem; }
+    
+    .language-bar {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .buttons {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .step-indicator {
+        gap: 1rem;
+    }
+    
+    .step {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+    }
+    
+    .result-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .tabs {
+        flex-direction: column;
+    }
+    
+    .tab-content {
+        padding: 1rem;
+    }
+    
+    .step-indicator {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .step:not(:last-child)::after {
+        top: 100%;
+        left: 50%;
+        width: 3px;
+        height: 2rem;
+        transform: translateX(-50%);
+    }
+}
+
+/* Print Styles */
+@media print {
+    .navbar, .language-bar, .tabs, .buttons { display: none; }
+    .main-card { box-shadow: none; }
+    body { background: white; }
+}
+
+/* Accessibility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus styles */
+*:focus {
+    outline: 2px solid var(--primary-cyan);
+    outline-offset: 2px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    :root {
+        --primary-cyan: #0066cc;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+</style>
+</head>
+<body>
+    <section><!-- Chatbot Start -->
+        <style>
+          #chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #00bcd4;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+          }
+          #chat-notification {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: #00bcd4;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 999;
+          }
+          #chat-popup {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            max-height: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+          }
+          #chat-header {
+            background: #00bcd4;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+          }
+          #chat-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background: #f7f7f7;
+          }
+          .chat-message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            font-size: 14px;
+          }
+          .suggestion {
+            background: #00bcd4;
+            color: white;
+            padding: 8px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+            margin: 5px 2px;
+            cursor: pointer;
+            transition: background 0.3s;
+          }
+          .suggestion:hover {
+            background: #0097a7;
+          }
+          #chat-input {
+            display: flex;
+            border-top: 1px solid #ddd;
+          }
+          #userInput {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            font-size: 14px;
+          }
+          #chat-input button {
+            padding: 10px;
+            background: #00bcd4;
+            color: white;
+            border: none;
+            cursor: pointer;
+          }
+        </style>
+        
+        <div id="chat-button">💬</div>
+        <div id="chat-notification">Hey! Any doubt? I'm here!</div>
+        <div id="chat-popup">
+          <div id="chat-header">BlueSprout Assistant</div>
+          <div id="chat-messages">
+            <div class="chat-message"><strong>BLUEY:</strong> Hi! I'm here to help you with BlueSprout.</div>
+            <div class="suggestion" onclick="sendMessage('How can I trace my roof?')">How can I trace my roof?</div>
+            <div class="suggestion" onclick="sendMessage('What is rainwater harvesting?')">What is rainwater harvesting?</div>
+            <div class="suggestion" onclick="sendMessage('How do I measure area?')">How do I measure area?</div>
+          </div>
+          <div id="chat-input">
+            <input type="text" id="userInput" placeholder="Type your message..." />
+            <button onclick="submitMessage()">Send</button>
+          </div>
+        </div>
+        
+        <script>
+          const chatButton = document.getElementById('chat-button');
+          const chatPopup = document.getElementById('chat-popup');
+          const chatNotification = document.getElementById('chat-notification');
+          const chatMessages = document.getElementById('chat-messages');
+          const userInput = document.getElementById('userInput');
+        
+          window.addEventListener('load', () => {
+            chatNotification.style.opacity = 1;
+            setTimeout(() => {
+              chatNotification.style.opacity = 0;
+              setTimeout(() => { chatNotification.style.display = 'none'; }, 300);
+            }, 4000);
+          });
+        
+          chatButton.addEventListener('click', () => {
+            if(chatPopup.style.display === 'flex') {
+              chatPopup.style.display = 'none';
+            } else {
+              chatPopup.style.display = 'flex';
+            }
+          });
+        
+          function sendMessage(text) {
+            appendMessage('You', text);
+            setTimeout(() => {
+              appendMessage('BLUEY', generateReply(text));
+            }, 500);
+          }
+        
+          function submitMessage() {
+            const text = userInput.value.trim();
+            if(text !== "") {
+              sendMessage(text);
+              userInput.value = '';
+            }
+          }
+        
+          function appendMessage(sender, text) {
+            const msg = document.createElement('div');
+            msg.className = 'chat-message';
+            msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+            chatMessages.appendChild(msg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          }
+        
+          function generateReply(text) {
+            text = text.toLowerCase();
+            if(text.includes('trace')) return "You can trace your rooftop by selecting points on the map.";
+            if(text.includes('rainwater')) return "Rainwater harvesting helps collect and store rainwater from rooftops.";
+            if(text.includes('measure')) return "After tracing, click on 'Calculate Area' to measure your rooftop.";
+            return "Let me check that for you or you can contact us for further assistance!";
+          }
+        </script>
+        <!-- Chatbot End --></section>
+
+<!-- Animated Background -->
+<div class="background-animation" id="backgroundAnimation"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="container nav-container">
+      <!-- Logo slightly inset on left -->
+      <div class="nav-logo"><i class="fas fa-tint"></i> BlueSprout</div>
+  
+      <!-- Navigation menu on right -->
+      <ul class="nav-menu">
+        <li><a href="index.html#hero" class="nav-link">Home</a></li>
+      <li><a href="index.html#features" class="nav-link">Features</a></li>
+      <li><a href="aiassessment.html" class="nav-link">AI Assessment</a></li>
+      <li><a href="gis.html" class="nav-link">GIS Map</a></li>
+      <li><a href="login.html" class="nav-link">Water Tracker</a></li>
+      <li><a href="index.html#game" class="nav-link">Play Game</a></li>
+      <li><a href="login.html" id="logoutLink" class="nav-link">Login</a></li>
+
+      </ul>
+      
+  
+      <button class="mobile-menu-btn">☰</button>
+    </div>
+  </nav>
+
+<!-- Main Container -->
+<div class="main-container">
+    <!-- Header -->
+    <div class="header">
+        <h1 id="main-title" 
+            data-en="Smart Water Assessment" 
+            data-hi="स्मार्ट पानी मूल्यांकन" 
+            data-te="స్మార్ట్ వాటర్ అంచనా">Smart Water Assessment</h1>
+        <p id="main-subtitle" 
+           data-en="Calculate your rainwater harvesting potential and contribute to a sustainable future" 
+           data-hi="अपनी वर्षा जल संचयन क्षमता की गणना करें और एक टिकाऊ भविष्य में योगदान दें" 
+           data-te="మీ వర్షపు నీటి సంరక్షణ సామర్థ్యాన్ని లెక్కించండి మరియు స్థిరమైన భవిష్యత్తుకు దోహదపడండి">
+           Calculate your rainwater harvesting potential and contribute to a sustainable future
+        </p>
+    </div>
+
+    <!-- Language Bar -->
+    <div class="language-bar">
+        <button class="lang-btn active" onclick="setLanguage('en', this)">
+            🇺🇸 English
+        </button>
+        <button class="lang-btn" onclick="setLanguage('hi', this)">
+            🇮🇳 हिंदी
+        </button>
+        <button class="lang-btn" onclick="setLanguage('te', this)">
+            🇮🇳 తెలుగు
+        </button>
+    </div>
+
+    <!-- Main Card -->
+    <div class="main-card">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('calculator', this)">
+                <span data-en="Calculator" data-hi="कैलकुलेटर" data-te="గణకం">Calculator</span>
+            </button>
+            <button class="tab-btn" onclick="openTab('guide', this)">
+                <span data-en="Guide" data-hi="गाइड" data-te="గైడ్">Guide</span>
+            </button>
+            <button class="tab-btn" onclick="openTab('about', this)">
+                <span data-en="About" data-hi="के बारे में" data-te="గురించి">About</span>
+            </button>
+        </div>
+
+        <!-- Calculator Tab -->
+        <div id="calculator" class="tab-content active">
+            <div class="step-indicator">
+                <div class="step active" id="step-1">1</div>
+                <div class="step" id="step-2">2</div>
+                <div class="step" id="step-3">3</div>
+                <div class="step" id="step-4">4</div>
+            </div>
+
+            <!-- Step 1: Basic Information -->
+            <div id="form-step-1" class="form-section active">
+                <h3 data-en="Basic Information" data-hi="बुनियादी जानकारी" data-te="ప్రాథమిక సమాచారం">
+                    Basic Information
+                </h3>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-en="Full Name" data-hi="पूरा नाम" data-te="పూర్తి పేరు">
+                           Full Name
+                        </label>
+                        <input type="text" id="userName" class="form-input" 
+                               placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label data-en="Email Address" data-hi="ईमेल पता" data-te="ఇమెయిల్ చిరునామా">
+                            Email Address
+                        </label>
+                        <input type="email" id="userEmail" class="form-input" 
+                               placeholder="your.email@example.com" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Address</label>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap">
+                            <input type="text" id="address" class="form-input" placeholder="Enter address (required for location-based data)" style="flex:1">
+                            <button type="button" class="btn btn-primary" onclick="geocodeAddress()" style="min-width:auto; padding:0 16px">Find</button>
+                        </div>
+                        <small style="color:#666; margin-top:6px">Or fill coordinates below</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Latitude</label>
+                        <input type="text" id="lat" class="form-input" placeholder="Optional">
+                    </div>
+                    <div class="form-group">
+                        <label>Longitude</label>
+                        <input type="text" id="lng" class="form-input" placeholder="Optional">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-en="Select City" data-hi="शहर चुनें" data-te="నగరం ఎంచుకోండి">
+                            Select City
+                        </label>
+                        <select id="userCity" class="form-select" required>
+                            <option value="" data-en="Choose your city" data-hi="अपना शहर चुनें" data-te="మీ నగరాన్ని ఎంచుకోండి">
+                                Choose your city
+                            </option>
+                            <option value="Mumbai" data-annual-rainfall="2200">Mumbai, Maharashtra</option>
+                            <option value="Delhi" data-annual-rainfall="700">Delhi</option>
+                            <option value="Bangalore" data-annual-rainfall="970">Bangalore, Karnataka</option>
+                            <option value="Chennai" data-annual-rainfall="1400">Chennai, Tamil Nadu</option>
+                            <option value="Hyderabad" data-annual-rainfall="800">Hyderabad, Telangana</option>
+                            <option value="Visakhapatnam" data-annual-rainfall="1100">Visakhapatnam, Andhra Pradesh</option>
+                            <option value="Surat" data-annual-rainfall="1200">Surat, Gujarat</option>
+                            <option value="Vadodara" data-annual-rainfall="900">Vadodara, Gujarat</option>
+                            <option value="Jaipur" data-annual-rainfall="650">Jaipur, Rajasthan</option>
+                            <option value="Bhopal" data-annual-rainfall="1200">Bhopal, Madhya Pradesh</option>
+                            <option value="Patna" data-annual-rainfall="1200">Patna, Bihar</option>
+                            <option value="Coimbatore" data-annual-rainfall="700">Coimbatore, Tamil Nadu</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="Property Type" data-hi="संपत्ति का प्रकार" data-te="ఆస్తి రకం">
+                            Property Type
+                        </label>
+                        <select id="propertyType" class="form-select" required>
+                            <option value="" data-en="Select property type" data-hi="संपत्ति का प्रकार चुनें" data-te="ఆస్తి రకాన్ని ఎంచుకోండి">
+                                Select property type
+                            </option>
+                            <option value="independent-house">Independent House</option>
+                            <option value="apartment">Apartment</option>
+                            <option value="villa">Villa</option>
+                            <option value="commercial">Commercial Building</option>
+                            <option value="industrial">Industrial Complex</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="tip">
+                    <span data-en="Tip: Accurate city selection helps us provide precise rainfall data for your calculations."
+                          data-hi="सुझाव: सटीक शहर चयन हमें आपकी गणना के लिए सटीक वर्षा डेटा प्रदान करने में मदद करता है।"
+                          data-te="చిట్కా: ఖచ్చితమైన నగర ఎంపిక మీ లెక్కలకు ఖచ్చితమైన వర్షపాతం డేటాను అందించడంలో మాకు సహాయపడుతుంది।">
+                        Tip: Accurate city selection helps us provide precise rainfall data for your calculations.
+                    </span>
+                </div>
+            </div>
+
+            <!-- Step 2: Building Details -->
+            <div id="form-step-2" class="form-section">
+                <h3 data-en="Building Details" data-hi="भवन विवरण" data-te="భవన వివరాలు">
+                    Building Details
+                </h3>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-en="Roof Area (sq ft)" data-hi="छत का क्षेत्रफल (वर्ग फुट)" data-te="పైకప్పు వైశాల్యం (చ. అడుగులు)">
+                            Roof Area (sq ft)
+                        </label>
+                        <input type="number" id="roofArea" class="form-input" 
+                               placeholder="e.g., 1200" min="100" max="50000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="Number of Stories" data-hi="मंजिलों की संख्या" data-te="అంతస్తుల సంఖ్య">
+                            Number of Stories
+                        </label>
+                        <select id="stories" class="form-select" required>
+                            <option value="">Select stories</option>
+                            <option value="1">Single Story (G)</option>
+                            <option value="2">Two Stories (G+1)</option>
+                            <option value="3">Three Stories (G+2)</option>
+                            <option value="4">Four Stories (G+3)</option>
+                            <option value="5+">More than 4 stories</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-en="Roof Type" data-hi="छत का प्रकार" data-te="పైకప్పు రకం">
+                            Roof Type
+                        </label>
+                        <select id="roofType" class="form-select" required>
+                            <option value="">Select roof type</option>
+                            <option value="concrete" data-coefficient="0.8">Concrete/RCC (80% efficiency)</option>
+                            <option value="tiles" data-coefficient="0.75">Clay Tiles (75% efficiency)</option>
+                            <option value="metal" data-coefficient="0.9">Metal Sheet (90% efficiency)</option>
+                            <option value="asbestos" data-coefficient="0.85">Asbestos Sheet (85% efficiency)</option>
+                            <option value="green" data-coefficient="0.6">Green Roof (60% efficiency)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="Family Size" data-hi="परिवार का आकार" data-te="కుటుంబ పరిమాణం">
+                            Family Size
+                        </label>
+                        <input type="number" id="familySize" class="form-input" 
+                               placeholder="e.g., 4" min="1" max="20" required>
+                    </div>
+                </div>
+
+                <div class="tip">
+                    <span data-en="Tip: Measure your roof area accurately. For complex shapes, break it down into rectangles and add them up."
+                          data-hi="सुझाव: अपने छत के क्षेत्रफल को सटीक रूप से मापें। जटिल आकार के लिए, इसे आयतों में बांटें और जोड़ें।"
+                          data-te="చిట్కా: మీ పైకప్పు వైశాల్యాన్ని ఖచ్చితంగా కొలవండి. సంక్లిష్ట ఆకారాలకు, దానిని దీర్ఘచతురస్రాలుగా విభజించి జోడించండి।">
+                        Tip: Measure your roof area accurately. For complex shapes, break it down into rectangles and add them up.
+                    </span>
+                </div>
+            </div>
+
+            <!-- Step 3: Water Usage -->
+            <div id="form-step-3" class="form-section">
+                <h3 data-en="Water Usage Patterns" data-hi="पानी के उपयोग के पैटर्न" data-te="నీటి వినియోగ నమూనాలు">
+                    Water Usage Patterns
+                </h3>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-en="🚿 Daily Water Consumption (liters)" data-hi="🚿 दैनिक पानी की खपत (लीटर)" data-te="🚿 రోజువారీ నీటి వినియోగం (లీటర్లు)">
+                            🚿 Daily Water Consumption (liters)
+                        </label>
+                        <input type="number" id="dailyConsumption" class="form-input" 
+                               placeholder="e.g., 500" min="50" max="5000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="Swimming Pool (if any)" data-hi="स्विमिंग पूल (यदि कोई हो)" data-te="స్విమ్మింగ్ పూల్ (ఏదైనా ఉంటే)">
+                            Swimming Pool (if any)
+                        </label>
+                        <select id="hasPool" class="form-select">
+                            <option value="no">No Pool</option>
+                            <option value="small">Small Pool (< 10,000L)</option>
+                            <option value="medium">Medium Pool (10,000-20,000L)</option>
+                            <option value="large">Large Pool (> 20,000L)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-en="Garden Area (sq ft)" data-hi="बगीचे का क्षेत्रफल (वर्ग फुट)" data-te="తోట వైశాల్యం (చ. అడుగులు)">
+                            Garden Area (sq ft)
+                        </label>
+                        <input type="number" id="gardenArea" class="form-input" 
+                               placeholder="e.g., 200" min="0" max="10000">
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="Vehicle Washing" data-hi="वाहन धुलाई" data-te="వాహన కడుక్కోవడం">
+                            Vehicle Washing
+                        </label>
+                        <select id="vehicleWashing" class="form-select">
+                            <option value="none">No vehicles</option>
+                            <option value="1-2">1-2 vehicles weekly</option>
+                            <option value="3-4">3-4 vehicles weekly</option>
+                            <option value="daily">Daily washing</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="tip">
+                    <span data-en="Tip: Average Indian household uses 135-200 liters per person per day. Include all uses: drinking, cooking, bathing, cleaning."
+                          data-hi="सुझाव: औसत भारतीय परिवार प्रति व्यक्ति प्रति दिन 135-200 लीटर पानी का उपयोग करता है। सभी उपयोग शामिल करें: पीना, खाना बनाना, नहाना, सफाई।"
+                          data-te="చిట్కా: సగటు భారతీయ కుటుంబం రోజుకు ఒక వ్యక్తికి 135-200 లీటర్లు వాడుతుంది. అన్ని వాడకాలు చేర్చండి: తాగడం, వంట, స్నానం, శుభ్రత।">
+                        Tip: Average Indian household uses 135-200 liters per person per day. Include all uses: drinking, cooking, bathing, cleaning.
+                    </span>
+                </div>
+            </div>
+
+            <!-- Step 4: Storage & Budget -->
+            <div id="form-step-4" class="form-section">
+                <h3 data-en="Storage & Investment" data-hi="भंडारण और निवेश" data-te="నిల్వ & పెట్టుబడి">
+                    Storage & Investment
+                </h3>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-en="Preferred Storage Capacity (liters)" data-hi="पसंदीदा भंडारण क्षमता (लीटर)" data-te="కోరుకున్న నిల్వ సామర్థ్యం (లీటర్లు)">
+                            Preferred Storage Capacity (liters)
+                        </label>
+                        <select id="storageCapacity" class="form-select" required>
+                            <option value="">Select capacity</option>
+                            <option value="1000">1,000L (Basic)</option>
+                            <option value="2500">2,500L (Standard)</option>
+                            <option value="5000">5,000L (Large)</option>
+                            <option value="10000">10,000L (Extra Large)</option>
+                            <option value="custom">Custom Amount</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="customCapacityGroup" style="display: none;">
+                        <label data-en="Custom Capacity (liters)" data-hi="कस्टम क्षमता (लीटर)" data-te="అనుకూల సామర్థ్యం (లీటర్లు)">
+                            Custom Capacity (liters)
+                        </label>
+                        <input type="number" id="customCapacity" class="form-input" 
+                               placeholder="e.g., 7500" min="500" max="50000">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label data-en="Budget Range (₹)" data-hi="बजट सीमा (₹)" data-te="బడ్జెట్ పరిధి (₹)">
+                            Budget Range (₹)
+                        </label>
+                        <select id="budget" class="form-select" required>
+                            <option value="">Select budget</option>
+                            <option value="25000">Under ₹25,000 (Basic)</option>
+                            <option value="50000">₹25,000 - ₹50,000 (Standard)</option>
+                            <option value="100000">₹50,000 - ₹1,00,000 (Premium)</option>
+                            <option value="150000">Above ₹1,00,000 (Luxury)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-en="Implementation Timeline" data-hi="कार्यान्वयन समयसीमा" data-te="అమలు కాలపరిమితి">
+                            Implementation Timeline
+                        </label>
+                        <select id="timeline" class="form-select" required>
+                            <option value="">Select timeline</option>
+                            <option value="immediate">Immediate (1-2 months)</option>
+                            <option value="soon">Soon (3-6 months)</option>
+                            <option value="later">Later (6-12 months)</option>
+                            <option value="planning">Just Planning (1+ years)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="tip">
+                    <span data-en="Tip: A good rule of thumb is to store 15-20 days of water consumption. Consider monsoon duration in your area."
+                          data-hi="सुझाव: एक अच्छा नियम है 15-20 दिन की पानी की खपत का भंडारण करना। अपने क्षेत्र में मानसून की अवधि पर विचार करें।"
+                          data-te="చిట్కా: మంచి నియమం ఏమిటంటే 15-20 రోజుల నీటి వినియోగాన్ని నిల్వ చేయడం. మీ ప్రాంతంలో వర్షాకాలం కాలాన్ని పరిగణించండి।">
+                        Tip: A good rule of thumb is to store 15-20 days of water consumption. Consider monsoon duration in your area.
+                    </span>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="buttons">
+                <button id="prevBtn" class="btn btn-secondary" onclick="changeStep(-1)" style="display: none;">
+                    <i class="fas fa-arrow-left"></i>
+                    <span data-en="Previous" data-hi="पिछला" data-te="మునుపటిది">Previous</span>
+                </button>
+                
+                <button id="nextBtn" class="btn btn-primary" onclick="changeStep(1)">
+                    <span data-en="Next" data-hi="अगला" data-te="తదుపరి">Next</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                
+                <button id="calculateBtn" class="btn btn-primary" onclick="calculateResults()" style="display: none;">
+                    <i class="fas fa-calculator"></i>
+                    <span data-en="Calculate Results" data-hi="परिणाम गणना करें" data-te="ఫలితాలను లెక్కించండి">Calculate Results</span>
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results-section" class="results-container" style="display: none;">
+                <h3 data-en="Your Rainwater Harvesting Assessment" data-hi="आपका वर्षा जल संचयन मूल्यांकन" data-te="మీ వర్షపు నీటి సంరక్షణ అంచనా">
+                    Your Rainwater Harvesting Assessment
+                </h3>
+
+                <div class="result-cards">
+                    <div class="result-card">
+                        <h4 data-en="Annual Harvesting Potential" data-hi="वार्षिक संचयन क्षमता" data-te="వార్షిక సంరక్షణ సామర్థ్యం">
+                            Annual Harvesting Potential
+                        </h4>
+                        <div id="harvestingPotential" class="result-value">0</div>
+                        <div class="result-unit">liters/year</div>
+                    </div>
+
+                    <div class="result-card">
+                        <h4 data-en="Water Savings" data-hi="पानी की बचत" data-te="నీటి పొదుపు">
+                            Water Savings
+                        </h4>
+                        <div id="waterSavings" class="result-value">₹0</div>
+                        <div class="result-unit">per year</div>
+                    </div>
+
+                    <div class="result-card">
+                        <h4 data-en="Self-sufficiency" data-hi="आत्मनिर्भरता" data-te="స్వావలంబన">
+                            Self-sufficiency
+                        </h4>
+                        <div id="selfSufficiency" class="result-value">0%</div>
+                        <div class="result-unit">of water needs</div>
+                    </div>
+
+                    <div class="result-card">
+                        <h4 data-en="Environmental Impact" data-hi="पर्यावरणीय प्रभाव" data-te="పర్యావరణ ప్రభావం">
+                            Environmental Impact
+                        </h4>
+                        <div id="carbonSavings" class="result-value">0</div>
+                        <div class="result-unit">kg CO₂ saved/year</div>
+                    </div>
+                </div>
+                
+
+                <div class="summary-card">
+                    <div class="summary-item">
+                        <span data-en="Daily Collection Potential" data-hi="दैनिक संग्रह क्षमता" data-te="రోజువారీ సేకరణ సామర్థ్యం">Daily Collection Potential</span>
+                        <strong id="dailyCollection">0 L</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span data-en="Monsoon Collection (4 months)" data-hi="मानसून संग्रह (4 महीने)" data-te="వర్షాకాల సేకరణ (4 నెలలు)">Monsoon Collection (4 months)</span>
+                        <strong id="monsoonCollection">0 L</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span data-en="Recommended Storage" data-hi="अनुशंसित भंडारण" data-te="సిఫార్సు చేయబడిన నిల్వ">Recommended Storage</span>
+                        <strong id="recommendedStorage">0 L</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span data-en="Investment Recovery Period" data-hi="निवेश वापसी अवधि" data-te="పెట్టుబడి తిరిగి రావడానికి కాలం">Investment Recovery Period</span>
+                        <strong id="recoveryPeriod">0 years</strong>
+                    </div>
+                </div>
+
+                <!-- Progress Indicators -->
+                <div style="margin: 2rem 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span data-en="Water Independence Level" data-hi="जल स्वतंत्रता स्तर" data-te="నీటి స్వాతంత్ర్య స్థాయి">Water Independence Level</span>
+                        <span id="independenceLevel">0%</span>
+                    </div>
+                    <div class="progress-container">
+                        <div id="independenceProgress" class="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Recommendations -->
+                <div id="recommendations" style="margin-top: 2rem;">
+                    <h4 data-en="Personalized Recommendations" data-hi="व्यक्तिगत सिफारिशें" data-te="వ్యక్తిగత సిఫార్సులు">
+                        Personalized Recommendations
+                    </h4>
+                    <div id="recommendationsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guide Tab -->
+        <div id="guide" class="tab-content">
+            <div class="guide-content">
+                <h2 data-en="Complete Rainwater Harvesting Guide" data-hi="संपूर्ण वर्षा जल संचयन गाइड" data-te="పూర్తి వర్షపు నీటి సంరక్షణ గైడ్">
+                    Complete Rainwater Harvesting Guide
+                </h2>
+
+                <div class="guide-section">
+                    <h3 data-en="What is Rainwater Harvesting?" data-hi="वर्षा जल संचयन क्या है?" data-te="వర్షపు నీటి సంరక్షణ అంటే ఏమిటి?">
+                        What is Rainwater Harvesting?
+                    </h3>
+                    <p data-en="Rainwater harvesting is the collection and storage of rainwater from rooftops, land surfaces, and other areas for later use. This sustainable practice helps reduce dependence on groundwater and municipal water supply while providing clean water for various household needs."
+                       data-hi="वर्षा जल संचयन छतों, भूमि की सतहों और अन्य क्षेत्रों से बारिश के पानी का संग्रह और भंडारण है। यह टिकाऊ अभ्यास भूजल और नगरपालिका जल आपूर्ति पर निर्भरता कम करने में मदद करता है।"
+                       data-te="వర్షపు నీటి సంరక్షణ అంటే పైకప్పులు, భూ ఉపరితలాలు మరియు ఇతర ప్రాంతాల నుండి వర్షపు నీటిని సేకరించి నిల్వ చేయడం. ఈ స్థిరమైన అభ్యాసం భూగర్భజలాలు మరియు మునిసిపల్ నీటి సరఫరాపై ఆధారపడటాన్ని తగ్గిస్తుంది.">
+                        Rainwater harvesting is the collection and storage of rainwater from rooftops, land surfaces, and other areas for later use. This sustainable practice helps reduce dependence on groundwater and municipal water supply while providing clean water for various household needs.
+                    </p>
+                </div>
+
+                <div class="guide-section">
+                    <h3 data-en="Benefits of Rainwater Harvesting" data-hi="वर्षा जल संचयन के फायदे" data-te="వర్షపు నీటి సంరక్షణ లాభాలు">
+                        Benefits of Rainwater Harvesting
+                    </h3>
+                    <p data-en="• Reduces water bills and provides long-term savings<br>• Decreases dependency on municipal water supply<br>• Helps recharge groundwater levels<br>• Reduces urban flooding and soil erosion<br>• Provides soft water free from chemicals<br>• Environmentally sustainable and carbon-neutral"
+                       data-hi="• पानी के बिल कम करता है और दीर्घकालिक बचत प्रदान करता है<br>• नगरपालिका जल आपूर्ति पर निर्भरता घटाता है<br>• भूजल स्तर रिचार्ज करने में मदद करता है<br>• शहरी बाढ़ और मिट्टी के कटाव को कम करता है<br>• रसायन मुक्त मुलायम पानी प्रदान करता है<br>• पर्यावरणीय रूप से टिकाऊ और कार्बन न्यूट्रल"
+                       data-te="• నీటి బిల్లులను తగ్గిస్తుంది మరియు దీర్ఘకాలిక పొదుపులను అందిస్తుంది<br>• మునిసిపల్ నీటి సరఫరాపై ఆధారపడటాన్ని తగ్గిస్తుంది<br>• భూగర్భజల స్థాయిలను రీఛార్జ్ చేయడంలో సహాయపడుతుంది<br>• పట్టణ వరదలు మరియు నేల కోతను తగ్గిస్తుంది<br>• రసాయనాలు లేని మృదువైన నీటిని అందిస్తుంది<br>• పర్యావరణంగా స్థిరమైనది మరియు కార్బన్ న్యూట్రల్">
+                        • Reduces water bills and provides long-term savings<br>• Decreases dependency on municipal water supply<br>• Helps recharge groundwater levels<br>• Reduces urban flooding and soil erosion<br>• Provides soft water free from chemicals<br>• Environmentally sustainable and carbon-neutral
+                    </p>
+                </div>
+
+                <div class="guide-steps">
+                    <div class="guide-step">
+                        <div class="guide-step-icon"></div>
+                        <h4 data-en="Step 1: Assessment" data-hi="चरण 1: मूल्यांकन" data-te="దశ 1: అంచనా">Step 1: Assessment</h4>
+                        <p data-en="Evaluate your roof area, rainfall data, and water requirements." data-hi="अपने छत के क्षेत्र, वर्षा डेटा और पानी की आवश्यकताओं का मूल्यांकन करें।" data-te="మీ పైకప్పు వైశాల్యం, వర్షపాతం డేటా మరియు నీటి అవసరాలను అంచనా వేయండి।">
+                            Evaluate your roof area, rainfall data, and water requirements.
+                        </p>
+                    </div>
+                    <div class="guide-step">
+                        <div class="guide-step-icon"></div>
+                        <h4 data-en="Step 2: Planning" data-hi="चरण 2: योजना" data-te="దశ 2: ప్రణాళిక">Step 2: Planning</h4>
+                        <p data-en="Design the system components: gutters, downspouts, filters, and storage tanks." data-hi="सिस्टम घटकों का डिज़ाइन: गटर, डाउनस्पाउट, फिल्टर और स्टोरेज टैंक।" data-te="సిస్టమ్ భాగాలను రూపకల్పన చేయండి: గట్టర్లు, డౌన్‌స్పౌట్‌లు, ఫిల్టర్లు మరియు నిల్వ ట్యాంకులు।">
+                            Design the system components: gutters, downspouts, filters, and storage tanks.
+                        </p>
+                    </div>
+                    <div class="guide-step">
+                        <div class="guide-step-icon"></div>
+                        <h4 data-en="Step 3: Installation" data-hi="चरण 3: स्थापना" data-te="దశ 3: సంస్థాపన">Step 3: Installation</h4>
+                        <p data-en="Install gutters, pipes, filtration systems, and storage tanks by professionals." data-hi="पेशेवरों द्वारा गटर, पाइप, निस्पंदन प्रणाली और स्टोरेज टैंक स्थापित करें।" data-te="నిపుణులచే గట్టర్లు, పైపులు, వడపోత వ్యవస్థలు మరియు నిల్వ ట్యాంకులను సంస్థాపించండి।">
+                            Install gutters, pipes, filtration systems, and storage tanks by professionals.
+                        </p>
+                    </div>
+                    <div class="guide-step">
+                        <div class="guide-step-icon"></div>
+                        <h4 data-en="Step 4: Maintenance" data-hi="चरण 4: रखरखाव" data-te="దశ 4: నిర్వహణ">Step 4: Maintenance</h4>
+                        <p data-en="Regular cleaning of gutters, filters, and tanks ensures optimal water quality." data-hi="गटर, फिल्टर और टैंक की नियमित सफाई से पानी की गुणवत्ता सुनिश्चित होती है।" data-te="గట్టర్లు, ఫిల్టర్లు మరియు ట్యాంకుల క్రమమైన శుభ్రత సరైన నీటి నాణ్యతను నిర్ధారిస్తుంది।">
+                            Regular cleaning of gutters, filters, and tanks ensures optimal water quality.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Tab -->
+        <div id="about" class="tab-content">
+            <div class="guide-content">
+                <h2 data-en="About BlueSprout" data-hi="BlueSprout के बारे में" data-te="BlueSprout గురించి">
+                    About BlueSprout
+                </h2>
+
+                <div class="guide-section">
+                    <h3 data-en="Our Mission" data-hi="हमारा मिशन" data-te="మా లక్ష్యం">Our Mission</h3>
+                    <p data-en="BlueSprout is dedicated to making rainwater harvesting accessible and practical for every household. We believe in sustainable water management solutions that benefit both families and the environment."
+                       data-hi="BlueSprout हर घर के लिए वर्षा जल संचयन को सुलभ और व्यावहारिक बनाने के लिए समर्पित है। हमारा मानना है कि टिकाऊ जल प्रबंधन समाधान परिवार और पर्यावरण दोनों के लिए फायदेमंद हैं।"
+                       data-te="BlueSprout ప్రతి కుటుంబానికి వర్షపు నీటి సంరక్షణను అందుబాటులో మరియు ఆచరణాత్మకంగా చేయడానికి అంకితం చేయబడింది. కుటుంబాలు మరియు పర్యావరణం రెండింటికీ ప్రయోజనకరమైన స్థిరమైన నీటి నిర్వహణ పరిష్కారాలను మేము విశ్వసిస్తాము।">
+                        BlueSprout is dedicated to making rainwater harvesting accessible and practical for every household. We believe in sustainable water management solutions that benefit both families and the environment.
+                    </p>
+                </div>
+
+                <div class="guide-section">
+                    <h3 data-en="Key Features" data-hi="मुख्य विशेषताएं" data-te="ముఖ్య లక్షణాలు">Key Features</h3>
+                    <p data-en="• Accurate calculations based on local rainfall data<br>• Personalized recommendations for your specific needs<br>• Multi-language support (English, Hindi, Telugu)<br>• Cost-benefit analysis and ROI calculations<br>• Environmental impact assessment<br>• Professional implementation guidance"
+                       data-hi="• स्थानीय वर्षा डेटा के आधार पर सटीक गणना<br>• आपकी विशिष्ट आवश्यकताओं के लिए व्यक्तिगत सिफारिशें<br>• बहुभाषी समर्थन (अंग्रेजी, हिंदी, तेलुगु)<br>• लागत-लाभ विश्लेषण और ROI गणना<br>• पर्यावरणीय प्रभाव मूल्यांकन<br>• पेशेवर कार्यान्वयन मार्गदर्शन"
+                       data-te="• స్థానిక వర్షపాతం డేటా ఆధారంగా ఖచ్చితమైన లెక్కలు<br>• మీ నిర్దిష్ట అవసరాలకు వ్యక్తిగతీకరించిన సిఫార్సులు<br>• బహుభాషా మద్దతు (ఆంగ్లం, హిందీ, తెలుగు)<br>• వ్యయ-లాభ విశ్లేషణ మరియు ROI లెక్కలు<br>• పర్యావరణ ప్రభావ అంచనా<br>• వృత్తిపరమైన అమలు మార్గదర్శకత్వం">
+                        • Accurate calculations based on local rainfall data<br>• Personalized recommendations for your specific needs<br>• Multi-language support (English, Hindi, Telugu)<br>• Cost-benefit analysis and ROI calculations<br>• Environmental impact assessment<br>• Professional implementation guidance
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Global variables
+let currentStep = 1;
+let currentLanguage = 'en';
+let calculationResults = {};
+
+// Language translations
+const translations = {
+    en: {
+        'main-title': 'Smart Water Assessment',
+        'main-subtitle': 'Calculate your rainwater harvesting potential and contribute to a sustainable future',
+        'calculator-tab': 'Calculator',
+        'guide-tab': 'Guide',
+        'about-tab': 'About'
+    },
+    hi: {
+        'main-title': 'स्मार्ट पानी मूल्यांकन',
+        'main-subtitle': 'अपनी वर्षा जल संचयन क्षमता की गणना करें और एक टिकाऊ भविष्य में योगदान दें',
+        'calculator-tab': 'कैलकुलेटर',
+        'guide-tab': 'गाइड',
+        'about-tab': 'के बारे में'
+    },
+    te: {
+        'main-title': 'స్మార్ట్ వాటర్ అంచనా',
+        'main-subtitle': 'మీ వర్షపు నీటి సంరక్షణ సామర్థ్యాన్ని లెక్కించండి మరియు స్థిరమైన భవిష్యత్తుకు దోహదపడండి',
+        'calculator-tab': 'గణకం',
+        'guide-tab': 'గైడ్',
+        'about-tab': 'గురించి'
+    }
+};
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+    createRaindrops();
+    setupEventListeners();
+    updateNavigationButtons();
+    // Ensure active language reflects default state
+    setLanguage(currentLanguage, document.querySelector('.lang-btn.active'));
+});
+
+// Create animated raindrops
+function createRaindrops() {
+    const backgroundAnimation = document.getElementById('backgroundAnimation');
+    const numberOfDrops = 50;
+
+    for (let i = 0; i < numberOfDrops; i++) {
+        const raindrop = document.createElement('div');
+        raindrop.className = 'raindrop';
+        
+        const size = Math.random() * 5 + 2;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 3 + 2;
+        const delay = Math.random() * 2;
+        
+        raindrop.style.left = left + '%';
+        raindrop.style.width = size + 'px';
+        raindrop.style.height = size + 'px';
+        raindrop.style.animationDuration = duration + 's';
+        raindrop.style.animationDelay = delay + 's';
+        
+        backgroundAnimation.appendChild(raindrop);
+    }
+}
+
+// Geocoding via Nominatim
+async function geocodeAddress() {
+    const query = document.getElementById('address').value.trim();
+    if (!query) { alert('Please enter an address.'); return; }
+    try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`, { headers: { 'Accept-Language': 'en' } });
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+            const { lat, lon, display_name } = data[0];
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lon;
+            // Optional: map link or message
+            console.log('Geocoded:', display_name);
+        } else {
+            alert('No results found. Try a nearby landmark.');
+        }
+    } catch (e) {
+        alert('Failed to look up address. Check connection and try again.');
+        console.error(e);
+    }
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    // Storage capacity change listener
+    document.getElementById('storageCapacity').addEventListener('change', function() {
+        const customGroup = document.getElementById('customCapacityGroup');
+        if (this.value === 'custom') {
+            customGroup.style.display = 'block';
+        } else {
+            customGroup.style.display = 'none';
+        }
+    });
+
+    // Form validation listeners
+    const requiredInputs = document.querySelectorAll('input[required], select[required]');
+    requiredInputs.forEach(input => {
+        input.addEventListener('blur', validateField);
+        input.addEventListener('input', validateField);
+    });
+}
+
+// Validate individual form field
+function validateField(event) {
+    const field = event.target;
+    const isValid = field.checkValidity();
+    
+    if (isValid) {
+        field.style.borderColor = '#4caf50';
+    } else {
+        field.style.borderColor = '#f44336';
+    }
+}
+
+// Language switching
+function setLanguage(lang, el) {
+    currentLanguage = lang;
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+    if (el) { el.classList.add('active'); }
+    document.querySelectorAll('[data-' + lang + ']').forEach(element => {
+        const translation = element.getAttribute('data-' + lang);
+        if (translation) element.textContent = translation;
+    });
+}
+
+// Tab switching
+function openTab(tabName, el) {
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Remove active class from all tab buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected tab and mark button as active
+    document.getElementById(tabName).classList.add('active');
+    if (el) { el.classList.add('active'); }
+}
+
+// Step navigation
+function changeStep(direction) {
+    const totalSteps = 4;
+    const newStep = currentStep + direction;
+    
+    if (newStep < 1 || newStep > totalSteps) return;
+    
+    // Validate current step before proceeding
+    if (direction > 0 && !validateCurrentStep()) {
+        return;
+    }
+    
+    // Hide current step
+    document.getElementById(`form-step-${currentStep}`).classList.remove('active');
+    document.getElementById(`step-${currentStep}`).classList.remove('active');
+    
+    // Show new step
+    currentStep = newStep;
+    document.getElementById(`form-step-${currentStep}`).classList.add('active');
+    document.getElementById(`step-${currentStep}`).classList.add('active');
+    
+    updateNavigationButtons();
+}
+
+// Update navigation buttons
+function updateNavigationButtons() {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const calculateBtn = document.getElementById('calculateBtn');
+    
+    prevBtn.style.display = currentStep === 1 ? 'none' : 'flex';
+    
+    if (currentStep === 4) {
+        nextBtn.style.display = 'none';
+        calculateBtn.style.display = 'flex';
+    } else {
+        nextBtn.style.display = 'flex';
+        calculateBtn.style.display = 'none';
+    }
+}
+
+// Validate current step
+function validateCurrentStep() {
+    const currentStepElement = document.getElementById(`form-step-${currentStep}`);
+    const requiredFields = currentStepElement.querySelectorAll('input[required], select[required]');
+    
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.style.borderColor = '#f44336';
+            isValid = false;
+        } else {
+            field.style.borderColor = '#4caf50';
+        }
+    });
+    
+    if (!isValid) {
+        alert('Please fill in all required fields before proceeding.');
+    }
+    
+    return isValid;
+}
+
+// Main calculation function
+function calculateResults() {
+    if (!validateCurrentStep()) return;
+    
+    const formData = gatherFormData();
+    const results = performCalculations(formData);
+    displayResults(results);
+    
+    // Show results section
+    document.getElementById('results-section').style.display = 'block';
+    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Gather all form data
+function gatherFormData() {
+    return {
+        userName: document.getElementById('userName').value,
+        userEmail: document.getElementById('userEmail').value,
+        userCity: document.getElementById('userCity').value,
+        propertyType: document.getElementById('propertyType').value,
+        roofArea: parseFloat(document.getElementById('roofArea').value),
+        stories: document.getElementById('stories').value,
+        roofType: document.getElementById('roofType').value,
+        familySize: parseInt(document.getElementById('familySize').value),
+        dailyConsumption: parseFloat(document.getElementById('dailyConsumption').value),
+        hasPool: document.getElementById('hasPool').value,
+        gardenArea: parseFloat(document.getElementById('gardenArea').value) || 0,
+        vehicleWashing: document.getElementById('vehicleWashing').value,
+        storageCapacity: document.getElementById('storageCapacity').value === 'custom' 
+            ? parseFloat(document.getElementById('customCapacity').value)
+            : parseFloat(document.getElementById('storageCapacity').value),
+        budget: parseFloat(document.getElementById('budget').value),
+        timeline: document.getElementById('timeline').value
+    };
+}
+
+// Perform all calculations
+function performCalculations(data) {
+    // Get rainfall data for selected city
+    const cityOption = document.querySelector(`#userCity option[value="${data.userCity}"]`);
+    const annualRainfall = parseFloat(cityOption.getAttribute('data-annual-rainfall'));
+    
+    // Get roof efficiency coefficient
+    const roofOption = document.querySelector(`#roofType option[value="${data.roofType}"]`);
+    const roofCoefficient = parseFloat(roofOption.getAttribute('data-coefficient'));
+    
+    // Calculate harvesting potential
+    const roofAreaM2 = data.roofArea * 0.092903; // Convert sq ft to sq m
+    const annualHarvestingPotential = Math.round(roofAreaM2 * annualRainfall * roofCoefficient * 0.8); // 80% collection efficiency
+    
+    // Calculate daily and monsoon collection
+    const dailyCollection = Math.round(annualHarvestingPotential / 365);
+    const monsoonCollection = Math.round(annualHarvestingPotential * 0.7); // 70% in monsoon months
+    
+    // Calculate water savings (assuming ₹3 per liter for municipal water)
+    const waterSavings = Math.round(annualHarvestingPotential * 3);
+    
+    // Calculate self-sufficiency percentage
+    const annualConsumption = data.dailyConsumption * 365;
+    const selfSufficiency = Math.min(100, Math.round((annualHarvestingPotential / annualConsumption) * 100));
+    
+    // Calculate environmental impact (CO2 savings)
+    const carbonSavings = Math.round(annualHarvestingPotential * 0.0005); // 0.5g CO2 per liter
+    
+    // Calculate recommended storage
+    const recommendedStorage = Math.max(data.storageCapacity, Math.round(data.dailyConsumption * 15));
+    
+    // Calculate investment recovery period
+    const recoveryPeriod = Math.round(data.budget / waterSavings * 10) / 10;
+    
+    return {
+        annualHarvestingPotential,
+        dailyCollection,
+        monsoonCollection,
+        waterSavings,
+        selfSufficiency,
+        carbonSavings,
+        recommendedStorage,
+        recoveryPeriod,
+        formData: data
+    };
+}
+
+// Display calculation results
+function displayResults(results) {
+    // Update result cards
+    document.getElementById('harvestingPotential').textContent = results.annualHarvestingPotential.toLocaleString();
+    document.getElementById('waterSavings').textContent = '₹' + results.waterSavings.toLocaleString();
+    document.getElementById('selfSufficiency').textContent = results.selfSufficiency + '%';
+    document.getElementById('carbonSavings').textContent = results.carbonSavings.toLocaleString();
+    
+    // Update summary items
+    document.getElementById('dailyCollection').textContent = results.dailyCollection.toLocaleString() + ' L';
+    document.getElementById('monsoonCollection').textContent = results.monsoonCollection.toLocaleString() + ' L';
+    document.getElementById('recommendedStorage').textContent = results.recommendedStorage.toLocaleString() + ' L';
+    document.getElementById('recoveryPeriod').textContent = results.recoveryPeriod + ' years';
+    
+    // Update progress bar
+    document.getElementById('independenceLevel').textContent = results.selfSufficiency + '%';
+    document.getElementById('independenceProgress').style.width = results.selfSufficiency + '%';
+    
+    // Generate recommendations
+    generateRecommendations(results);
+    
+    // Store results globally
+    calculationResults = results;
+}
+
+// Generate personalized recommendations
+function generateRecommendations(results) {
+    const recommendations = [];
+    const { formData } = results;
+    
+    // Storage recommendations
+    if (results.recommendedStorage > formData.storageCapacity) {
+        recommendations.push({
+            icon: '🪣',
+            title: 'Increase Storage Capacity',
+            text: `Consider increasing your storage to ${results.recommendedStorage.toLocaleString()}L for better water security during dry periods.`
+        });
+    }
+    
+    // Efficiency recommendations
+    if (results.selfSufficiency < 50) {
+        recommendations.push({
+            icon: '⚡',
+            title: 'Improve Collection Efficiency',
+            text: 'Consider installing first-flush diverters and leaf guards to maximize water collection efficiency.'
+        });
+    }
+    
+    // Budget recommendations
+    if (formData.budget < 50000) {
+        recommendations.push({
+            icon: '💰',
+            title: 'Phased Implementation',
+            text: 'Consider implementing your rainwater harvesting system in phases to spread the cost over time.'
+        });
+    }
+    
+    // Environmental recommendations
+    if (results.carbonSavings < 1000) {
+        recommendations.push({
+            icon: '🌱',
+            title: 'Maximize Environmental Impact',
+            text: 'Consider expanding your roof area coverage or adding permeable surfaces to increase environmental benefits.'
+        });
+    }
+    
+    // Maintenance recommendations
+    recommendations.push({
+        icon: '🔧',
+        title: 'Regular Maintenance',
+        text: 'Schedule quarterly cleaning of gutters and filters, and annual tank inspections to maintain water quality.'
+    });
+    
+    // Display recommendations
+    const recommendationsList = document.getElementById('recommendationsList');
+    recommendationsList.innerHTML = '';
+    
+    recommendations.forEach(rec => {
+        const recElement = document.createElement('div');
+        recElement.className = 'guide-section';
+        recElement.innerHTML = `
+            <h4>${rec.icon} ${rec.title}</h4>
+            <p>${rec.text}</p>
+        `;
+        recommendationsList.appendChild(recElement);
+    });
+}
+
+// Utility functions for form validation
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+function validateNumber(value, min = 0, max = Infinity) {
+    const num = parseFloat(value);
+    return !isNaN(num) && num >= min && num <= max;
+}
+
+// Print/Export functionality (optional enhancement)
+function exportResults() {
+    if (!calculationResults.formData) {
+        alert('Please calculate results first.');
+        return;
+    }
+    // Prepare PDF via jsPDF
+    if (!window.jspdf) {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js';
+        document.body.appendChild(s);
+        s.onload = () => generatePdf();
+        s.onerror = () => window.print();
+    } else {
+        generatePdf();
+    }
+}
+
+function generatePdf() {
+    const { jsPDF } = window.jspdf || {};
+    if (!jsPDF) { window.print(); return; }
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+    const m = 40; let y = m;
+    const r = calculationResults;
+    function line(t, sz=12, b=false) { doc.setFont('helvetica', b?'bold':'normal'); doc.setFontSize(sz); doc.text(t, m, y); y += sz + 6; }
+    line('BlueSprout - Manual Assessment Report', 16, true);
+    y += 6;
+    line(`Name: ${r.formData.userName || '-'}`);
+    line(`City: ${r.formData.userCity || '-'} | Roof: ${r.formData.roofArea} sq ft | Family: ${r.formData.familySize}`);
+    y += 6;
+    line(`Annual Harvesting Potential: ${r.annualHarvestingPotential.toLocaleString()} L`, 12, true);
+    line(`Daily Collection: ${r.dailyCollection.toLocaleString()} L`);
+    line(`Monsoon Collection: ${r.monsoonCollection.toLocaleString()} L`);
+    line(`Recommended Storage: ${r.recommendedStorage.toLocaleString()} L`);
+    line(`Self-sufficiency: ${r.selfSufficiency}% | Savings: ₹${r.waterSavings.toLocaleString()} | Payback: ${r.recoveryPeriod} years`);
+    doc.save('BlueSprout_Manual_Assessment.pdf');
+}
+
+// Mobile menu toggle (if needed)
+function toggleMobileMenu() {
+    const navMenu = document.querySelector('.nav-menu');
+    navMenu.classList.toggle('active');
+}
+
+// Scroll to top functionality
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Initialize tooltips or help text (optional)
+function initializeTooltips() {
+    // Add helpful tooltips to form fields
+    const tooltips = {
+        'roofArea': 'Measure length × width of your roof in square feet',
+        'dailyConsumption': 'Include water for drinking, cooking, bathing, and cleaning',
+        'gardenArea': 'Total area of lawn and plants that need watering'
+    };
+    
+    Object.keys(tooltips).forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.title = tooltips[fieldId];
+        }
+    });
+}
+
+// Call initialization functions when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initializeTooltips();
+});
+</script>
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+      <div class="footer-content">
+  
+        <!-- About Section -->
+        <div class="footer-section about">
+          <h3>BlueSprout</h3>
+          <p>Empowering communities to conserve rainwater and manage rooftop water resources effectively. Every rooftop can contribute to a sustainable water future.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+  
+        <!-- Quick Links -->
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html#hero">Home</a></li>
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="aiassessment.html" class="nav-link">AI Assessment</a></li>
+            <li><a href="manualassesment.html" class="nav-link">Manual Assessment</a></li>
+            <li><a href="index.html#game">Play our Game</a></li>
+           
+          </ul>
+        </div>
+  
+        <!-- Resources -->
+        <div class="footer-section">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="1.pdf" target="_blank">Rooftop Rainwater Guide</a></li>
+            <li><a href="2.pdf" target="_blank">Rainwater Harvesting Manual</a></li>
+            <li><a href="https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=1914351" target="_blank">Government Schemes</a></li>
+            <li><a href="https://neer.co.in/rainwater-harvesting-success-stories-from-around-the-globe/" target="_blank">Success Stories</a></li>
+          </ul>
+        </div>
+  
+        <!-- Support -->
+        <div class="footer-section">
+          <h3>Support</h3>
+          <ul>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQs</a></li>
+            <li><a href="pp.html">Privacy Policy</a></li>
+            <li><a href="ourstory.html">Our Story</a></li>
+
+          </ul>
+        </div>
+  
+      </div>
+  
+      <div class="footer-bottom">
+        <p>&copy; 2025 BlueSprout. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <style>
+    /* Footer CSS */
+    footer {
+      background: #1a1a2e;
+      color: white;
+      padding: 60px 0 20px 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    /* About section with centered socials */
+    footer .footer-section.about .social-links {
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: left;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .footer-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: rgb(0, 225, 225); /* Accent color */
+    }
+    
+    .footer-section p {
+      line-height: 1.6;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+    
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .footer-section ul li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-section ul li a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: inline-block;
+    }
+    
+    .footer-section ul li a:hover {
+      color: rgb(0, 225, 225);
+      transform: translateX(5px);
+    }
+    
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgb(0, 225, 225); /* Accent color */
+      color: white;
+      border-radius: 50%;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      transform: translateY(-3px);
+      background: #00baba; /* Slightly darker on hover */
+      box-shadow: 0 5px 15px rgba(0, 225, 225, 0.4);
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid #333;
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive Footer */
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    
+      .social-links {
+        justify-content: center;
+      }
+    }
+    </style>
+
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/x-icon" href="dropp.png">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQs</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+  body { font-family: 'Fredoka', sans-serif; margin:0; background:#f3f7ff; color:#333; }
+  .container { max-width: 900px; margin: 50px auto; padding: 20px; background:#fff; border-radius:15px; box-shadow:0 15px 30px rgba(0,0,0,0.1); }
+  h2 { text-align:center; color:#4fc3f7; margin-bottom:10px; }
+  p.intro { text-align:center; margin-bottom:30px; font-size:1.1rem; color:#555; }
+
+  .faq-item { border-bottom:1px solid #eee; }
+  .faq-question { cursor:pointer; padding:15px; font-weight:600; display:flex; justify-content:space-between; align-items:center; transition:0.3s; }
+  .faq-question:hover { background:#f0f8ff; }
+  .faq-answer { max-height:0; overflow:hidden; transition:max-height 0.3s ease, padding 0.3s ease; padding:0 15px; color:#555; }
+  .faq-answer.open { padding:15px; }
+  .faq-question i { transition: transform 0.3s ease; }
+  .faq-question.active i { transform: rotate(45deg); }
+
+  @media(max-width:600px){ .faq-question { font-size: 0.95rem; } }
+</style>
+</head>
+<body>
+  <section><!-- Chatbot Start -->
+    <style>
+      #chat-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #00bcd4;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 1000;
+      }
+      #chat-notification {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        background: #00bcd4;
+        color: white;
+        padding: 12px 18px;
+        border-radius: 20px;
+        font-size: 14px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 999;
+      }
+      #chat-popup {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 300px;
+        max-height: 400px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 1000;
+      }
+      #chat-header {
+        background: #00bcd4;
+        color: white;
+        padding: 12px;
+        text-align: center;
+        font-weight: bold;
+      }
+      #chat-messages {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        background: #f7f7f7;
+      }
+      .chat-message {
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        font-size: 14px;
+      }
+      .suggestion {
+        background: #00bcd4;
+        color: white;
+        padding: 8px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        display: inline-block;
+        margin: 5px 2px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .suggestion:hover {
+        background: #0097a7;
+      }
+      #chat-input {
+        display: flex;
+        border-top: 1px solid #ddd;
+      }
+      #userInput {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        font-size: 14px;
+      }
+      #chat-input button {
+        padding: 10px;
+        background: #00bcd4;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
+    
+    <div id="chat-button">💬</div>
+    <div id="chat-notification">Hey! Any doubt? I'm here!</div>
+    <div id="chat-popup">
+      <div id="chat-header">BlueSprout Assistant</div>
+      <div id="chat-messages">
+        <div class="chat-message"><strong>BLUEY:</strong> Hi! I’m here to help you with BlueSprout.</div>
+        <div class="suggestion" onclick="sendMessage('How can I trace my roof?')">How can I trace my roof?</div>
+        <div class="suggestion" onclick="sendMessage('What is rainwater harvesting?')">What is rainwater harvesting?</div>
+        <div class="suggestion" onclick="sendMessage('How do I measure area?')">How do I measure area?</div>
+      </div>
+      <div id="chat-input">
+        <input type="text" id="userInput" placeholder="Type your message..." />
+        <button onclick="submitMessage()">Send</button>
+      </div>
+    </div>
+    
+    <script>
+      const chatButton = document.getElementById('chat-button');
+      const chatPopup = document.getElementById('chat-popup');
+      const chatNotification = document.getElementById('chat-notification');
+      const chatMessages = document.getElementById('chat-messages');
+      const userInput = document.getElementById('userInput');
+    
+      window.addEventListener('load', () => {
+        chatNotification.style.opacity = 1;
+        setTimeout(() => {
+          chatNotification.style.opacity = 0;
+          setTimeout(() => { chatNotification.style.display = 'none'; }, 300);
+        }, 4000);
+      });
+    
+      chatButton.addEventListener('click', () => {
+        if(chatPopup.style.display === 'flex') {
+          chatPopup.style.display = 'none';
+        } else {
+          chatPopup.style.display = 'flex';
+        }
+      });
+    
+      function sendMessage(text) {
+        appendMessage('You', text);
+        setTimeout(() => {
+          appendMessage('BLUEY', generateReply(text));
+        }, 500);
+      }
+    
+      function submitMessage() {
+        const text = userInput.value.trim();
+        if(text !== "") {
+          sendMessage(text);
+          userInput.value = '';
+        }
+      }
+    
+      function appendMessage(sender, text) {
+        const msg = document.createElement('div');
+        msg.className = 'chat-message';
+        msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+        chatMessages.appendChild(msg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    
+      function generateReply(text) {
+        text = text.toLowerCase();
+        if(text.includes('trace')) return "You can trace your rooftop by selecting points on the map.";
+        if(text.includes('rainwater')) return "Rainwater harvesting helps collect and store rainwater from rooftops.";
+        if(text.includes('measure')) return "After tracing, click on 'Calculate Area' to measure your rooftop.";
+        return "Let me check that for you or you can contact us for further assistance!";
+      }
+    </script>
+    <!-- Chatbot End --></section>
+<div class="container">
+  <h2>Frequently Asked Questions</h2>
+  <p class="intro">Here are some common questions about water conservation and our platform.</p>
+
+  <div class="faq-item">
+    <div class="faq-question"><span>How do I calculate water savings?</span><i class="fas fa-plus"></i></div>
+    <div class="faq-answer">You can enter your daily habits like shorter showers, dishwasher usage, and garden watering in the Water Savings Tracker to see your impact.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question"><span>What is rooftop rainwater harvesting?</span><i class="fas fa-plus"></i></div>
+    <div class="faq-answer">Rooftop rainwater harvesting collects and stores rainwater from roofs for later use, reducing dependency on groundwater.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question"><span>How do I know if my area is suitable for rainwater harvesting?</span><i class="fas fa-plus"></i></div>
+    <div class="faq-answer">Our Feasibility & Assessment tool provides suggestions based on your roof area, location, rainfall, and available space.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question"><span>Can I reuse greywater from sinks and showers?</span><i class="fas fa-plus"></i></div>
+    <div class="faq-answer">Yes! Greywater can be collected and reused for gardening and flushing toilets, helping you save fresh water.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question"><span>Is there any cost associated with using your platform?</span><i class="fas fa-plus"></i></div>
+    <div class="faq-answer">No, our platform is completely free and focused on educating and empowering communities to conserve water.</div>
+  </div>
+</div>
+
+<script>
+  const faqs = document.querySelectorAll('.faq-question');
+  faqs.forEach(faq => {
+    faq.addEventListener('click', () => {
+      faq.classList.toggle('active');
+      const answer = faq.nextElementSibling;
+      if(answer.style.maxHeight){
+        answer.style.maxHeight = null;
+        answer.classList.remove('open');
+      } else {
+        answer.style.maxHeight = answer.scrollHeight + "px";
+        answer.classList.add('open');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

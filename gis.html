@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GIS Map - BlueSprout</title>
+  <link rel="icon" type="image/x-icon" href="dropp.png">
+  <style>
+    /* ------------------- BlueSprout CSS ------------------- */
+    :root {
+      --primary-blue: #4fc3f7;
+      --secondary-blue: #29b6f6;
+      --dark-blue: #0277bd;
+      --light-blue: #e1f5fe;
+      --white: #ffffff;
+      --light-gray: #f5f5f5;
+      --text-dark: #333333;
+      --text-light: #666666;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --error: #f44336;
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --radius-lg: 0.75rem;
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: var(--font-primary); background: var(--white); color: var(--text-dark); }
+    a { text-decoration:none; color: inherit; }
+    .container { width:100%; max-width:1200px; margin:0 auto; padding:0 1rem; }
+
+    /* Navbar */
+    .navbar { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); position: fixed; top:0; left:0; right:0; z-index:1000; border-bottom:1px solid rgba(79,195,247,0.1); }
+    .nav-container { display:flex; justify-content:space-between; align-items:center; padding:1rem; }
+    .nav-logo { font-size:1.25rem; font-weight:700; color: var(--primary-blue); }
+    .nav-menu { display:flex; list-style:none; gap:1.5rem; }
+    .nav-link { font-weight:500; color: var(--text-dark); position: relative; }
+    .nav-link:hover, .nav-link.active { color: var(--primary-blue); }
+    .nav-link::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:2px; background: var(--primary-blue); transition: width 0.3s ease-in-out; }
+    .nav-link:hover::after, .nav-link.active::after { width:100%; }
+    .mobile-menu-btn { display:none; background:none; border:none; font-size:1.25rem; color: var(--primary-blue); cursor:pointer; }
+
+    /* Hero Section */
+    .hero { background: linear-gradient(135deg, var(--light-blue) 0%, rgba(79, 195, 247, 0.1) 100%); padding:6rem 0 4rem; margin-top:80px; text-align:center; }
+    .hero h1 { font-size:2.25rem; background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom:1rem; }
+    .hero p { font-size:1rem; color: var(--text-light); }
+
+    /* Section */
+    .section { padding:2rem 0; }
+
+    /* Footer */
+    .footer { background: var(--text-dark); color: var(--white); padding:2rem 0; text-align:center; }
+
+    /* Iframe */
+    .gis-iframe { width:100%; height:80vh; border:none; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="in.html" class="nav-logo">
+        <i class="fas fa-tint"></i> BlueSprout
+      </a>
+      <ul class="nav-menu">
+        <li><a href="index.html#hero" class="nav-link">Home</a></li>
+      <li><a href="index.html#features" class="nav-link">Features</a></li>
+      <li><a href="aiassessment.html" class="nav-link">AI Assessment</a></li>
+      <li><a href="gis.html" class="nav-link">GIS Map</a></li>
+      <li><a href="login.html" class="nav-link">Water Tracker</a></li>
+      <li><a href="index.html#game" class="nav-link">Play Game</a></li>
+      <li><a href="login.html" id="logoutLink" class="nav-link">Login</a></li>
+      </ul>
+      <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>GIS Rainwater Recharge Map</h1>
+      <p>Explore rooftop rainwater harvesting potential across India.</p>
+    </div>
+  </section>
+
+  <!-- GIS Iframe -->
+  <section class="section container">
+    <iframe class="gis-iframe" src="https://ingres.iith.ac.in/gecdataonline/gis/INDIA;parentLocName=INDIA;locname=INDIA;loctype=COUNTRY;view=ADMIN;locuuid=ffce954d-24e1-494b-ba7e-0931d8ad6085;year=2024-2025;computationType=normal;component=recharge;period=annual;category=safe;mapOnClickParams=false"></iframe>
+  </section>
+
+
+</body>
+</html>

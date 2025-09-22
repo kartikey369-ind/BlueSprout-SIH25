@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="dropp.png">
+
+  <title>BlueSprout - Sign Up</title>
+  <link rel="stylesheet" href="login.css"> <!-- Reuse same CSS -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <!-- Logo slightly inset on left -->
+      <div class="nav-logo"><i class="fas fa-tint"></i> BlueSprout</div>
+  
+      <!-- Navigation menu on right -->
+      <ul class="nav-menu">
+        <li><a href="index.html#hero" class="nav-link">Home</a></li>
+      <li><a href="index.html#features" class="nav-link">Features</a></li>
+      <li><a href="aiassessment.html" class="nav-link">AI Assessment</a></li>
+      <li><a href="gis.html" class="nav-link">GIS Map</a></li>
+      <li><a href="login.html" class="nav-link">Water Tracker</a></li>
+      <li><a href="index.html#game" class="nav-link">Play Game</a></li>
+      <li><a href="login.html" id="logoutLink" class="nav-link">Login</a></li>
+      </ul>
+      
+  
+      <button class="mobile-menu-btn">☰</button>
+    </div>
+  </nav>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBmFzWeb3havTS9hwsXwO7V0ztA5mHZGEY",
+      authDomain: "blue-sprout.firebaseapp.com",
+      projectId: "blue-sprout",
+      storageBucket: "blue-sprout.firebasestorage.app",
+      messagingSenderId: "352837881696",
+      appId: "1:352837881696:web:9ca7d22172a45ad5e2d805"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    async function signup() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Save user info in Firestore
+        await setDoc(doc(db, "users", user.uid), { name, email });
+
+        alert(`Account created for ${name}! Redirecting...`);
+        window.location.href = "home.html";
+      } catch (error) {
+        document.getElementById("message").innerText = error.message;
+      }
+    }
+    window.signup = signup;
+  </script>
+</head>
+<body>
+  <div class="main-container">
+    <div class="main-card">
+      <h2>Create Account</h2>
+      <input id="name" type="text" placeholder="Full Name">
+      <input id="email" type="email" placeholder="Email">
+      <input id="password" type="password" placeholder="Password">
+      <button onclick="signup()">Sign Up</button>
+      <p>Already have an account? <a href="login.html">Login</a></p>
+      <div id="message"></div>
+    </div>
+  </div>
+</body>
+</html>
