@@ -226,7 +226,7 @@
 
     .right-section img {
       width: 100%;
-      max-width: 300px;
+      max-width: 400px;
       filter: drop-shadow(0 0 10px rgb(0, 225, 225))
               drop-shadow(0 0 20px rgb(0, 225, 225));
     }
@@ -341,8 +341,9 @@
         <li><a href="index.html#features" class="nav-link">Features</a></li>
         <li><a href="aiassessment.html" class="nav-link">AI Assessment</a></li>
         <li><a href="gis.html" class="nav-link">GIS Map</a></li>
-        <li><a href="login.html" class="nav-link">Water Tracker</a></li>
         <li><a href="index.html#game" class="nav-link">Play Game</a></li>
+        <li><a href="login.html" class="nav-link">Water Tracker</a></li>
+
         <li><a href="login.html" id="logoutLink" class="nav-link">Login</a></li>
       </ul>
       
@@ -459,7 +460,7 @@
 
 <style>
 .stats {
-  background: linear-gradient(135deg, #00e1e1 0%, #a0f0f0 100%); /* richer cyan → light cyan */
+  background: linear-gradient(135deg, #7effff 0%, #fff8f8 100%); /* richer cyan → light cyan */
   color: #0a3d62; /* dark blue text */
   padding: 80px 20px;
   border-radius: 30px; /* optional: soft rounded edges for section */
@@ -604,319 +605,880 @@
     </div>
   </div>
 </section>
-<section><!-- Chatbot Start -->
+
+
+<!-- Video Section -->
+<section id="video" class="video-section">
+  <div class="container">
+      <h2 class="section-title fade-in">See Rainwater Harvesting in Action</h2>
+      
+      <div class="video-container fade-in">
+          <div class="video-content">
+              <div class="video-wrapper">
+                  <!-- Video with controls and poster -->
+                  <video id="rainwater-video"
+                         src="bluee.mp4"
+                         poster="poster.png"
+                         controls
+                         width="100%" height="100%"
+                         style="border-radius:15px;"
+                         preload="metadata">
+                      Your browser does not support the video tag.
+                  </video>
+                  
+                  <!-- Overlay play button -->
+                  <div class="video-overlay">
+                      <div class="play-icon">
+                          <i class="fas fa-play"></i>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<style>
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 */
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.video-wrapper video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border-radius: 15px;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.3);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  z-index: 2;  /* overlay above video */
+}
+
+.play-icon {
+  width: 80px; height: 80px;
+  background: rgba(0,225,225,0.9);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 2rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+</style>
+
+<script>
+// Fade-in animation
+document.addEventListener("DOMContentLoaded", () => {
+  const faders = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+          if(entry.isIntersecting){
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+          }
+      });
+  }, { threshold: 0.2 });
+  faders.forEach(fader => observer.observe(fader));
+});
+
+// Overlay click to play video
+document.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.querySelector('.video-overlay');
+  const video = document.getElementById('rainwater-video');
+
+  if (overlay && video) {
+      overlay.addEventListener('click', () => {
+          video.play();                   // start video
+          overlay.style.opacity = '0';    // hide overlay
+          overlay.style.pointerEvents = 'none'; // allow user to interact with video
+      });
+  }
+});
+</script>
+
+
+
+
+
+<!-- Success Stories Section -->
+<section id="success-stories" class="success-stories-section">
+    <div class="parallax-bg"></div>
+    
+    
+
+    <div class="container">
+        <h2 class="section-title fade-in">
+            Success Stories
+        </h2>
+        <p class="section-subtitle fade-in">
+            Real people, real results - discover how rainwater harvesting transformed communities
+        </p>
+        
+        <div class="stories-grid">
+            <!-- Story 1 -->
+            <div class="story-card fade-in" id="story-1">
+                <div class="story-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="story-badge">Residential</div>
+                </div>
+                <div class="story-content">
+                    <h3>The Sharma Family </h3>
+                    <p class="story-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Jaipur, Rajasthan
+                    </p>
+                    <p class="story-text">
+                        After installing our rainwater harvesting system, we reduced our water bills by 70% and now have a reliable water source even during droughts. The system paid for itself in just 18 months!
+                    </p>
+                    <div class="story-stats">
+                        <div class="stat">
+                            <span class="stat-number">70%</span>
+                            <span class="stat-label">Water Bill Reduction<br></span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">6,000</span>
+                            <span class="stat-label">Gallons Collected/Month<br></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Story 2 -->
+            <div class="story-card fade-in" id="story-2">
+                <div class="story-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="story-badge">Educational</div>
+                </div>
+                <div class="story-content">
+                    <h3>Vidya Niketan School</h3>
+                    <p class="story-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Pune, Maharashtra
+                    </p>
+                    <p class="story-text">
+                        Our rainwater harvesting project became a living classroom. Students learn about sustainability while the school saves ₹2,50,000 annually on water costs and maintains beautiful gardens year-round.
+                    </p>
+                    <div class="story-stats">
+                        <div class="stat">
+                            <span class="stat-number">₹2.5L</span>
+                            <span class="stat-label">Annual Savings<br></span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">18,000</span>
+                            <span class="stat-label">Liters Storage<br></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Story 3 -->
+            <div class="story-card fade-in" id="story-3">
+                <div class="story-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="story-badge">Agricultural</div>
+                </div>
+                <div class="story-content">
+                    <h3>Green Valley Farm </h3>
+                    <p class="story-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Nashik, Maharashtra
+                    </p>
+                    <p class="story-text">
+                        Rainwater harvesting helped us survive the drought years. We now irrigate 20 hectares sustainably, increased crop yields by 35%, and our organic farming became even more meaningful.
+                    </p>
+                    <div class="story-stats">
+                        <div class="stat">
+                            <span class="stat-number">35%</span>
+                            <span class="stat-label">Yield Increase<br></span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">20</span>
+                            <span class="stat-label">Hectares Irrigated<br></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            
+
+           
+
+       
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Hindi/Indian Language Styling */
+.hindi-text {
+    display: block;
+    font-size: 1.8rem;
+    color: #00b8d4;
+    font-weight: 600;
+    margin-top: 10px;
+    font-family: 'Noto Sans Devanagari', 'Arial Unicode MS', sans-serif;
+}
+
+.hindi-subtitle {
+    display: block;
+    font-size: 1rem;
+    color: #666;
+    margin-top: 8px;
+    font-family: 'Noto Sans Devanagari', 'Arial Unicode MS', sans-serif;
+    line-height: 1.5;
+}
+
+.hindi-name {
+    font-size: 1.1rem;
+    color: #00b8d4;
+    font-weight: 500;
+    margin-left: 10px;
+    font-family: 'Noto Sans Devanagari', 'Arial Unicode MS', sans-serif;
+}
+
+.hindi-quote {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 10px;
+    font-style: italic;
+    font-family: 'Noto Sans Devanagari', 'Arial Unicode MS', sans-serif;
+    line-height: 1.4;
+}
+
+.stat-label small {
+    font-size: 0.7rem;
+    color: #888;
+    font-family: 'Noto Sans Devanagari', 'Arial Unicode MS', sans-serif;
+}
+
+.summary-stat p small {
+    font-size: 0.8rem;
+    color: #777;
+    font-family: 'Noto Sans Devanagari', 'Arial Unicode MS', sans-serif;
+}
+
+/* Smooth Scroll Navigation */
+.scroll-nav {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 25px;
+    padding: 20px 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+}
+
+.scroll-nav-item {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(0, 225, 225, 0.3);
+    margin: 8px 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+.scroll-nav-item.active {
+    background: #00e1e1;
+    transform: scale(1.3);
+}
+
+.scroll-nav-item:hover {
+    background: #00b8d4;
+    transform: scale(1.2);
+}
+
+/* Parallax Background */
+.success-stories-section {
+    padding: 100px 20px;
+    background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.parallax-bg {
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="water-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="3" fill="%2300e1e1" opacity="0.1"/><circle cx="5" cy="5" r="2" fill="%2300b8d4" opacity="0.08"/><circle cx="35" cy="10" r="1.5" fill="%2300e1e1" opacity="0.06"/></pattern></defs><rect width="100%" height="100%" fill="url(%23water-pattern)"/></svg>') repeat;
+    z-index: 0;
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) translateX(0px); }
+    25% { transform: translateY(-10px) translateX(5px); }
+    50% { transform: translateY(-20px) translateX(0px); }
+    75% { transform: translateY(-10px) translateX(-5px); }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+    color: #0a3d62;
+    font-weight: 700;
+}
+
+.section-subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 60px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 80px;
+}
+
+.story-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border: 2px solid rgba(0, 225, 225, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+.story-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.story-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    border-color: rgba(0, 225, 225, 0.3);
+}
+
+.story-image {
+    height: 200px;
+    background: linear-gradient(135deg, #00e1e1 0%, #00b8d4 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.story-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+}
+
+.image-placeholder {
+    font-size: 4rem;
+    color: white;
+    z-index: 2;
+    position: relative;
+}
+
+.story-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #00e1e1;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 3;
+}
+
+.story-content {
+    padding: 30px;
+}
+
+.story-content h3 {
+    font-size: 1.5rem;
+    color: #0a3d62;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.story-location {
+    color: #00e1e1;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.story-location i {
+    font-size: 0.8rem;
+}
+
+.story-text {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    font-size: 1rem;
+}
+
+.story-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #00e1e1;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.2;
+}
+
+/* Success Summary */
+.success-summary {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border: 2px solid rgba(0, 225, 225, 0.1);
+}
+
+.summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    text-align: center;
+}
+
+.summary-stat h4 {
+    font-size: 2.5rem;
+    color: #00e1e1;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.summary-stat p {
+    color: #555;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Fade-in animation */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .scroll-nav {
+        right: 15px;
+        padding: 15px 8px;
+    }
+    
+    .success-stories-section {
+        padding: 80px 15px;
+    }
+    
+    .section-title {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+    }
+    
+    .section-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+    }
+    
+    .stories-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-bottom: 60px;
+    }
+    
+    .story-content {
+        padding: 25px;
+    }
+    
+    .story-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .summary-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .success-summary {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .story-content {
+        padding: 20px;
+    }
+    
+    .story-content h3 {
+        font-size: 1.3rem;
+    }
+    
+    .summary-stats {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .summary-stat h4 {
+        font-size: 2rem;
+    }
+}
+</style>
+
+<script>
+// Enhanced Fade-in animation on scroll with stagger effect
+document.addEventListener("DOMContentLoaded", () => {
+    const faders = document.querySelectorAll('.fade-in');
+    const storyCards = document.querySelectorAll('.story-card');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                // Add stagger effect for story cards
+                if (entry.target.classList.contains('story-card')) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                } else {
+                    entry.target.classList.add('visible');
+                }
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { 
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    faders.forEach(fader => observer.observe(fader));
+    
+    // Scroll navigation functionality
+    const scrollNavItems = document.querySelectorAll('.scroll-nav-item');
+    const stories = document.querySelectorAll('.story-card');
+    
+    // Update active nav item based on scroll position
+    const updateActiveNavItem = () => {
+        const scrollPosition = window.scrollY + window.innerHeight / 2;
+        
+        stories.forEach((story, index) => {
+            const storyTop = story.offsetTop;
+            const storyBottom = storyTop + story.offsetHeight;
+            
+            if (scrollPosition >= storyTop && scrollPosition <= storyBottom) {
+                scrollNavItems.forEach(item => item.classList.remove('active'));
+                if (scrollNavItems[index]) {
+                    scrollNavItems[index].classList.add('active');
+                }
+            }
+        });
+    };
+    
+    // Smooth scroll to story on nav click
+    scrollNavItems.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            const targetStory = stories[index];
+            if (targetStory) {
+                targetStory.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                
+                // Update active state
+                scrollNavItems.forEach(navItem => navItem.classList.remove('active'));
+                item.classList.add('active');
+            }
+        });
+    });
+    
+    // Listen for scroll events to update active nav item
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(updateActiveNavItem, 100);
+    });
+    
+    // Counter animation for summary stats
+    const animateCounter = (element, target, suffix = '', prefix = '') => {
+        let current = 0;
+        const increment = target / 100;
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = prefix + formatNumber(target) + suffix;
+                clearInterval(timer);
+            } else {
+                element.textContent = prefix + formatNumber(Math.floor(current)) + suffix;
+            }
+        }, 20);
+    };
+
+    const formatNumber = (num) => {
+        if (num >= 100000) {
+            return (num / 100000).toFixed(0) + ',00,000';
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(0) + ',000';
+        }
+        return num.toString();
+    };
+
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const summaryStats = document.querySelectorAll('.summary-stat h4');
+                
+                if (summaryStats[0]) animateCounter(summaryStats[0], 600000, '+', '');
+                if (summaryStats[1]) animateCounter(summaryStats[1], 800, '+', '');
+                if (summaryStats[2]) {
+                    summaryStats[2].textContent = '₹15,00,000+';
+                }
+                if (summaryStats[3]) animateCounter(summaryStats[3], 98, '%', '');
+                
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const successSummary = document.querySelector('.success-summary');
+    if (successSummary) {
+        statsObserver.observe(successSummary);
+    }
+});
+</script>
+
+
+
+<section>
   <style>
-    #chat-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
-      color: white;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(0, 225, 225, 0.4);
-      z-index: 1000;
-      border: 3px solid #ffffff;
-      transition: all 0.3s ease;
-      animation: robotPulse 2s infinite;
-    }
-
-    #chat-button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 25px rgba(0, 225, 225, 0.6);
-    }
-
-    @keyframes robotPulse {
-      0%, 100% { 
-        box-shadow: 0 6px 20px rgba(0, 225, 225, 0.4);
-      }
-      50% { 
-        box-shadow: 0 6px 20px rgba(0, 225, 225, 0.8), 0 0 0 10px rgba(0, 225, 225, 0.1);
-      }
-    }
-
-    #chat-button::before {
-      content: '';
-      position: absolute;
-      top: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 20px;
-      height: 8px;
-      background: #00e1e1;
-      border-radius: 10px 10px 0 0;
-      border: 2px solid #ffffff;
-      border-bottom: none;
-    }
-
-    #chat-button::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 30px;
-      height: 6px;
-      background: #00e1e1;
-      border-radius: 0 0 15px 15px;
-      border: 2px solid #ffffff;
-      border-top: none;
-    }
-    #chat-notification {
-      position: fixed;
-      bottom: 100px;
-      right: 20px;
-      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
-      color: white;
-      padding: 12px 18px;
-      border-radius: 20px;
-      font-size: 14px;
-      opacity: 0;
-      transition: opacity 0.3s;
-      z-index: 999;
-      border: 2px solid #ffffff;
-      box-shadow: 0 4px 15px rgba(0, 225, 225, 0.3);
-      font-weight: 600;
-    }
-    #chat-popup {
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      width: 300px;
-      max-height: 400px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 1000;
-    }
-    #chat-header {
-      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
-      color: white;
-      padding: 12px;
-      text-align: center;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    #chat-messages {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-      background: #f7f7f7;
-    }
-    .chat-message {
-      margin-bottom: 10px;
-      padding: 8px 12px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      font-size: 14px;
-    }
-    .suggestion {
-      background: #00bcd4;
-      color: white;
-      padding: 8px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      display: inline-block;
-      margin: 5px 2px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .suggestion:hover {
-      background: #0097a7;
-    }
-    #chat-input {
-      display: flex;
-      border-top: 1px solid #ddd;
-    }
-    #userInput {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      font-size: 14px;
-    }
-    #chat-input button {
-      padding: 10px;
-      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    #chat-input button:hover {
-      background: linear-gradient(135deg, #00baba 0%, #009999 100%);
-      transform: translateY(-1px);
-    }
+  #chat-button{position:fixed;bottom:20px;right:20px;width:70px;height:70px;background:linear-gradient(135deg,#00e1e1,#00baba);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;box-shadow:0 6px 20px rgba(0,225,225,0.4);z-index:1000;border:3px solid #fff;transition:all 0.3s ease;animation: robotPulse 2s infinite;}
+  #chat-button:hover{transform:scale(1.1);box-shadow:0 8px 25px rgba(0,225,225,0.6);}
+  @keyframes robotPulse{0%,100%{box-shadow:0 6px 20px rgba(0,225,225,0.4);}50%{box-shadow:0 6px 20px rgba(0,225,225,0.8),0 0 0 10px rgba(0,225,225,0.1);}}
+  
+  #chat-notification{position:fixed;bottom:100px;right:20px;background:linear-gradient(135deg,#00e1e1,#00baba);color:white;padding:12px 18px;border-radius:20px;font-size:14px;font-weight:600;opacity:0;transition:opacity 0.3s;z-index:999;box-shadow:0 4px 15px rgba(0,225,225,0.3);border:2px solid #ffffff;}
+  
+  #chat-popup{position:fixed;bottom:90px;right:20px;width:360px;max-height:500px;background:white;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);display:none;flex-direction:column;overflow:hidden;z-index:1000;font-family:Arial,sans-serif;}
+  #chat-header{background:linear-gradient(135deg,#00e1e1,#00baba);color:white;padding:12px;text-align:center;font-weight:bold;display:flex;align-items:center;justify-content:center;gap:8px;}
+  #chat-messages{flex:1;padding:10px;overflow-y:auto;background:#f7f7f7;display:flex;flex-direction:column;gap:8px;}
+  .chat-message{padding:8px 12px;border-radius:8px;font-size:14px;max-width:85%;word-wrap:break-word;}
+  .chat-message.user{background:#00e1e1;color:white;align-self:flex-end;}
+  .chat-message.bluey{background:white;color:black;align-self:flex-start;}
+  #chat-input{display:flex;border-top:1px solid #ddd;}
+  #userInput{flex:1;padding:10px;border:none;font-size:14px;}
+  #chat-input button{padding:10px;background:linear-gradient(135deg,#00e1e1,#00baba);color:white;border:none;cursor:pointer;font-weight:600;transition:all 0.3s ease;}
+  #chat-input button:hover{background:linear-gradient(135deg,#00baba,#009999);transform:translateY(-1px);}
+  #faq-panel{padding:10px;background:#f0f0f0;display:flex;flex-wrap:wrap;gap:5px;}
+  .suggestion{background:#00bcd4;color:white;padding:6px 10px;border-radius:20px;font-size:12px;cursor:pointer;transition:background 0.3s;}
+  .suggestion:hover{background:#0097a7;}
+  #typing-indicator{font-size:12px;color:#555;padding:5px 10px;display:none;}
   </style>
   
   <div id="chat-button">🤖</div>
-  <div id="chat-notification">Hey! Any doubt? I'm here!</div>
+  <div id="chat-notification">Hey there! Bluey at your service. </div>
+  
   <div id="chat-popup">
     <div id="chat-header">🤖 BlueSprout Assistant</div>
     <div id="chat-messages">
-      <div class="chat-message"><strong>BLUEY:</strong> Hi! I'm your BlueSprout assistant. I can help you with rooftop rainwater harvesting, assessments, and water conservation. What would you like to know?</div>
-      <div class="suggestion" onclick="sendMessage('What is BlueSprout?')">What is BlueSprout?</div>
-      <div class="suggestion" onclick="sendMessage('How to assess my rooftop?')">How to assess my rooftop?</div>
-      <div class="suggestion" onclick="sendMessage('What is rainwater harvesting?')">What is rainwater harvesting?</div>
-      <div class="suggestion" onclick="sendMessage('How much water can I collect?')">How much water can I collect?</div>
-      <div class="suggestion" onclick="sendMessage('What are the benefits?')">What are the benefits?</div>
-      <div class="suggestion" onclick="sendMessage('How much does it cost?')">How much does it cost?</div>
+      <div class="chat-message bluey"><strong>BLUEY:</strong> Hi! How can I help you today?</div>
     </div>
+    <div id="typing-indicator">Bluey is typing...</div>
     <div id="chat-input">
       <input type="text" id="userInput" placeholder="Type your message..." />
       <button onclick="submitMessage()">Send</button>
     </div>
+    <div id="faq-panel"></div>
   </div>
   
   <script>
-    const chatButton = document.getElementById('chat-button');
-    const chatPopup = document.getElementById('chat-popup');
-    const chatNotification = document.getElementById('chat-notification');
-    const chatMessages = document.getElementById('chat-messages');
-    const userInput = document.getElementById('userInput');
+  const chatButton=document.getElementById('chat-button');
+  const chatPopup=document.getElementById('chat-popup');
+  const chatMessages=document.getElementById('chat-messages');
+  const userInput=document.getElementById('userInput');
+  const chatNotification=document.getElementById('chat-notification');
+  const faqPanel=document.getElementById('faq-panel');
+  const typingIndicator=document.getElementById('typing-indicator');
   
-    window.addEventListener('load', () => {
-      chatNotification.style.opacity = 1;
-      setTimeout(() => {
-        chatNotification.style.opacity = 0;
-        setTimeout(() => { chatNotification.style.display = 'none'; }, 300);
-      }, 4000);
-    });
+  // Notification popup
+  window.addEventListener('load',()=>{
+    chatNotification.style.opacity=1;
+    setTimeout(()=>{ chatNotification.style.opacity=0; },5000);
+  });
   
-    chatButton.addEventListener('click', () => {
-      if(chatPopup.style.display === 'flex') {
-        chatPopup.style.display = 'none';
-      } else {
-        chatPopup.style.display = 'flex';
-      }
-    });
+  // Toggle chat popup
+  chatButton.addEventListener('click',()=>{ chatPopup.style.display=(chatPopup.style.display==='flex')?'none':'flex'; });
   
-    function sendMessage(text) {
-      appendMessage('You', text);
-      setTimeout(() => {
-        appendMessage('BLUEY', generateReply(text));
-      }, 500);
-    }
+  // ---------------- Master dataset ----------------
+  const dataset=[
+    {q:["hi","hello","hey","good morning","good afternoon","good evening"],a:"Hello! I'm Bluey. Ask me anything about rainwater harvesting."},
+    {q:["thanks","thank you","thx"],a:"You're welcome! Happy to help."},
+    {q:["bye","goodbye","see you"],a:"Goodbye! Stay hydrated and save water!"},
+    {q:["what is bluesprout","bluesprout"],a:"BlueSprout is a platform for rooftop rainwater harvesting, assessment, water tracking, and educational games."},
+    {q:["ai assessment","upload photo","ai analyze"],a:"Upload a rooftop photo. AI analyzes roof area, slope, and material to suggest tank size and setup."},
+    {q:["manual assessment","calculate manually"],a:"Enter roof area, rainfall, dwellers, and available space. We'll calculate water potential, tank size, and costs."},
+    {q:["how much water","water can i collect","capacity"],a:"Water collection = Roof Area × Rainfall × Runoff Coefficient × 1000 (liters). Use our tools for precise calculation."},
+    {q:["benefits","advantages","why"],a:"💧 Save water, 🌱 recharge groundwater, 🏠 backup supply, 🌊 reduce floods, 💰 cost-effective."},
+    {q:["cost","price","expensive"],a:"Basic ₹15k-50k, Medium ₹50k-1.5L, Large ₹1.5L+ depending on tank size, filtration, and installation."},
+    {q:["maintenance","clean","care"],a:"Clean gutters monthly, inspect tanks quarterly, check filters, monitor water quality."},
+    {q:["tank size","storage"],a:"Tank size depends on roof area and rainfall. Typically 60% of annual harvestable water."},
+    {q:["recharge","groundwater","artificial recharge"],a:"Artificial recharge uses pits, trenches or shafts to replenish groundwater. Improves water table and sustainability."},
+    {q:["filter","quality","safe"],a:"Use first-flush diverters, mesh filters, sand/charcoal filters. Add UV or RO for drinking water."},
+    {q:["game","learn","fun"],a:"Our Rain Catcher game teaches water conservation through interactive gameplay. Catch raindrops, avoid acid rain, and level up!"},
+    {q:["track","monitor","progress"],a:"Water Tracker monitors water savings, sets conservation goals, and analyzes system efficiency."},
+    {q:["feasible","suitable","possible"],a:"Most rooftops are suitable. Minimum 20m², 400mm rainfall, and metal/concrete/tile roofs work best."},
+    {q:["location","area","region"],a:"BlueSprout works across India, using local rainfall and groundwater data for accurate recommendations."},
+    {q:["contact","support","help"],a:"Contact us via email, call, or continue chatting with me. Check our FAQs or download guides for more info."},
+    {q:["guide","manual","pdf"],a:"We provide comprehensive guides covering assessment, implementation, maintenance, and troubleshooting."}
+  ];
   
-    function submitMessage() {
-      const text = userInput.value.trim();
-      if(text !== "") {
-        sendMessage(text);
-        userInput.value = '';
-      }
-    }
+  // ---------------- FAQ panel ----------------
+  const faqList=[
+    "What is BlueSprout?",
+    "AI Assessment",
+    "Manual Assessment",
+    "How much water can I collect?",
+    "Benefits of rainwater harvesting?",
+    "Cost of installation?",
+    "Maintenance tips",
+    "Tank size",
+    "Groundwater recharge",
+    "Water Tracker",
+    "Play Rain Catcher game"
+  ];
   
-    function appendMessage(sender, text) {
-      const msg = document.createElement('div');
-      msg.className = 'chat-message';
-      msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
-      chatMessages.appendChild(msg);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
+  faqList.forEach(q=>{
+    const btn=document.createElement('div');
+    btn.className='suggestion';
+    btn.textContent=q;
+    btn.onclick=()=>{sendMessage(q);};
+    faqPanel.appendChild(btn);
+  });
   
-    function generateReply(text) {
-      text = text.toLowerCase();
-      
-      // BlueSprout Platform Questions
-      if(text.includes('bluesprout') || text.includes('what is bluesprout')) {
-        return "BlueSprout is a comprehensive platform for rooftop rainwater harvesting assessment and artificial recharge planning. We help individuals and communities assess their rainwater collection potential, get personalized recommendations, and contribute to groundwater conservation. Our platform includes AI-powered assessments, manual calculations, water tracking, and educational games.";
-      }
-      
-      // Assessment Questions
-      if(text.includes('assess') || text.includes('assessment') || text.includes('rooftop')) {
-        return "You can assess your rooftop in two ways: 1) AI Assessment - Upload a photo of your roof for AI-powered analysis, or 2) Manual Assessment - Enter details like roof area, rainfall data, and location for precise calculations. Both methods provide feasibility analysis, recommended tank sizes, and cost estimates.";
-      }
-      
-      if(text.includes('ai assessment') || text.includes('upload')) {
-        return "Our AI Assessment uses advanced image recognition to analyze your rooftop photo. Simply upload a clear image of your roof, and our AI will identify the roof area, material, slope, and provide recommendations for optimal rainwater harvesting setup. It's quick, accurate, and user-friendly!";
-      }
-      
-      if(text.includes('manual assessment') || text.includes('calculate')) {
-        return "Manual Assessment requires you to input: roof area (m²), annual rainfall (mm), number of dwellers, available open space, and roof material. Our algorithm calculates harvestable volume, recommended tank size, recharge capacity, and provides detailed cost-benefit analysis.";
-      }
-      
-      // Rainwater Harvesting Questions
-      if(text.includes('rainwater harvesting') || text.includes('what is rainwater')) {
-        return "Rainwater harvesting is the collection and storage of rainwater from rooftops, surfaces, or catchments for later use. It helps reduce water bills, provides backup water supply, reduces flooding, and recharges groundwater. Our platform helps you implement this sustainable practice effectively.";
-      }
-      
-      if(text.includes('how much water') || text.includes('water can i collect') || text.includes('capacity')) {
-        return "Water collection depends on roof area, annual rainfall, and runoff coefficient. Formula: Volume = Rainfall(mm) × Roof Area(m²) × Runoff Coefficient × 1000. For example, a 100m² roof in an area with 800mm annual rainfall can collect ~64,000 liters/year (assuming 0.8 runoff coefficient). Use our assessment tools for precise calculations!";
-      }
-      
-      if(text.includes('benefits') || text.includes('advantages') || text.includes('why')) {
-        return "Benefits include: 💧 Reduced water bills (30-50% savings), 🌱 Groundwater recharge, 🏠 Backup water supply, 🌊 Flood reduction, 🌍 Environmental sustainability, 💰 Cost-effective long-term solution, 🏘️ Community water security, and 📈 Increased property value. Our platform helps maximize these benefits!";
-      }
-      
-      if(text.includes('cost') || text.includes('price') || text.includes('expensive')) {
-        return "Costs vary by system size and complexity. Basic systems: ₹15,000-50,000, Medium systems: ₹50,000-1,50,000, Large systems: ₹1,50,000+. Factors include tank size, filtration, plumbing, and installation. Our platform provides detailed cost estimates and payback period calculations. Most systems pay for themselves in 3-5 years through water savings.";
-      }
-      
-      // Technical Questions
-      if(text.includes('tank size') || text.includes('storage')) {
-        return "Tank size depends on roof area, rainfall, and usage patterns. General rule: 60% of annual harvestable volume. For a 100m² roof with 800mm rainfall, recommended tank size is ~38,400 liters. Our assessment tools calculate optimal tank size based on your specific conditions and usage needs.";
-      }
-      
-      if(text.includes('recharge') || text.includes('groundwater') || text.includes('artificial')) {
-        return "Artificial recharge involves directing rainwater to recharge pits, trenches, or shafts to replenish groundwater. Benefits include improved water table levels, reduced flooding, and sustainable water management. Our platform calculates recharge capacity and recommends appropriate structures based on soil type and available space.";
-      }
-      
-      if(text.includes('maintenance') || text.includes('care') || text.includes('clean')) {
-        return "Regular maintenance includes: cleaning gutters monthly, inspecting tanks quarterly, checking filters, monitoring water quality, repairing leaks immediately, and cleaning first-flush diverters. Our water tracker helps monitor system performance and maintenance schedules.";
-      }
-      
-      if(text.includes('filter') || text.includes('quality') || text.includes('safe')) {
-        return "Water quality depends on roof material, environment, and filtration. Use first-flush diverters, mesh filters, and sand/charcoal filters. For drinking water, add UV treatment or reverse osmosis. Our platform provides water quality guidelines and filtration recommendations based on your location and usage.";
-      }
-      
-      // Game and Education
-      if(text.includes('game') || text.includes('play') || text.includes('learn')) {
-        return "Our interactive Rain Catcher game teaches water conservation through fun gameplay! Catch raindrops, avoid acid rain, build combos, and level up while learning about rainwater harvesting. It's educational, engaging, and helps spread awareness about water conservation. Try it out!";
-      }
-      
-      if(text.includes('track') || text.includes('monitor') || text.includes('progress')) {
-        return "Our Water Tracker helps you monitor your water savings, track environmental impact, set conservation goals, and measure the effectiveness of your rainwater harvesting system. It provides detailed analytics and helps optimize your water usage patterns.";
-      }
-      
-      // Location and Feasibility
-      if(text.includes('feasible') || text.includes('suitable') || text.includes('possible')) {
-        return "Most rooftops are suitable for rainwater harvesting! Key factors: roof area (minimum 20m²), rainfall (minimum 400mm annually), roof material (metal, tile, concrete work best), and local regulations. Our assessment tools evaluate feasibility and provide specific recommendations for your location.";
-      }
-      
-      if(text.includes('location') || text.includes('area') || text.includes('region')) {
-        return "BlueSprout works across India and supports regional languages for better accessibility. We use local rainfall data, groundwater information, and regional guidelines to provide accurate assessments. Our platform adapts to different climatic conditions and local water management practices.";
-      }
-      
-      // Contact and Support
-      if(text.includes('contact') || text.includes('help') || text.includes('support')) {
-        return "For additional support, you can: 📧 Contact us through our contact page, 📞 Call our helpline, 💬 Continue chatting with me, 📚 Check our FAQ section, or 📖 Download our comprehensive guides. We're here to help you succeed with rainwater harvesting!";
-      }
-      
-      if(text.includes('guide') || text.includes('manual') || text.includes('pdf')) {
-        return "We provide comprehensive guides: 'Rooftop Rainwater Guide' and 'Rainwater Harvesting Manual' available for download. These cover everything from basic concepts to advanced implementation, maintenance, and troubleshooting. Perfect for DIY enthusiasts and professionals alike!";
-      }
-      
-      // Default response
-      return "I'm here to help with all your rainwater harvesting questions! Try asking about assessments, costs, benefits, maintenance, or any specific concerns. You can also use our AI Assessment, Manual Assessment, or Water Tracker tools for detailed analysis. What else would you like to know?";
-    }
-  </script>
-  <!-- Chatbot End --></section>
+  // ---------------- Chat functions ----------------
+  function submitMessage(){
+    const text=userInput.value.trim();
+    if(!text) return;
+    sendMessage(text);
+    userInput.value='';
+  }
+  // Submit on Enter key
+userInput.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // prevent default newline
+    submitMessage();
+  }
+});
 
-<style>
+  
+  function sendMessage(text){
+    appendMessage('user',text);
+    typingIndicator.style.display='block';
+    setTimeout(()=>{
+      const reply=getReply(text);
+      typingIndicator.style.display='none';
+      appendMessage('bluey',reply);
+    },800);
+  }
+  
+  function appendMessage(sender,text){
+    const div=document.createElement('div');
+    div.className='chat-message '+sender;
+    div.innerHTML=`<strong>${sender==='bluey'?'BLUEY':'You'}:</strong> ${text}`;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop=chatMessages.scrollHeight;
+  }
+  
+  function getReply(text){
+    text=text.toLowerCase();
+    for(let i=0;i<dataset.length;i++){
+      for(let kw of dataset[i].q){
+        if(text.includes(kw)) return dataset[i].a;
+      }
+    }
+    return "Sorry, I didn't understand. Try asking about assessment, AI/manual tools, costs, benefits, maintenance, or water collection.";
+  }
+  </script>
+  </section>
+  <style>
 /* Game Section */
 .game-section {
   padding: 100px 20px;
@@ -1425,6 +1987,8 @@ document.addEventListener("DOMContentLoaded", () => {
           <li><a href="index.html#hero">Home</a></li>
           <li><a href="index.html#features">Features</a></li>
           <li><a href="aiassessment.html">AI Assessment</a></li>
+          <li><a href="gis.html" class="nav-link">GIS Map</a></li>
+
           <li><a href="manualassesment.html">Manual Assessment</a></li>
           <li><a href="index.html#game">Play our Game</a></li>
         </ul>

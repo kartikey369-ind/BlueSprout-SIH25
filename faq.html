@@ -25,177 +25,155 @@
 </style>
 </head>
 <body>
-  <section><!-- Chatbot Start -->
+  <section>
     <style>
-      #chat-button {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #00bcd4;
-        color: white;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 28px;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 1000;
-      }
-      #chat-notification {
-        position: fixed;
-        bottom: 90px;
-        right: 20px;
-        background: #00bcd4;
-        color: white;
-        padding: 12px 18px;
-        border-radius: 20px;
-        font-size: 14px;
-        opacity: 0;
-        transition: opacity 0.3s;
-        z-index: 999;
-      }
-      #chat-popup {
-        position: fixed;
-        bottom: 90px;
-        right: 20px;
-        width: 300px;
-        max-height: 400px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        display: none;
-        flex-direction: column;
-        overflow: hidden;
-        z-index: 1000;
-      }
-      #chat-header {
-        background: #00bcd4;
-        color: white;
-        padding: 12px;
-        text-align: center;
-        font-weight: bold;
-      }
-      #chat-messages {
-        flex: 1;
-        padding: 10px;
-        overflow-y: auto;
-        background: #f7f7f7;
-      }
-      .chat-message {
-        margin-bottom: 10px;
-        padding: 8px 12px;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        font-size: 14px;
-      }
-      .suggestion {
-        background: #00bcd4;
-        color: white;
-        padding: 8px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        display: inline-block;
-        margin: 5px 2px;
-        cursor: pointer;
-        transition: background 0.3s;
-      }
-      .suggestion:hover {
-        background: #0097a7;
-      }
-      #chat-input {
-        display: flex;
-        border-top: 1px solid #ddd;
-      }
-      #userInput {
-        flex: 1;
-        padding: 10px;
-        border: none;
-        font-size: 14px;
-      }
-      #chat-input button {
-        padding: 10px;
-        background: #00bcd4;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
+    #chat-button{position:fixed;bottom:20px;right:20px;width:70px;height:70px;background:linear-gradient(135deg,#00e1e1,#00baba);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;box-shadow:0 6px 20px rgba(0,225,225,0.4);z-index:1000;border:3px solid #fff;transition:all 0.3s ease;animation: robotPulse 2s infinite;}
+    #chat-button:hover{transform:scale(1.1);box-shadow:0 8px 25px rgba(0,225,225,0.6);}
+    @keyframes robotPulse{0%,100%{box-shadow:0 6px 20px rgba(0,225,225,0.4);}50%{box-shadow:0 6px 20px rgba(0,225,225,0.8),0 0 0 10px rgba(0,225,225,0.1);}}
+    
+    #chat-notification{position:fixed;bottom:100px;right:20px;background:linear-gradient(135deg,#00e1e1,#00baba);color:white;padding:12px 18px;border-radius:20px;font-size:14px;font-weight:600;opacity:0;transition:opacity 0.3s;z-index:999;box-shadow:0 4px 15px rgba(0,225,225,0.3);border:2px solid #ffffff;}
+    
+    #chat-popup{position:fixed;bottom:90px;right:20px;width:360px;max-height:500px;background:white;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);display:none;flex-direction:column;overflow:hidden;z-index:1000;font-family:Arial,sans-serif;}
+    #chat-header{background:linear-gradient(135deg,#00e1e1,#00baba);color:white;padding:12px;text-align:center;font-weight:bold;display:flex;align-items:center;justify-content:center;gap:8px;}
+    #chat-messages{flex:1;padding:10px;overflow-y:auto;background:#f7f7f7;display:flex;flex-direction:column;gap:8px;}
+    .chat-message{padding:8px 12px;border-radius:8px;font-size:14px;max-width:85%;word-wrap:break-word;}
+    .chat-message.user{background:#00e1e1;color:white;align-self:flex-end;}
+    .chat-message.bluey{background:white;color:black;align-self:flex-start;}
+    #chat-input{display:flex;border-top:1px solid #ddd;}
+    #userInput{flex:1;padding:10px;border:none;font-size:14px;}
+    #chat-input button{padding:10px;background:linear-gradient(135deg,#00e1e1,#00baba);color:white;border:none;cursor:pointer;font-weight:600;transition:all 0.3s ease;}
+    #chat-input button:hover{background:linear-gradient(135deg,#00baba,#009999);transform:translateY(-1px);}
+    #faq-panel{padding:10px;background:#f0f0f0;display:flex;flex-wrap:wrap;gap:5px;}
+    .suggestion{background:#00bcd4;color:white;padding:6px 10px;border-radius:20px;font-size:12px;cursor:pointer;transition:background 0.3s;}
+    .suggestion:hover{background:#0097a7;}
+    #typing-indicator{font-size:12px;color:#555;padding:5px 10px;display:none;}
     </style>
     
-    <div id="chat-button">💬</div>
-    <div id="chat-notification">Hey! Any doubt? I'm here!</div>
+    <div id="chat-button">🤖</div>
+    <div id="chat-notification">Hey there! Bluey at your service. </div>
+    
     <div id="chat-popup">
-      <div id="chat-header">BlueSprout Assistant</div>
+      <div id="chat-header">🤖 BlueSprout Assistant</div>
       <div id="chat-messages">
-        <div class="chat-message"><strong>BLUEY:</strong> Hi! I’m here to help you with BlueSprout.</div>
-        <div class="suggestion" onclick="sendMessage('How can I trace my roof?')">How can I trace my roof?</div>
-        <div class="suggestion" onclick="sendMessage('What is rainwater harvesting?')">What is rainwater harvesting?</div>
-        <div class="suggestion" onclick="sendMessage('How do I measure area?')">How do I measure area?</div>
+        <div class="chat-message bluey"><strong>BLUEY:</strong> Hi! How can I help you today?</div>
       </div>
+      <div id="typing-indicator">Bluey is typing...</div>
       <div id="chat-input">
         <input type="text" id="userInput" placeholder="Type your message..." />
         <button onclick="submitMessage()">Send</button>
       </div>
+      <div id="faq-panel"></div>
     </div>
     
     <script>
-      const chatButton = document.getElementById('chat-button');
-      const chatPopup = document.getElementById('chat-popup');
-      const chatNotification = document.getElementById('chat-notification');
-      const chatMessages = document.getElementById('chat-messages');
-      const userInput = document.getElementById('userInput');
+    const chatButton=document.getElementById('chat-button');
+    const chatPopup=document.getElementById('chat-popup');
+    const chatMessages=document.getElementById('chat-messages');
+    const userInput=document.getElementById('userInput');
+    const chatNotification=document.getElementById('chat-notification');
+    const faqPanel=document.getElementById('faq-panel');
+    const typingIndicator=document.getElementById('typing-indicator');
     
-      window.addEventListener('load', () => {
-        chatNotification.style.opacity = 1;
-        setTimeout(() => {
-          chatNotification.style.opacity = 0;
-          setTimeout(() => { chatNotification.style.display = 'none'; }, 300);
-        }, 4000);
-      });
+    // Notification popup
+    window.addEventListener('load',()=>{
+      chatNotification.style.opacity=1;
+      setTimeout(()=>{ chatNotification.style.opacity=0; },5000);
+    });
     
-      chatButton.addEventListener('click', () => {
-        if(chatPopup.style.display === 'flex') {
-          chatPopup.style.display = 'none';
-        } else {
-          chatPopup.style.display = 'flex';
+    // Toggle chat popup
+    chatButton.addEventListener('click',()=>{ chatPopup.style.display=(chatPopup.style.display==='flex')?'none':'flex'; });
+    
+    // ---------------- Master dataset ----------------
+    const dataset=[
+      {q:["hi","hello","hey","good morning","good afternoon","good evening"],a:"Hello! I'm Bluey. Ask me anything about rainwater harvesting."},
+      {q:["thanks","thank you","thx"],a:"You're welcome! Happy to help."},
+      {q:["bye","goodbye","see you"],a:"Goodbye! Stay hydrated and save water!"},
+      {q:["what is bluesprout","bluesprout"],a:"BlueSprout is a platform for rooftop rainwater harvesting, assessment, water tracking, and educational games."},
+      {q:["ai assessment","upload photo","ai analyze"],a:"Upload a rooftop photo. AI analyzes roof area, slope, and material to suggest tank size and setup."},
+      {q:["manual assessment","calculate manually"],a:"Enter roof area, rainfall, dwellers, and available space. We'll calculate water potential, tank size, and costs."},
+      {q:["how much water","water can i collect","capacity"],a:"Water collection = Roof Area × Rainfall × Runoff Coefficient × 1000 (liters). Use our tools for precise calculation."},
+      {q:["benefits","advantages","why"],a:"💧 Save water, 🌱 recharge groundwater, 🏠 backup supply, 🌊 reduce floods, 💰 cost-effective."},
+      {q:["cost","price","expensive"],a:"Basic ₹15k-50k, Medium ₹50k-1.5L, Large ₹1.5L+ depending on tank size, filtration, and installation."},
+      {q:["maintenance","clean","care"],a:"Clean gutters monthly, inspect tanks quarterly, check filters, monitor water quality."},
+      {q:["tank size","storage"],a:"Tank size depends on roof area and rainfall. Typically 60% of annual harvestable water."},
+      {q:["recharge","groundwater","artificial recharge"],a:"Artificial recharge uses pits, trenches or shafts to replenish groundwater. Improves water table and sustainability."},
+      {q:["filter","quality","safe"],a:"Use first-flush diverters, mesh filters, sand/charcoal filters. Add UV or RO for drinking water."},
+      {q:["game","learn","fun"],a:"Our Rain Catcher game teaches water conservation through interactive gameplay. Catch raindrops, avoid acid rain, and level up!"},
+      {q:["track","monitor","progress"],a:"Water Tracker monitors water savings, sets conservation goals, and analyzes system efficiency."},
+      {q:["feasible","suitable","possible"],a:"Most rooftops are suitable. Minimum 20m², 400mm rainfall, and metal/concrete/tile roofs work best."},
+      {q:["location","area","region"],a:"BlueSprout works across India, using local rainfall and groundwater data for accurate recommendations."},
+      {q:["contact","support","help"],a:"Contact us via email, call, or continue chatting with me. Check our FAQs or download guides for more info."},
+      {q:["guide","manual","pdf"],a:"We provide comprehensive guides covering assessment, implementation, maintenance, and troubleshooting."}
+    ];
+    
+    // ---------------- FAQ panel ----------------
+    const faqList=[
+      "What is BlueSprout?",
+      "AI Assessment",
+      "Manual Assessment",
+      "How much water can I collect?",
+      "Benefits of rainwater harvesting?",
+      "Cost of installation?",
+      "Maintenance tips",
+      "Tank size",
+      "Groundwater recharge",
+      "Water Tracker",
+      "Play Rain Catcher game"
+    ];
+    
+    faqList.forEach(q=>{
+      const btn=document.createElement('div');
+      btn.className='suggestion';
+      btn.textContent=q;
+      btn.onclick=()=>{sendMessage(q);};
+      faqPanel.appendChild(btn);
+    });
+    
+    // ---------------- Chat functions ----------------
+    function submitMessage(){
+      const text=userInput.value.trim();
+      if(!text) return;
+      sendMessage(text);
+      userInput.value='';
+    }
+    // Submit on Enter key
+  userInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault(); // prevent default newline
+      submitMessage();
+    }
+  });
+  
+    
+    function sendMessage(text){
+      appendMessage('user',text);
+      typingIndicator.style.display='block';
+      setTimeout(()=>{
+        const reply=getReply(text);
+        typingIndicator.style.display='none';
+        appendMessage('bluey',reply);
+      },800);
+    }
+    
+    function appendMessage(sender,text){
+      const div=document.createElement('div');
+      div.className='chat-message '+sender;
+      div.innerHTML=`<strong>${sender==='bluey'?'BLUEY':'You'}:</strong> ${text}`;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop=chatMessages.scrollHeight;
+    }
+    
+    function getReply(text){
+      text=text.toLowerCase();
+      for(let i=0;i<dataset.length;i++){
+        for(let kw of dataset[i].q){
+          if(text.includes(kw)) return dataset[i].a;
         }
-      });
-    
-      function sendMessage(text) {
-        appendMessage('You', text);
-        setTimeout(() => {
-          appendMessage('BLUEY', generateReply(text));
-        }, 500);
       }
-    
-      function submitMessage() {
-        const text = userInput.value.trim();
-        if(text !== "") {
-          sendMessage(text);
-          userInput.value = '';
-        }
-      }
-    
-      function appendMessage(sender, text) {
-        const msg = document.createElement('div');
-        msg.className = 'chat-message';
-        msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
-        chatMessages.appendChild(msg);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-    
-      function generateReply(text) {
-        text = text.toLowerCase();
-        if(text.includes('trace')) return "You can trace your rooftop by selecting points on the map.";
-        if(text.includes('rainwater')) return "Rainwater harvesting helps collect and store rainwater from rooftops.";
-        if(text.includes('measure')) return "After tracing, click on 'Calculate Area' to measure your rooftop.";
-        return "Let me check that for you or you can contact us for further assistance!";
-      }
+      return "Sorry, I didn't understand. Try asking about assessment, AI/manual tools, costs, benefits, maintenance, or water collection.";
+    }
     </script>
-    <!-- Chatbot End --></section>
+    </section>
 <div class="container">
   <h2>Frequently Asked Questions</h2>
   <p class="intro">Here are some common questions about water conservation and our platform.</p>

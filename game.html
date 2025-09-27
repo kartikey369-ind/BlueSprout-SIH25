@@ -328,12 +328,12 @@ footer .footer-section.about .social-links {
   <div class="nav-container">
     <div class="nav-logo"><i class="fas fa-tint"></i> BlueSprout</div>
     <ul class="nav-menu">
-      <li><a href="index.html#hero" class="nav-link active">Home</a></li>
+      <li><a href="index.html#hero" class="nav-link ">Home</a></li>
         <li><a href="index.html#features" class="nav-link">Features</a></li>
         <li><a href="aiassessment.html" class="nav-link">AI Assessment</a></li>
         <li><a href="gis.html" class="nav-link">GIS Map</a></li>
         <li><a href="login.html" class="nav-link">Water Tracker</a></li>
-        <li><a href="index.html#game" class="nav-link">Play Game</a></li>
+        <li><a href="index.html#game" class="nav-link active">Play Game</a></li>
         <li><a href="login.html" id="logoutLink" class="nav-link">Login</a></li>
     </ul>
     <button class="mobile-menu-btn">☰</button>
@@ -422,325 +422,153 @@ footer .footer-section.about .social-links {
 <!-- Enhanced Chatbot -->
 <section>
   <style>
-    #chat-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
-      color: white;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(0, 225, 225, 0.4);
-      z-index: 1000;
-      border: 3px solid #ffffff;
-      transition: all 0.3s ease;
-      animation: robotPulse 2s infinite;
-    }
-
-    #chat-button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 25px rgba(0, 225, 225, 0.6);
-    }
-
-    @keyframes robotPulse {
-      0%, 100% { 
-        box-shadow: 0 6px 20px rgba(0, 225, 225, 0.4);
-      }
-      50% { 
-        box-shadow: 0 6px 20px rgba(0, 225, 225, 0.8), 0 0 0 10px rgba(0, 225, 225, 0.1);
-      }
-    }
-
-    #chat-button::before {
-      content: '';
-      position: absolute;
-      top: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 20px;
-      height: 8px;
-      background: #00e1e1;
-      border-radius: 10px 10px 0 0;
-      border: 2px solid #ffffff;
-      border-bottom: none;
-    }
-
-    #chat-button::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 30px;
-      height: 6px;
-      background: #00e1e1;
-      border-radius: 0 0 15px 15px;
-      border: 2px solid #ffffff;
-      border-top: none;
-    }
-
-    #chat-notification {
-      position: fixed;
-      bottom: 100px;
-      right: 20px;
-      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
-      color: white;
-      padding: 12px 18px;
-      border-radius: 20px;
-      font-size: 14px;
-      opacity: 0;
-      transition: opacity 0.3s;
-      z-index: 999;
-      border: 2px solid #ffffff;
-      box-shadow: 0 4px 15px rgba(0, 225, 225, 0.3);
-      font-weight: 600;
-    }
-
-    #chat-popup {
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      width: 300px;
-      max-height: 400px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 1000;
-    }
-
-    #chat-header {
-      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
-      color: white;
-      padding: 12px;
-      text-align: center;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    #chat-messages {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-      background: #f7f7f7;
-    }
-
-    .chat-message {
-      margin-bottom: 10px;
-      padding: 8px 12px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      font-size: 14px;
-    }
-
-    .suggestion {
-      background: #00e1e1;
-      color: white;
-      padding: 8px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      display: inline-block;
-      margin: 5px 2px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .suggestion:hover {
-      background: #00baba;
-    }
-
-    #chat-input {
-      display: flex;
-      border-top: 1px solid #ddd;
-    }
-
-    #userInput {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      font-size: 14px;
-    }
-
-    #chat-input button {
-      padding: 10px;
-      background: linear-gradient(135deg, #00e1e1 0%, #00baba 100%);
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    #chat-input button:hover {
-      background: linear-gradient(135deg, #00baba 0%, #009999 100%);
-      transform: translateY(-1px);
-    }
+  #chat-button{position:fixed;bottom:20px;right:20px;width:70px;height:70px;background:linear-gradient(135deg,#00e1e1,#00baba);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;box-shadow:0 6px 20px rgba(0,225,225,0.4);z-index:1000;border:3px solid #fff;transition:all 0.3s ease;animation: robotPulse 2s infinite;}
+  #chat-button:hover{transform:scale(1.1);box-shadow:0 8px 25px rgba(0,225,225,0.6);}
+  @keyframes robotPulse{0%,100%{box-shadow:0 6px 20px rgba(0,225,225,0.4);}50%{box-shadow:0 6px 20px rgba(0,225,225,0.8),0 0 0 10px rgba(0,225,225,0.1);}}
+  
+  #chat-notification{position:fixed;bottom:100px;right:20px;background:linear-gradient(135deg,#00e1e1,#00baba);color:white;padding:12px 18px;border-radius:20px;font-size:14px;font-weight:600;opacity:0;transition:opacity 0.3s;z-index:999;box-shadow:0 4px 15px rgba(0,225,225,0.3);border:2px solid #ffffff;}
+  
+  #chat-popup{position:fixed;bottom:90px;right:20px;width:360px;max-height:500px;background:white;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);display:none;flex-direction:column;overflow:hidden;z-index:1000;font-family:Arial,sans-serif;}
+  #chat-header{background:linear-gradient(135deg,#00e1e1,#00baba);color:white;padding:12px;text-align:center;font-weight:bold;display:flex;align-items:center;justify-content:center;gap:8px;}
+  #chat-messages{flex:1;padding:10px;overflow-y:auto;background:#f7f7f7;display:flex;flex-direction:column;gap:8px;}
+  .chat-message{padding:8px 12px;border-radius:8px;font-size:14px;max-width:85%;word-wrap:break-word;}
+  .chat-message.user{background:#00e1e1;color:white;align-self:flex-end;}
+  .chat-message.bluey{background:white;color:black;align-self:flex-start;}
+  #chat-input{display:flex;border-top:1px solid #ddd;}
+  #userInput{flex:1;padding:10px;border:none;font-size:14px;}
+  #chat-input button{padding:10px;background:linear-gradient(135deg,#00e1e1,#00baba);color:white;border:none;cursor:pointer;font-weight:600;transition:all 0.3s ease;}
+  #chat-input button:hover{background:linear-gradient(135deg,#00baba,#009999);transform:translateY(-1px);}
+  #faq-panel{padding:10px;background:#f0f0f0;display:flex;flex-wrap:wrap;gap:5px;}
+  .suggestion{background:#00bcd4;color:white;padding:6px 10px;border-radius:20px;font-size:12px;cursor:pointer;transition:background 0.3s;}
+  .suggestion:hover{background:#0097a7;}
+  #typing-indicator{font-size:12px;color:#555;padding:5px 10px;display:none;}
   </style>
   
   <div id="chat-button">🤖</div>
-  <div id="chat-notification">Hey! Any doubt? I'm here!</div>
+  <div id="chat-notification">Hey there! Bluey at your service. </div>
+  
   <div id="chat-popup">
     <div id="chat-header">🤖 BlueSprout Assistant</div>
     <div id="chat-messages">
-      <div class="chat-message"><strong>BLUEY:</strong> Hi! I'm your BlueSprout assistant. I can help you with rooftop rainwater harvesting, assessments, and water conservation. What would you like to know?</div>
-      <div class="suggestion" onclick="sendMessage('What is BlueSprout?')">What is BlueSprout?</div>
-      <div class="suggestion" onclick="sendMessage('How to assess my rooftop?')">How to assess my rooftop?</div>
-      <div class="suggestion" onclick="sendMessage('What is rainwater harvesting?')">What is rainwater harvesting?</div>
-      <div class="suggestion" onclick="sendMessage('How much water can I collect?')">How much water can I collect?</div>
-      <div class="suggestion" onclick="sendMessage('What are the benefits?')">What are the benefits?</div>
-      <div class="suggestion" onclick="sendMessage('How much does it cost?')">How much does it cost?</div>
+      <div class="chat-message bluey"><strong>BLUEY:</strong> Hi! How can I help you today?</div>
     </div>
+    <div id="typing-indicator">Bluey is typing...</div>
     <div id="chat-input">
       <input type="text" id="userInput" placeholder="Type your message..." />
       <button onclick="submitMessage()">Send</button>
     </div>
+    <div id="faq-panel"></div>
   </div>
   
   <script>
-    const chatButton = document.getElementById('chat-button');
-    const chatPopup = document.getElementById('chat-popup');
-    const chatNotification = document.getElementById('chat-notification');
-    const chatMessages = document.getElementById('chat-messages');
-    const userInput = document.getElementById('userInput');
+  const chatButton=document.getElementById('chat-button');
+  const chatPopup=document.getElementById('chat-popup');
+  const chatMessages=document.getElementById('chat-messages');
+  const userInput=document.getElementById('userInput');
+  const chatNotification=document.getElementById('chat-notification');
+  const faqPanel=document.getElementById('faq-panel');
+  const typingIndicator=document.getElementById('typing-indicator');
   
-    window.addEventListener('load', () => {
-      chatNotification.style.opacity = 1;
-      setTimeout(() => {
-        chatNotification.style.opacity = 0;
-        setTimeout(() => { chatNotification.style.display = 'none'; }, 300);
-      }, 4000);
-    });
+  // Notification popup
+  window.addEventListener('load',()=>{
+    chatNotification.style.opacity=1;
+    setTimeout(()=>{ chatNotification.style.opacity=0; },5000);
+  });
   
-    chatButton.addEventListener('click', () => {
-      if(chatPopup.style.display === 'flex') {
-        chatPopup.style.display = 'none';
-      } else {
-        chatPopup.style.display = 'flex';
+  // Toggle chat popup
+  chatButton.addEventListener('click',()=>{ chatPopup.style.display=(chatPopup.style.display==='flex')?'none':'flex'; });
+  
+  // ---------------- Master dataset ----------------
+  const dataset=[
+    {q:["hi","hello","hey","good morning","good afternoon","good evening"],a:"Hello! I'm Bluey. Ask me anything about rainwater harvesting."},
+    {q:["thanks","thank you","thx"],a:"You're welcome! Happy to help."},
+    {q:["bye","goodbye","see you"],a:"Goodbye! Stay hydrated and save water!"},
+    {q:["what is bluesprout","bluesprout"],a:"BlueSprout is a platform for rooftop rainwater harvesting, assessment, water tracking, and educational games."},
+    {q:["ai assessment","upload photo","ai analyze"],a:"Upload a rooftop photo. AI analyzes roof area, slope, and material to suggest tank size and setup."},
+    {q:["manual assessment","calculate manually"],a:"Enter roof area, rainfall, dwellers, and available space. We'll calculate water potential, tank size, and costs."},
+    {q:["how much water","water can i collect","capacity"],a:"Water collection = Roof Area × Rainfall × Runoff Coefficient × 1000 (liters). Use our tools for precise calculation."},
+    {q:["benefits","advantages","why"],a:"💧 Save water, 🌱 recharge groundwater, 🏠 backup supply, 🌊 reduce floods, 💰 cost-effective."},
+    {q:["cost","price","expensive"],a:"Basic ₹15k-50k, Medium ₹50k-1.5L, Large ₹1.5L+ depending on tank size, filtration, and installation."},
+    {q:["maintenance","clean","care"],a:"Clean gutters monthly, inspect tanks quarterly, check filters, monitor water quality."},
+    {q:["tank size","storage"],a:"Tank size depends on roof area and rainfall. Typically 60% of annual harvestable water."},
+    {q:["recharge","groundwater","artificial recharge"],a:"Artificial recharge uses pits, trenches or shafts to replenish groundwater. Improves water table and sustainability."},
+    {q:["filter","quality","safe"],a:"Use first-flush diverters, mesh filters, sand/charcoal filters. Add UV or RO for drinking water."},
+    {q:["game","learn","fun"],a:"Our Rain Catcher game teaches water conservation through interactive gameplay. Catch raindrops, avoid acid rain, and level up!"},
+    {q:["track","monitor","progress"],a:"Water Tracker monitors water savings, sets conservation goals, and analyzes system efficiency."},
+    {q:["feasible","suitable","possible"],a:"Most rooftops are suitable. Minimum 20m², 400mm rainfall, and metal/concrete/tile roofs work best."},
+    {q:["location","area","region"],a:"BlueSprout works across India, using local rainfall and groundwater data for accurate recommendations."},
+    {q:["contact","support","help"],a:"Contact us via email, call, or continue chatting with me. Check our FAQs or download guides for more info."},
+    {q:["guide","manual","pdf"],a:"We provide comprehensive guides covering assessment, implementation, maintenance, and troubleshooting."}
+  ];
+  
+  // ---------------- FAQ panel ----------------
+  const faqList=[
+    "What is BlueSprout?",
+    "AI Assessment",
+    "Manual Assessment",
+    "How much water can I collect?",
+    "Benefits of rainwater harvesting?",
+    "Cost of installation?",
+    "Maintenance tips",
+    "Tank size",
+    "Groundwater recharge",
+    "Water Tracker",
+    "Play Rain Catcher game"
+  ];
+  
+  faqList.forEach(q=>{
+    const btn=document.createElement('div');
+    btn.className='suggestion';
+    btn.textContent=q;
+    btn.onclick=()=>{sendMessage(q);};
+    faqPanel.appendChild(btn);
+  });
+  
+  // ---------------- Chat functions ----------------
+  function submitMessage(){
+    const text=userInput.value.trim();
+    if(!text) return;
+    sendMessage(text);
+    userInput.value='';
+  }
+  // Submit on Enter key
+userInput.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // prevent default newline
+    submitMessage();
+  }
+});
+
+  
+  function sendMessage(text){
+    appendMessage('user',text);
+    typingIndicator.style.display='block';
+    setTimeout(()=>{
+      const reply=getReply(text);
+      typingIndicator.style.display='none';
+      appendMessage('bluey',reply);
+    },800);
+  }
+  
+  function appendMessage(sender,text){
+    const div=document.createElement('div');
+    div.className='chat-message '+sender;
+    div.innerHTML=`<strong>${sender==='bluey'?'BLUEY':'You'}:</strong> ${text}`;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop=chatMessages.scrollHeight;
+  }
+  
+  function getReply(text){
+    text=text.toLowerCase();
+    for(let i=0;i<dataset.length;i++){
+      for(let kw of dataset[i].q){
+        if(text.includes(kw)) return dataset[i].a;
       }
-    });
-  
-    function sendMessage(text) {
-      appendMessage('You', text);
-      setTimeout(() => {
-        appendMessage('BLUEY', generateReply(text));
-      }, 500);
     }
-  
-    function submitMessage() {
-      const text = userInput.value.trim();
-      if(text !== "") {
-        sendMessage(text);
-        userInput.value = '';
-      }
-    }
-  
-    function appendMessage(sender, text) {
-      const msg = document.createElement('div');
-      msg.className = 'chat-message';
-      msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
-      chatMessages.appendChild(msg);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-  
-    function generateReply(text) {
-      text = text.toLowerCase();
-      
-      // BlueSprout Platform Questions
-      if(text.includes('bluesprout') || text.includes('what is bluesprout')) {
-        return "BlueSprout is a comprehensive platform for rooftop rainwater harvesting assessment and artificial recharge planning. We help individuals and communities assess their rainwater collection potential, get personalized recommendations, and contribute to groundwater conservation. Our platform includes AI-powered assessments, manual calculations, water tracking, and educational games.";
-      }
-      
-      // Assessment Questions
-      if(text.includes('assess') || text.includes('assessment') || text.includes('rooftop')) {
-        return "You can assess your rooftop in two ways: 1) AI Assessment - Upload a photo of your roof for AI-powered analysis, or 2) Manual Assessment - Enter details like roof area, rainfall data, and location for precise calculations. Both methods provide feasibility analysis, recommended tank sizes, and cost estimates.";
-      }
-      
-      if(text.includes('ai assessment') || text.includes('upload')) {
-        return "Our AI Assessment uses advanced image recognition to analyze your rooftop photo. Simply upload a clear image of your roof, and our AI will identify the roof area, material, slope, and provide recommendations for optimal rainwater harvesting setup. It's quick, accurate, and user-friendly!";
-      }
-      
-      if(text.includes('manual assessment') || text.includes('calculate')) {
-        return "Manual Assessment requires you to input: roof area (m²), annual rainfall (mm), number of dwellers, available open space, and roof material. Our algorithm calculates harvestable volume, recommended tank size, recharge capacity, and provides detailed cost-benefit analysis.";
-      }
-      
-      // Rainwater Harvesting Questions
-      if(text.includes('rainwater harvesting') || text.includes('what is rainwater')) {
-        return "Rainwater harvesting is the collection and storage of rainwater from rooftops, surfaces, or catchments for later use. It helps reduce water bills, provides backup water supply, reduces flooding, and recharges groundwater. Our platform helps you implement this sustainable practice effectively.";
-      }
-      
-      if(text.includes('how much water') || text.includes('water can i collect') || text.includes('capacity')) {
-        return "Water collection depends on roof area, annual rainfall, and runoff coefficient. Formula: Volume = Rainfall(mm) × Roof Area(m²) × Runoff Coefficient × 1000. For example, a 100m² roof in an area with 800mm annual rainfall can collect ~64,000 liters/year (assuming 0.8 runoff coefficient). Use our assessment tools for precise calculations!";
-      }
-      
-      if(text.includes('benefits') || text.includes('advantages') || text.includes('why')) {
-        return "Benefits include: 💧 Reduced water bills (30-50% savings), 🌱 Groundwater recharge, 🏠 Backup water supply, 🌊 Flood reduction, 🌍 Environmental sustainability, 💰 Cost-effective long-term solution, 🏘️ Community water security, and 📈 Increased property value. Our platform helps maximize these benefits!";
-      }
-      
-      if(text.includes('cost') || text.includes('price') || text.includes('expensive')) {
-        return "Costs vary by system size and complexity. Basic systems: ₹15,000-50,000, Medium systems: ₹50,000-1,50,000, Large systems: ₹1,50,000+. Factors include tank size, filtration, plumbing, and installation. Our platform provides detailed cost estimates and payback period calculations. Most systems pay for themselves in 3-5 years through water savings.";
-      }
-      
-      // Technical Questions
-      if(text.includes('tank size') || text.includes('storage')) {
-        return "Tank size depends on roof area, rainfall, and usage patterns. General rule: 60% of annual harvestable volume. For a 100m² roof with 800mm rainfall, recommended tank size is ~38,400 liters. Our assessment tools calculate optimal tank size based on your specific conditions and usage needs.";
-      }
-      
-      if(text.includes('recharge') || text.includes('groundwater') || text.includes('artificial')) {
-        return "Artificial recharge involves directing rainwater to recharge pits, trenches, or shafts to replenish groundwater. Benefits include improved water table levels, reduced flooding, and sustainable water management. Our platform calculates recharge capacity and recommends appropriate structures based on soil type and available space.";
-      }
-      
-      if(text.includes('maintenance') || text.includes('care') || text.includes('clean')) {
-        return "Regular maintenance includes: cleaning gutters monthly, inspecting tanks quarterly, checking filters, monitoring water quality, repairing leaks immediately, and cleaning first-flush diverters. Our water tracker helps monitor system performance and maintenance schedules.";
-      }
-      
-      if(text.includes('filter') || text.includes('quality') || text.includes('safe')) {
-        return "Water quality depends on roof material, environment, and filtration. Use first-flush diverters, mesh filters, and sand/charcoal filters. For drinking water, add UV treatment or reverse osmosis. Our platform provides water quality guidelines and filtration recommendations based on your location and usage.";
-      }
-      
-      // Game and Education
-      if(text.includes('game') || text.includes('play') || text.includes('learn')) {
-        return "Our interactive Rain Catcher game teaches water conservation through fun gameplay! Catch raindrops, avoid acid rain, build combos, and level up while learning about rainwater harvesting. It's educational, engaging, and helps spread awareness about water conservation. Try it out!";
-      }
-      
-      if(text.includes('track') || text.includes('monitor') || text.includes('progress')) {
-        return "Our Water Tracker helps you monitor your water savings, track environmental impact, set conservation goals, and measure the effectiveness of your rainwater harvesting system. It provides detailed analytics and helps optimize your water usage patterns.";
-      }
-      
-      // Location and Feasibility
-      if(text.includes('feasible') || text.includes('suitable') || text.includes('possible')) {
-        return "Most rooftops are suitable for rainwater harvesting! Key factors: roof area (minimum 20m²), rainfall (minimum 400mm annually), roof material (metal, tile, concrete work best), and local regulations. Our assessment tools evaluate feasibility and provide specific recommendations for your location.";
-      }
-      
-      if(text.includes('location') || text.includes('area') || text.includes('region')) {
-        return "BlueSprout works across India and supports regional languages for better accessibility. We use local rainfall data, groundwater information, and regional guidelines to provide accurate assessments. Our platform adapts to different climatic conditions and local water management practices.";
-      }
-      
-      // Contact and Support
-      if(text.includes('contact') || text.includes('help') || text.includes('support')) {
-        return "For additional support, you can: 📧 Contact us through our contact page, 📞 Call our helpline, 💬 Continue chatting with me, 📚 Check our FAQ section, or 📖 Download our comprehensive guides. We're here to help you succeed with rainwater harvesting!";
-      }
-      
-      if(text.includes('guide') || text.includes('manual') || text.includes('pdf')) {
-        return "We provide comprehensive guides: 'Rooftop Rainwater Guide' and 'Rainwater Harvesting Manual' available for download. These cover everything from basic concepts to advanced implementation, maintenance, and troubleshooting. Perfect for DIY enthusiasts and professionals alike!";
-      }
-      
-      // Default response
-      return "I'm here to help with all your rainwater harvesting questions! Try asking about assessments, costs, benefits, maintenance, or any specific concerns. You can also use our AI Assessment, Manual Assessment, or Water Tracker tools for detailed analysis. What else would you like to know?";
-    }
+    return "Sorry, I didn't understand. Try asking about assessment, AI/manual tools, costs, benefits, maintenance, or water collection.";
+  }
   </script>
-</section>
+  </section>
 
 <!-- Footer -->
 <footer>
@@ -799,6 +627,8 @@ footer .footer-section.about .social-links {
     </div>
   </div>
 </footer>
+
+
 
 <script>
 // Mobile menu toggle
@@ -1022,6 +852,8 @@ startBtn.addEventListener('click', startGame);
 restartBtn.addEventListener('click', () => { startGame(); });
 
 </script>
+
+
 
 </body>
 </html>

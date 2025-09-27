@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlueSprout - AI Assessment</title>
+<link rel="icon" type="image/x-icon" href="dropp.png">
+<!-- Add this after the existing Leaflet CSS links -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<!-- Chart.js removed to avoid lag on lower-end devices -->
+
+<style>
+:root {
+    --primary-cyan: #00bcd4;
+    --primary-dark: #0a192f;
+    --white: #ffffff;
+    --light-gray: #f5f5f5;
+    --dark-gray: #333;
+    --success: #4caf50;
+    --warning: #ff9800;
+    --error: #f44336;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --space-2: 8px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --font-base: 'Poppins', sans-serif;
+    --font-display: 'Fredoka', sans-serif;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-sm: 0 2px 10px rgba(0,0,0,0.05);
+    --shadow-md: 0 10px 30px rgba(0,0,0,0.1);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* Reset & Base */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body { 
+    background: linear-gradient(135deg, #ffffff 0%, #00b3cb 100%);
+    min-height: 100vh;
+    color: var(--dark-gray); 
+    line-height: 1.6; 
+    font-family: var(--font-base);
+}
+
+/* Animated Background */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.raindrop {
+    position: absolute;
+    background: rgba(0, 188, 212, 0.1);
+    border-radius: 50%;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+/* Navbar */
+.navbar {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.nav-logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.nav-logo i {
+  color: rgb(0, 225, 225);
+  font-size: 2rem;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+.nav-link {
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s;
+  text-decoration: none;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: rgb(0, 225, 225);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(0, 225, 225);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.mobile-menu-btn {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Main Content */
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 2rem 2rem;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.header h1 {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-cyan), #4fc3f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    animation: slideInUp 0.8s ease-out;
+}
+
+.header p {
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.9);
+    max-width: 600px;
+    margin: 0 auto;
+    animation: slideInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Main Card */
+.main-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    animation: slideInUp 0.8s ease-out 0.6s both;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Method Tabs */
+.method-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.method-tab {
+    padding: 1rem 2rem;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    border-bottom: 3px solid transparent;
+}
+
+.method-tab.active {
+    color: var(--primary-cyan);
+    border-bottom-color: var(--primary-cyan);
+}
+
+.method-tab:hover {
+    color: var(--primary-cyan);
+}
+
+.method-content {
+    display: none;
+}
+
+.method-content.active {
+    display: block;
+}
+
+/* Map Container */
+.map-container {
+    margin-bottom: 2rem;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+.controls input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 150px;
+}
+
+.controls button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    background: #4fc3f7;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.controls button:hover { 
+    background: #29b6f6; 
+}
+
+.controls button[onclick="useMyLocation()"] {
+    background: #4caf50;
+}
+
+.controls button[onclick="useMyLocation()"]:hover {
+    background: #45a049;
+}
+
+#map { 
+    height: 50vh; 
+    width: 100%; 
+    border-radius: 15px; 
+    margin-bottom: 15px; 
+}
+
+/* Auto-populated indicator */
+.auto-filled {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05));
+    border-color: #4caf50;
+    position: relative;
+}
+
+.auto-filled::after {
+    content: '✓ Auto-filled';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #4caf50;
+    font-weight: 600;
+}
+
+/* Form Elements */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--dark-gray);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-input {
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: var(--transition);
+    background: white;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-cyan);
+    box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Buttons */
+.btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    min-width: 140px;
+    justify-content: center;
+    margin: 1rem auto;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-cyan), #4fc3f7);
+    color: white;
+    box-shadow: 0 5px 20px rgba(0, 188, 212, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 188, 212, 0.4);
+}
+
+/* Tips */
+.tip {
+    background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(0, 188, 212, 0.05));
+    border-left: 4px solid var(--primary-cyan);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    margin: 2rem 0;
+    position: relative;
+}
+
+.tip::before {
+    content: '💡';
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 1.2rem;
+}
+
+.tip span {
+    margin-left: 2rem;
+    display: block;
+    color: var(--dark-gray);
+    font-style: italic;
+}
+
+/* Recommendations */
+.recommendations {
+    margin-top: 2rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.recommendations h4 {
+    color: var(--primary-cyan);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rec-item {
+    background: linear-gradient(135deg, rgba(0, 188, 212, 0.08), rgba(0, 188, 212, 0.04));
+    border-left: 4px solid var(--primary-cyan);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 0.75rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.rec-item:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-md);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Footer */
+footer {
+    background: var(--primary-dark);
+    color: white;
+    padding: 3rem 2rem 1.5rem;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary-cyan);
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-logo i {
+    font-size: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-menu { 
+        display: none; 
+        flex-direction: column;
+        background: rgba(0, 0, 0, 0.9);
+        position: absolute;
+        top: 80px;
+        right: 20px;
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        min-width: 200px;
+    }
+    
+    .nav-menu.show { 
+        display: flex; 
+    }
+    
+    .mobile-menu-btn { 
+        display: block; 
+    }
+    
+    .main-container { 
+        padding: 5rem 1rem 1rem; 
+    }
+    
+    .header h1 { 
+        font-size: 2rem; 
+    }
+    
+    .header p { 
+        font-size: 1rem; 
+    }
+    
+    .main-card {
+        padding: 1.5rem;
+        margin: 0 0.5rem 2rem;
+    }
+
+    .method-tabs {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-card {
+        padding: 1rem;
+    }
+}
+
+#area {
+    margin-top: 10px;
+    font-weight:600;
+    text-align:center;
+    color:#2c3e50;
+}
+/* Key Features Section Styles */
+.features-section { 
+  margin-top: 2rem; 
+  padding: 1.5rem; 
+  background: #ffffffcc; 
+  backdrop-filter: blur(8px); 
+  border: 1px solid #e0e0e0; 
+  border-radius: 16px; 
+  box-shadow: var(--shadow-soft); 
+}
+.features-section h2 { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  font-size: 1.6rem; 
+  color: var(--primary-cyan); 
+  margin-bottom: 1rem; 
+}
+.features-grid { 
+  display: grid; 
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 1rem; 
+}
+.feature-card { 
+  background: #fff; 
+  border-radius: 14px; 
+  padding: 1rem; 
+  border: 1px solid #eaeaea; 
+  box-shadow: var(--shadow-soft); 
+  transition: var(--transition-fast); 
+}
+.feature-card:hover { 
+  transform: translateY(-2px); 
+  box-shadow: var(--shadow-elevated); 
+}
+.feature-icon { 
+  width: 42px; 
+  height: 42px; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  border-radius: 10px; 
+  color:#fff; 
+  margin-bottom: 10px; 
+}
+.icon-1 { background: linear-gradient(135deg, #4caf50, #2ecc71); }
+.icon-2 { background: linear-gradient(135deg, #00bcd4, #03a9f4); }
+.icon-3 { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+.icon-4 { background: linear-gradient(135deg, #ff9800, #ff5722); }
+.icon-5 { background: linear-gradient(135deg, #2196f3, #3f51b5); }
+.icon-6 { background: linear-gradient(135deg, #00c853, #64dd17); }
+.icon-7 { background: linear-gradient(135deg, #795548, #6d4c41); }
+.icon-8 { background: linear-gradient(135deg, #607d8b, #455a64); }
+.feature-title { font-weight: 600; color:#2c3e50; margin-bottom:6px; }
+.feature-desc { color:#555; font-size: 0.95rem; }
+@media (max-width: 1024px) { .features-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .features-grid { grid-template-columns: 1fr; } }
+</style>
+<style>
+  /* Hide static Key Features at top per request */
+  #key-features { display: none !important; }
+  /* Feasibility Highlight Styles */
+  .rec-highlight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border-left: 5px solid var(--primary-cyan);
+    background: linear-gradient(135deg, #e8fbff, #ffffff);
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 14px;
+  }
+  .feasibility-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    box-shadow: var(--shadow-soft);
+  }
+  .feasibility-pill.high { color: #1b5e20; background: #c8e6c9; }
+  .feasibility-pill.moderate { color: #7a4e00; background: #ffe0b2; }
+  .feasibility-pill.low { color: #7f0000; background: #ffcdd2; }
+  .feasibility-note { color: #555; font-size: 0.92rem; }
+
+  /* New UI polish tokens and overrides */
+  :root {
+    --shadow-soft: 0 6px 18px rgba(0,0,0,0.06);
+    --primary-gradient: linear-gradient(135deg, #00bcd4 0%, #4fc3f7 100%);
+    --glass-bg: rgba(255,255,255,0.7);
+  }
+
+  /* Recommendations container & header */
+  .recommendations {
+    margin-top: 1.25rem;
+    padding-top: 0.25rem;
+  }
+
+  .recommendations h4 {
+    color: #0a3d62;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 1rem 0 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  /* Card polish */
+  .rec-item {
+    background: linear-gradient(135deg, rgba(0, 188, 212, 0.08), rgba(0, 188, 212, 0.03));
+    border-left: 5px solid var(--primary-cyan);
+    padding: 1.1rem 1.25rem;
+    border-radius: 14px;
+    margin-bottom: 0.9rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .rec-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .rec-item strong { color: #0a3d62; }
+
+  /* Success banner (glass + gradient accent) */
+  #successBanner {
+    background: linear-gradient(135deg, #e8fff3, #ffffff);
+    border-left-color: #4caf50;
+    display: none;
+    position: relative;
+    overflow: hidden;
+  }
+  #successBanner::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: radial-gradient(ellipse at top left, rgba(76,175,80,0.15), transparent 60%);
+    pointer-events: none;
+  }
+  #successBanner i { color: #4caf50; }
+
+  /* Micro-animation for banner appearance */
+  @keyframes popIn {
+    from { opacity: 0; transform: translateY(8px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  #successBanner.show {
+    animation: popIn 0.35s ease-out;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .rec-highlight { flex-direction: column; align-items: flex-start; }
+    .recommendations h4 { font-size: 1.2rem; }
+    .rec-item { padding: 1rem; }
+  }
+</style>
+<style>
+  /* Remove chart styles; keep image style lightweight */
+  .rec-img { width: 56px; height: 56px; object-fit: contain; vertical-align: middle; margin-right: 10px; border-radius: 12px; background: #fff; box-shadow: var(--shadow-sm); }
+  /* Respect reduced motion preference to minimize jank */
+  @media (prefers-reduced-motion: reduce) {
+    #successBanner { animation: none !important; }
+    .rec-item:hover { transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="background-animation" id="backgroundAnimation"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="#" class="nav-logo">
+      <i class="fas fa-tint"></i> BlueSprout
+    </a>
+    <ul id="navMenu" class="nav-menu">
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="index.html#features" class="nav-link">Features</a></li>
+        <li><a href="aiassessment.html" class="nav-link active">AI Assessment</a></li>
+        <li><a href="gis.html" class="nav-link">GIS Map</a></li>
+        <li><a href="login.html" class="nav-link">Water Tracker</a></li>
+        <li><a href="game.html" class="nav-link">Play Game</a></li>
+        <li><a href="login.html" class="nav-link">Login</a></li>
+    </ul>
+    
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- Main Container -->
+<div class="main-container">
+  <!-- Header -->
+  <div class="header">
+    <h1><i class="fas fa-robot"></i> AI Rainwater Assessment</h1>
+    <p>Choose your preferred method to measure roof area and get personalized recommendations</p>
+  </div>
+
+  <!-- Key Features -->
+  <section id="key-features" class="features-section">
+    <h2><i class="fas fa-list-check"></i> Key Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon icon-1"><i class="fas fa-clipboard-check"></i></div>
+        <div class="feature-title">Feasibility check for rooftop rainwater harvesting</div>
+        <div class="feature-desc">Assesses suitability from roof area, rainfall, and demand.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-2"><i class="fas fa-tools"></i></div>
+        <div class="feature-title">Suggested type of RTRWH/Artificial Recharge structures</div>
+        <div class="feature-desc">Recommends suitable structures based on site and soil conditions.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-3"><i class="fas fa-layer-group"></i></div>
+        <div class="feature-title">Information on principal aquifer in the area</div>
+        <div class="feature-desc">Summarizes aquifer type and expected hydrogeology.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-4"><i class="fas fa-ruler"></i></div>
+        <div class="feature-title">Depth to groundwater level</div>
+        <div class="feature-desc">Indicates typical depth for planning recharge feasibility.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-5"><i class="fas fa-cloud-rain"></i></div>
+        <div class="feature-title">Local rainfall data</div>
+        <div class="feature-desc">Uses monthly rainfall to estimate water availability.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-6"><i class="fas fa-chart-area"></i></div>
+        <div class="feature-title">Runoff generation capacity</div>
+        <div class="feature-desc">Computes runoff considering roof type and collection efficiency.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-7"><i class="fas fa-ruler-combined"></i></div>
+        <div class="feature-title">Recommended dimensions of pits, trenches and shafts</div>
+        <div class="feature-desc">Suggests practical sizes aligned with available open space.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-8"><i class="fas fa-coins"></i></div>
+        <div class="feature-title">Cost estimation and cost-benefit analysis</div>
+        <div class="feature-desc">Estimates implementation cost and potential savings.</div>
+      </div>
+    </div>
+  </section>
+  <!-- Key Features removed: integrated into results per request -->
+
+  <!-- Main Card -->
+  <div class="main-card">
+    <!-- Method Selection Tabs -->
+    <div class="method-tabs">
+      
+      
+    </div>
+
+    <!-- Map Method -->
+    <div id="mapMethod" class="method-content active">
+      <div class="map-container">
+        <h3 style="text-align: center; color: var(--primary-cyan); margin-bottom: 1rem;">
+          <i class="fas fa-map-marked-alt"></i> Trace Your Rooftop
+        </h3>
+        
+        <div class="controls">
+          <button onclick="useMyLocation()" style="background: #4caf50;">Use My Location</button>
+          <button onclick="startDrawing()">Trace Rooftop</button>
+          <button onclick="undoLast()">Undo Last Point</button>
+          <button onclick="clearMap()">Clear</button>
+          <button onclick="toggleMapStyle()">Toggle View</button>
+        </div>
+
+        <div id="map"></div>
+        
+        <!-- Advanced Location Options -->
+        <div class="tip" style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top: 15px;">
+          <span><strong>Advanced Location Options</strong> (optional): Enter coordinates manually</span>
+          <button id="toggleLocationAdvanced" class="btn btn-primary" style="min-width:auto; padding:8px 14px; font-size:12px">
+            <i class="fas fa-map-marker-alt"></i> Show
+          </button>
+        </div>
+        <div id="advancedLocationSection" style="display:none; margin-top: 10px;">
+          <div class="controls">
+            <input type="text" id="lat" placeholder="Latitude">
+            <input type="text" id="lng" placeholder="Longitude">
+            <button onclick="goToLocation()">Go to Coordinates</button>
+          </div>
+        </div>
+        
+        <div id="area">Area: 0 m²</div>
+      </div>
+    </div>
+
+    <!-- Manual Entry Method -->
+    <div id="manualMethod" class="method-content">
+      <h3 style="text-align: center; color: var(--primary-cyan); margin-bottom: 2rem;">
+        <i class="fas fa-calculator"></i> Enter Known Details
+      </h3>
+      
+      <div class="form-group">
+        <label>
+          <i class="fas fa-ruler-combined"></i> Known Roof Area (m²)
+        </label>
+        <input type="number" id="manualArea" class="form-input" placeholder="Enter your roof area in square meters">
+      </div>
+      
+      <button onclick="useManualArea()" class="btn btn-primary">
+        <i class="fas fa-check"></i> Use This Area
+      </button>
+    </div>
+
+    <!-- Assessment Form - Always Visible -->
+    <div id="assessmentForm" style="margin-top: 3rem; border-top: 2px solid #e0e0e0; padding-top: 2rem;">
+      <h3 style="text-align: center; color: var(--primary-cyan); margin-bottom: 2rem;">
+        <i class="fas fa-home"></i> Property Details
+      </h3>
+
+      <div class="form-group">
+        <label>
+          <i class="fas fa-ruler-combined"></i> Calculated Roof Area (m²) 
+        </label>
+        <input type="number" id="knownArea" class="form-input" placeholder="Will be filled automatically" readonly>
+        <span style="font-size:12px; color:#555; margin-top:6px">This will be auto-populated when you measure your roof area above.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="roofType">
+          <i class="fas fa-home"></i> Roof Type
+        </label>
+        <select id="roofType" class="form-input">
+          <option value="rcc">RCC/Concrete</option>
+          <option value="metal">Metal Sheet</option>
+          <option value="tile">Tile/Slate</option>
+          <option value="asbestos">Asbestos/Fiber</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fas fa-users"></i> Number of Dwellers
+        </label>
+        <input type="number" id="numDwellers" class="form-input" placeholder="e.g., 4" value="4">
+        <span style="font-size:12px; color:#555; margin-top:6px">Used to estimate household water demand.</span>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fas fa-tint"></i> Per-capita Daily Demand (liters)
+        </label>
+        <input type="number" id="perCapitaDemand" class="form-input" placeholder="e.g., 70" value="70">
+        <span style="font-size:12px; color:#555; margin-top:6px">Typical range 50–90 L/day depending on usage.</span>
+      </div>
+
+      <div class="tip" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+        <span><strong>Advanced Options</strong> (optional): Soil infiltration, open space and monthly rainfall</span>
+        <button id="toggleAdvanced" class="btn btn-primary" style="min-width:auto; padding:8px 14px">
+          <i class="fas fa-sliders-h"></i> Show
+        </button>
+      </div>
+      
+      <div id="advancedSection" style="display:none">
+        <div class="form-group">
+          <label>
+            <i class="fas fa-seedling"></i> Infiltration Rate (mm/hr)
+          </label>
+          <input type="number" id="infiltrationRate" class="form-input" placeholder="Soil permeability rate" value="20">
+        </div>
+
+        <div class="form-group">
+          <label>
+            <i class="fas fa-square"></i> Available Open Space for AR (m²)
+          </label>
+          <input type="number" id="openSpace" class="form-input" placeholder="Area available for recharge structures" value="20">
+        </div>
+
+        <div class="tip">
+          <span>Monthly Rainfall (mm). Values are auto-populated based on Indian averages but can be customized.</span>
+        </div>
+        <div class="controls" id="rainfallInputs"></div>
+      </div>
+
+      <button id="computePlan" class="btn btn-primary">
+        <i class="fas fa-calculator"></i> Generate Assessment Report
+      </button>
+      
+      <button id="downloadPdf" class="btn btn-primary" style="display:none">
+        <i class="fas fa-file-pdf"></i> Download PDF Report
+      </button>
+
+      <div class="recommendations" id="recs"></div>
+      <div id="successBanner" class="rec-item" role="status" aria-live="polite" style="display:none; background:#e8fff3; border-left-color:#4caf50">
+        <i class="fas fa-check-circle"></i> Assessment complete! Review your personalized recommendations below.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-logo">
+      <i class="fas fa-tint"></i> BlueSprout
+    </div>
+    <p>&copy; 2025 BlueSprout. All rights reserved. Empowering sustainable water management.</p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+
+<script>
+// Global variables
+let currentCalculatedArea = 0;
+let userLocation = null;
+
+// Map initialization
+let satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri',
+    maxZoom: 22
+});
+
+let street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+});
+
+let map = L.map('map', {
+    layers: [satellite],
+    zoomControl: true,
+    minZoom: 5,
+    maxZoom: 19
+}).setView([20.5937, 78.9629], 5);
+
+let currentLayer = 'satellite';
+let drawnItems = new L.FeatureGroup().addTo(map);
+let drawControl = new L.Control.Draw({
+    edit: { featureGroup: drawnItems },
+    draw: { polygon: true, polyline: false, rectangle: false, circle: false, marker: false, circlemarker: false }
+});
+map.addControl(drawControl);
+
+let userMarker = null;
+
+// Method switching
+function switchMethod(method) {
+    // Update tabs
+    document.querySelectorAll('.method-tab').forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Show/hide content
+    document.querySelectorAll('.method-content').forEach(content => content.classList.remove('active'));
+    document.getElementById(method + 'Method').classList.add('active');
+    
+    // Resize map if switching to map method
+    if (method === 'map') {
+        setTimeout(() => map.invalidateSize(), 100);
+    }
+}
+
+// Auto-population functions
+function autoPopulateFromArea(area) {
+    currentCalculatedArea = area;
+    
+    // Fill the known area field
+    const knownAreaInput = document.getElementById('knownArea');
+    knownAreaInput.value = area.toFixed(2);
+    knownAreaInput.classList.add('auto-filled');
+    
+    // Auto-populate based on area size
+    autoPopulateDefaults(area);
+    
+    // Show success message
+    showAreaDetectedMessage(area);
+}
+
+function autoPopulateDefaults(area) {
+    // Adjust defaults based on roof area
+    const dwellersInput = document.getElementById('numDwellers');
+    const perCapitaInput = document.getElementById('perCapitaDemand');
+    const infiltrationInput = document.getElementById('infiltrationRate');
+    const openSpaceInput = document.getElementById('openSpace');
+    
+    // Smart defaults based on area
+    let estimatedDwellers = 4;
+    let perCapitaDemand = 70;
+    let infiltrationRate = 20;
+    let openSpace = Math.max(20, area * 0.3); // 30% of roof area as available space
+    
+    if (area > 150) {
+        // Large house
+        estimatedDwellers = 6;
+        perCapitaDemand = 80;
+        infiltrationRate = 25;
+        openSpace = area * 0.4;
+    } else if (area > 80) {
+        // Medium house
+        estimatedDwellers = 4;
+        perCapitaDemand = 75;
+        infiltrationRate = 22;
+        openSpace = area * 0.35;
+    } else if (area < 30) {
+        // Small house/apartment
+        estimatedDwellers = 2;
+        perCapitaDemand = 65;
+        infiltrationRate = 18;
+        openSpace = Math.max(15, area * 0.25);
+    }
+    
+    // Apply auto-population with visual feedback
+    if (!dwellersInput.value || dwellersInput.value == 4) {
+        dwellersInput.value = estimatedDwellers;
+        dwellersInput.classList.add('auto-filled');
+    }
+    
+    if (!perCapitaInput.value || perCapitaInput.value == 70) {
+        perCapitaInput.value = perCapitaDemand;
+        perCapitaInput.classList.add('auto-filled');
+    }
+    
+    if (!infiltrationInput.value || infiltrationInput.value == 20) {
+        infiltrationInput.value = infiltrationRate;
+        infiltrationInput.classList.add('auto-filled');
+    }
+    
+    if (!openSpaceInput.value || openSpaceInput.value == 20) {
+        openSpaceInput.value = openSpace.toFixed(0);
+        openSpaceInput.classList.add('auto-filled');
+    }
+}
+
+function showAreaDetectedMessage(area) {
+    // Create a temporary notification
+    const notification = document.createElement('div');
+    notification.className = 'rec-item';
+    notification.style.background = '#e8f5e8';
+    notification.style.borderLeftColor = '#4caf50';
+    notification.style.marginBottom = '1rem';
+    notification.innerHTML = `
+        <strong>✅ Area Detected!</strong> ${area.toFixed(2)} m² roof area calculated. 
+        Form fields have been auto-populated with intelligent defaults based on your roof size.
+    `;
+    
+    const form = document.getElementById('assessmentForm');
+    form.insertBefore(notification, form.firstChild);
+    
+    // Remove notification after 5 seconds
+    setTimeout(() => {
+        notification.remove();
+    }, 5000);
+}
+
+// Map functions
+function useMyLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            userLocation = [position.coords.latitude, position.coords.longitude];
+            map.setView(userLocation, 18);
+            
+            if (userMarker) {
+                map.removeLayer(userMarker);
+            }
+            userMarker = L.marker(userLocation).addTo(map)
+                .bindPopup('<b>Your Location</b><br>Click "Trace Rooftop" to start measuring your roof area.')
+                .openPopup();
+            
+            // Auto-fill coordinates in advanced section
+            document.getElementById('lat').value = userLocation[0].toFixed(6);
+            document.getElementById('lng').value = userLocation[1].toFixed(6);
+            document.getElementById('lat').classList.add('auto-filled');
+            document.getElementById('lng').classList.add('auto-filled');
+        }, function(error) {
+            alert('Error getting location: ' + error.message);
+        });
+    } else {
+        alert('Geolocation is not supported by this browser.');
+    }
+}
+
+function startDrawing() {
+    alert('Click on the polygon option in map to start tracing your rooftop. Double-click to finish the polygon.');
+}
+
+function goToLocation() {
+    const lat = parseFloat(document.getElementById('lat').value);
+    const lng = parseFloat(document.getElementById('lng').value);
+    
+    if (isNaN(lat) || isNaN(lng)) {
+        alert('Please enter valid latitude and longitude values.');
+        return;
+    }
+    
+    map.setView([lat, lng], 18);
+    
+    if (userMarker) {
+        map.removeLayer(userMarker);
+    }
+    userMarker = L.marker([lat, lng]).addTo(map)
+        .bindPopup('<b>Custom Location</b><br>Click "Trace Rooftop" to start measuring.')
+        .openPopup();
+}
+
+function toggleMapStyle() {
+    if (currentLayer === 'satellite') {
+        map.removeLayer(satellite);
+        map.addLayer(street);
+        currentLayer = 'street';
+    } else {
+        map.removeLayer(street);
+        map.addLayer(satellite);
+        currentLayer = 'satellite';
+    }
+}
+
+function undoLast() {
+    const layers = drawnItems.getLayers();
+    if (layers.length > 0) {
+        drawnItems.removeLayer(layers[layers.length - 1]);
+        updateArea();
+    }
+}
+
+function clearMap() {
+    drawnItems.clearLayers();
+    updateArea();
+}
+
+function updateArea() {
+    let totalArea = 0;
+    drawnItems.eachLayer(function(layer) {
+        if (layer instanceof L.Polygon) {
+            const coords = layer.getLatLngs()[0].map(coord => [coord.lng, coord.lat]);
+            coords.push(coords[0]); // Close the polygon
+            const polygon = turf.polygon([coords]);
+            const area = turf.area(polygon);
+            totalArea += area;
+        }
+    });
+    
+    document.getElementById('area').innerHTML = `Area: ${totalArea.toFixed(2)} m²`;
+    
+    if (totalArea > 0) {
+        autoPopulateFromArea(totalArea);
+    }
+    
+    return totalArea;
+}
+
+function useManualArea() {
+    const area = parseFloat(document.getElementById('manualArea').value);
+    if (isNaN(area) || area <= 0) {
+        alert('Please enter a valid roof area.');
+        return;
+    }
+    
+    autoPopulateFromArea(area);
+    
+    // Switch to map view to show the process is complete
+    switchMethod('map');
+}
+
+// Map event listeners
+map.on(L.Draw.Event.CREATED, function(e) {
+    drawnItems.addLayer(e.layer);
+    updateArea();
+});
+
+map.on(L.Draw.Event.EDITED, function(e) {
+    updateArea();
+});
+
+map.on(L.Draw.Event.DELETED, function(e) {
+    updateArea();
+});
+
+// Toggle functions
+document.getElementById('toggleAdvanced').addEventListener('click', function() {
+    const section = document.getElementById('advancedSection');
+    const button = this;
+    
+    if (section.style.display === 'none' || section.style.display === '') {
+        section.style.display = 'block';
+        button.innerHTML = '<i class="fas fa-sliders-h"></i> Hide';
+    } else {
+        section.style.display = 'none';
+        button.innerHTML = '<i class="fas fa-sliders-h"></i> Show';
+    }
+});
+
+document.getElementById('toggleLocationAdvanced').addEventListener('click', function() {
+    const section = document.getElementById('advancedLocationSection');
+    const button = this;
+    
+    if (section.style.display === 'none' || section.style.display === '') {
+        section.style.display = 'block';
+        button.innerHTML = '<i class="fas fa-map-marker-alt"></i> Hide';
+    } else {
+        section.style.display = 'none';
+        button.innerHTML = '<i class="fas fa-map-marker-alt"></i> Show';
+    }
+});
+
+// Initialize rainfall inputs
+function initializeRainfallInputs() {
+    const months = [
+        {name: 'January', value: 15},
+        {name: 'February', value: 20},
+        {name: 'March', value: 25},
+        {name: 'April', value: 35},
+        {name: 'May', value: 60},
+        {name: 'June', value: 150},
+        {name: 'July', value: 250},
+        {name: 'August', value: 220},
+        {name: 'September', value: 180},
+        {name: 'October', value: 80},
+        {name: 'November', value: 30},
+        {name: 'December', value: 20}
+    ];
+    
+    const container = document.getElementById('rainfallInputs');
+    container.innerHTML = '';
+    
+    months.forEach((month, index) => {
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.id = `rainfall_${index}`;
+        input.placeholder = month.name;
+        input.value = month.value;
+        input.title = `${month.name} rainfall (mm)`;
+        input.style.width = '80px';
+        input.style.margin = '5px';
+        container.appendChild(input);
+    });
+}
+
+// Assessment computation
+function computeAssessment() {
+    const area = parseFloat(document.getElementById('knownArea').value);
+    const roofType = document.getElementById('roofType').value;
+    const numDwellers = parseInt(document.getElementById('numDwellers').value);
+    const perCapitaDemand = parseFloat(document.getElementById('perCapitaDemand').value);
+    const infiltrationRate = parseFloat(document.getElementById('infiltrationRate').value) || 20;
+    const openSpace = parseFloat(document.getElementById('openSpace').value) || 20;
+    
+    if (!area || area <= 0) {
+        alert('Please measure your roof area first using one of the methods above.');
+        return;
+    }
+    
+    if (!numDwellers || !perCapitaDemand) {
+        alert('Please fill in the required fields.');
+        return;
+    }
+    
+    // Get rainfall data
+    const rainfallData = [];
+    for (let i = 0; i < 12; i++) {
+        const rainfall = parseFloat(document.getElementById(`rainfall_${i}`).value) || 0;
+        rainfallData.push(rainfall);
+    }
+    
+    // Roof type coefficients
+    const roofCoefficients = {
+        rcc: 0.85,
+        metal: 0.90,
+        tile: 0.75,
+        asbestos: 0.80
+    };
+    
+    const coefficient = roofCoefficients[roofType] || 0.8;
+    
+    // Calculate annual rainfall
+    const totalAnnualRainfall = rainfallData.reduce((sum, month) => sum + month, 0);
+    
+    // Calculate harvestable water (liters)
+    const harvestableWater = area * totalAnnualRainfall * coefficient * 0.001 * 1000; // Convert to liters
+    
+    // Calculate annual demand
+    const annualDemand = numDwellers * perCapitaDemand * 365;
+    
+    // Calculate percentage of demand met
+    const percentageMet = (harvestableWater / annualDemand * 100).toFixed(1);
+
+    // Monthly breakdown for advanced metrics
+    const monthlyHarvests = [];
+    const monthlyDemand = numDwellers * perCapitaDemand * 30;
+    let annualSurplus = 0;
+    for (let i = 0; i < 12; i++) {
+        const mh = area * rainfallData[i] * coefficient * 0.001 * 1000;
+        monthlyHarvests.push(mh);
+        const surplus = mh - monthlyDemand;
+        if (surplus > 0) annualSurplus += surplus;
+    }
+
+    // Feasibility rating
+    let feasibility = 'Low';
+    if (percentageMet >= 60 && infiltrationRate >= 15 && openSpace >= 10) feasibility = 'High';
+    else if (percentageMet >= 35 && infiltrationRate >= 10 && openSpace >= 5) feasibility = 'Moderate';
+
+    // Simple hydro profile heuristic based on infiltration
+    const hydroProfile = (function(){
+        if (infiltrationRate >= 30) return { aquifer: 'Alluvial/Sandy', gwDepth: '5–15 m' };
+        if (infiltrationRate >= 15) return { aquifer: 'Weathered/Fractured Basalt or Granite', gwDepth: '10–25 m' };
+        return { aquifer: 'Massive Hard Rock/Clayey', gwDepth: '20–40 m' };
+    })();
+
+    // Recharge structure suggestion
+    const structure = (function(){
+        if (infiltrationRate >= 25 && openSpace >= 15) {
+            // Percolation trench
+            const length = Math.min(openSpace * 0.7, 6);
+            return { type: 'Percolation trench', count: 1, size: `${length.toFixed(1)}m × 0.8m × 1.2m` };
+        } else if (infiltrationRate >= 10 && openSpace >= 6) {
+            // Recharge pits
+            const count = Math.max(1, Math.ceil(openSpace / 15));
+            return { type: 'Recharge pits', count, size: '1.0m × 1.0m × 1.5m (each)' };
+        } else {
+            // Recharge shaft / percolation well
+            const count = 1;
+            return { type: 'Recharge shaft', count, size: 'Ø0.3m × 15–25m depth + filter chamber' };
+        }
+    })();
+
+    // Rough costs and ROI
+    const COSTS = { tank1000L: 6000, diverter: 800, pit: 3000, trench: 7000, shaft: 20000 };
+    const recommendedTankSize = Math.max(harvestableWater / 12 * 0.5, 1000);
+    const numTanks = Math.ceil(recommendedTankSize / 1000);
+    let rechargeCost = 0;
+    if (structure.type === 'Recharge pits') rechargeCost = structure.count * COSTS.pit;
+    else if (structure.type === 'Percolation trench') rechargeCost = COSTS.trench;
+    else rechargeCost = COSTS.shaft;
+    const tankCost = numTanks * COSTS.tank1000L;
+    const diverterCost = Math.ceil(area / 50) * COSTS.diverter;
+    const totalCost = tankCost + diverterCost + rechargeCost;
+    const waterTariffPerKL = 12; // ₹ per 1000 liters
+    const annualUsable = Math.min(harvestableWater, annualDemand);
+    const annualSavings = (annualUsable / 1000) * waterTariffPerKL;
+    const roiYears = totalCost > 0 ? (totalCost / annualSavings) : 0;
+    
+    // Generate recommendations
+    generateRecommendations({
+        area,
+        roofType,
+        numDwellers,
+        perCapitaDemand,
+        infiltrationRate,
+        openSpace,
+        coefficient,
+        totalAnnualRainfall,
+        harvestableWater,
+        annualDemand,
+        percentageMet,
+        rainfallData,
+        monthlyHarvests,
+        feasibility,
+        hydroProfile,
+        structure,
+        recommendedTankSize,
+        numTanks,
+        totalCost,
+        annualSavings,
+        roiYears
+    });
+    
+    // Show success banner and PDF download
+    const banner = document.getElementById('successBanner');
+    banner.style.display = 'block';
+    banner.classList.add('show');
+    document.getElementById('downloadPdf').style.display = 'inline-flex';
+    
+    // Scroll to recommendations
+    document.getElementById('recs').scrollIntoView({ behavior: 'smooth' });
+}
+
+function generateRecommendations(data) {
+    const recsDiv = document.getElementById('recs');
+    const feasClass = data.feasibility === 'High' ? 'high' : (data.feasibility === 'Moderate' ? 'moderate' : 'low');
+    
+    let html = `
+        <div class="rec-item rec-highlight">
+            <span class="feasibility-pill ${feasClass}"><i class="fas fa-gauge-high"></i> Feasibility: ${data.feasibility}</span>
+            <span class="feasibility-note">Based on demand coverage, infiltration and open space.</span>
+        </div>
+        <h4><i class="fas fa-chart-line"></i> Assessment Results</h4>
+        
+        <div class="rec-item">
+            <strong>🏠 Property Summary:</strong><br>
+            • Roof Area: ${data.area.toFixed(2)} m²<br>
+            • Roof Type: ${data.roofType.toUpperCase()} (Coefficient: ${data.coefficient})<br>
+            • Household Size: ${data.numDwellers} people<br>
+            • Daily Water Demand: ${(data.numDwellers * data.perCapitaDemand).toFixed(0)} liters/day
+        </div>
+        
+        <div class="rec-item">
+            <strong>🌧️ Rainwater Potential:</strong><br>
+            • Annual Rainfall: ${data.totalAnnualRainfall} mm<br>
+            • Harvestable Water: ${data.harvestableWater.toFixed(0)} liters/year<br>
+            • Annual Demand: ${data.annualDemand.toFixed(0)} liters/year<br>
+            • <span style="color: ${data.percentageMet > 50 ? '#4caf50' : data.percentageMet > 25 ? '#ff9800' : '#f44336'}">
+                Demand Met: ${data.percentageMet}%</span>
+        </div>
+    `;
+    
+    // Storage recommendations
+    const monthlyStorage = data.harvestableWater / 12;
+    const recommendedTankSize = Math.max(monthlyStorage * 0.5, 1000); // At least 1000L
+    
+    html += `
+        <div class="rec-item">
+            <strong>💧 Storage Recommendations:</strong><br>
+            <img class="rec-img" loading="lazy" src="https://img.icons8.com/color/96/water-tank.png" alt="Water tank"> 
+            • Recommended Tank Capacity: ${data.recommendedTankSize.toFixed(0)} liters<br>
+            • Consider ${data.numTanks} tanks of 1000L each<br>
+            • First flush diverter: ${Math.ceil(data.area / 50)} units recommended
+        </div>
+    `;
+    
+    // Recharge recommendations: type and dimensions
+    const rechargeCapacity = data.openSpace * data.infiltrationRate * 24 * 30; // liters/month
+    html += `
+        <div class="rec-item">
+            <strong>🌱 Groundwater Recharge:</strong><br>
+            <img class="rec-img" loading="lazy" src="${(function(){const t=data.structure.type.toLowerCase();if(t.includes('shaft'))return 'https://img.icons8.com/color/96/well.png';if(t.includes('pit'))return 'https://img.icons8.com/color/96/hole.png';if(t.includes('trench'))return 'https://img.icons8.com/color/96/drainage.png';return 'https://img.icons8.com/color/96/hand-with-water-droplets.png';})()}" alt="Recharge structure"> 
+            • Suggested Structure: ${data.structure.type}<br>
+            • Recommended Count: ${data.structure.count}<br>
+            • Typical Dimensions: ${data.structure.size}<br>
+            • Monthly Recharge Capacity (site): ${rechargeCapacity.toFixed(0)} liters
+        </div>
+    `;
+
+    // Hydrogeology overview (heuristic)
+    html += `
+        <div class="rec-item">
+            <strong>🧭 Principal Aquifer & Groundwater Depth (approx.):</strong><br>
+            • Aquifer Type: ${data.hydroProfile.aquifer}<br>
+            • Depth to Water Table: ${data.hydroProfile.gwDepth}
+        </div>
+    `;
+    
+    // Monthly breakdown
+    html += `<div class="rec-item"><strong>📅 Monthly Water Balance:</strong><br>`;
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    for (let i = 0; i < 12; i++) {
+        const monthlyHarvest = data.monthlyHarvests[i];
+        const monthlyDemand = data.numDwellers * data.perCapitaDemand * 30;
+        const balance = monthlyHarvest - monthlyDemand;
+        const color = balance > 0 ? '#4caf50' : '#f44336';
+        
+        html += `• ${monthNames[i]}: <span style="color: ${color}">${balance > 0 ? '+' : ''}${balance.toFixed(0)}L</span> `;
+        if ((i + 1) % 4 === 0) html += '<br>';
+    }
+    html += '</div>';
+
+    // Charts removed for performance; textual summary retained above.
+
+    // Cost estimation and ROI
+    html += `
+        <div class="rec-item">
+            <strong>💰 Cost Estimation & Benefit:</strong><br>
+            • Estimated System Cost: ₹${Math.round(data.totalCost).toLocaleString()}<br>
+            • Estimated Annual Savings: ₹${Math.round(data.annualSavings).toLocaleString()}<br>
+            • Approximate ROI: ${data.roiYears.toFixed(1)} years
+        </div>
+    `;
+
+    // Action items
+    html += `
+        <div class="rec-item">
+            <strong>🎯 Priority Actions:</strong><br>
+    `;
+    
+    if (data.percentageMet > 75) {
+        html += `• ✅ Excellent potential! Install ${Math.ceil(recommendedTankSize / 1000)}x 1000L tanks<br>`;
+        html += `• ✅ Set up recharge system for excess water<br>`;
+    } else if (data.percentageMet > 50) {
+        html += `• ⚡ Good potential! Start with ${Math.ceil(recommendedTankSize / 2000)}x 1000L tanks<br>`;
+        html += `• ⚡ Focus on monsoon storage (Jun-Sep)<br>`;
+    } else if (data.percentageMet > 25) {
+        html += `• ⚠️ Moderate potential. Consider supplementary sources<br>`;
+        html += `• ⚠️ Optimize for peak months (${getTopRainfallMonths(data.rainfallData).join(', ')})<br>`;
+    } else {
+        html += `• 🚨 Limited potential. Combine with other water sources<br>`;
+        html += `• 🚨 Focus on water conservation measures<br>`;
+    }
+    
+    html += `• 📋 Get quotes from local contractors<br>`;
+    html += `• 🔧 Plan installation before monsoon season</div>`;
+    
+    recsDiv.innerHTML = html;
+    // Removed Chart.js instantiation to avoid heavy canvas rendering.
+}
+
+function getTopRainfallMonths(rainfallData) {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const sortedIndices = rainfallData
+        .map((value, index) => ({value, index}))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 3)
+        .map(item => months[item.index]);
+    return sortedIndices;
+}
+
+// PDF generation (simplified version)
+// PDF generation with jsPDF
+function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Get current assessment data
+    const area = parseFloat(document.getElementById('knownArea').value);
+    const roofType = document.getElementById('roofType').value;
+    const numDwellers = parseInt(document.getElementById('numDwellers').value);
+    const perCapitaDemand = parseFloat(document.getElementById('perCapitaDemand').value);
+    
+    if (!area || !numDwellers || !perCapitaDemand) {
+        alert('Please complete the assessment first before downloading the PDF.');
+        return;
+    }
+    
+    // Calculate basic metrics
+    const rainfallData = [];
+    for (let i = 0; i < 12; i++) {
+        const rainfall = parseFloat(document.getElementById(`rainfall_${i}`).value) || 0;
+        rainfallData.push(rainfall);
+    }
+    
+    const roofCoefficients = { rcc: 0.85, metal: 0.90, tile: 0.75, asbestos: 0.80 };
+    const coefficient = roofCoefficients[roofType] || 0.8;
+    const totalAnnualRainfall = rainfallData.reduce((sum, month) => sum + month, 0);
+    const harvestableWater = area * totalAnnualRainfall * coefficient * 0.001 * 1000;
+    const annualDemand = numDwellers * perCapitaDemand * 365;
+    const percentageMet = (harvestableWater / annualDemand * 100).toFixed(1);
+    const recommendedTankSize = Math.max(harvestableWater / 12 * 0.5, 1000);
+    const numTanks = Math.ceil(recommendedTankSize / 1000);
+    const infiltrationRate = parseFloat(document.getElementById('infiltrationRate').value) || 20;
+    const openSpace = parseFloat(document.getElementById('openSpace').value) || 20;
+    const hydroProfile = (function(){
+        if (infiltrationRate >= 30) return { aquifer: 'Alluvial/Sandy', gwDepth: '5–15 m' };
+        if (infiltrationRate >= 15) return { aquifer: 'Weathered/Fractured Basalt or Granite', gwDepth: '10–25 m' };
+        return { aquifer: 'Massive Hard Rock/Clayey', gwDepth: '20–40 m' };
+    })();
+    const structure = (function(){
+        if (infiltrationRate >= 25 && openSpace >= 15) {
+            const length = Math.min(openSpace * 0.7, 6);
+            return { type: 'Percolation trench', count: 1, size: `${length.toFixed(1)}m × 0.8m × 1.2m` };
+        } else if (infiltrationRate >= 10 && openSpace >= 6) {
+            const count = Math.max(1, Math.ceil(openSpace / 15));
+            return { type: 'Recharge pits', count, size: '1.0m × 1.0m × 1.5m (each)' };
+        } else {
+            return { type: 'Recharge shaft', count: 1, size: 'Ø0.3m × 15–25m depth + filter chamber' };
+        }
+    })();
+    const COSTS = { tank1000L: 6000, diverter: 800, pit: 3000, trench: 7000, shaft: 20000 };
+    const diverterCount = Math.ceil(area / 50);
+    const tankCost = numTanks * COSTS.tank1000L;
+    const diverterCost = diverterCount * COSTS.diverter;
+    let rechargeCost = 0;
+    if (structure.type === 'Recharge pits') rechargeCost = structure.count * COSTS.pit;
+    else if (structure.type === 'Percolation trench') rechargeCost = COSTS.trench;
+    else rechargeCost = COSTS.shaft;
+    const totalCost = tankCost + diverterCost + rechargeCost;
+    const waterTariffPerKL = 12; // ₹ per 1000 liters
+    const annualUsable = Math.min(harvestableWater, annualDemand);
+    const annualSavings = (annualUsable / 1000) * waterTariffPerKL;
+    const roiYears = totalCost > 0 ? (totalCost / annualSavings) : 0;
+    
+    // PDF Header
+    doc.setFontSize(20);
+    doc.setTextColor(0, 188, 212);
+    doc.text('BlueSprout - Rainwater Harvesting Assessment Report', 20, 25);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 35);
+    
+    // Property Summary
+    let yPos = 50;
+    doc.setFontSize(14);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Property Summary', 20, yPos);
+    
+    yPos += 10;
+    doc.setFontSize(10);
+    doc.text(`Roof Area: ${area.toFixed(2)} m²`, 20, yPos);
+    doc.text(`Roof Type: ${roofType.toUpperCase()} (Coefficient: ${coefficient})`, 20, yPos + 7);
+    doc.text(`Household Size: ${numDwellers} people`, 20, yPos + 14);
+    doc.text(`Daily Water Demand: ${(numDwellers * perCapitaDemand).toFixed(0)} liters/day`, 20, yPos + 21);
+    
+    // Rainwater Potential
+    yPos += 35;
+    doc.setFontSize(14);
+    doc.text('Rainwater Harvesting Potential', 20, yPos);
+    
+    yPos += 10;
+    doc.setFontSize(10);
+    doc.text(`Annual Rainfall: ${totalAnnualRainfall} mm`, 20, yPos);
+    doc.text(`Harvestable Water: ${harvestableWater.toFixed(0)} liters/year`, 20, yPos + 7);
+    doc.text(`Annual Demand: ${annualDemand.toFixed(0)} liters/year`, 20, yPos + 14);
+    doc.text(`Demand Met: ${percentageMet}%`, 20, yPos + 21);
+    
+    // Storage Recommendations
+    yPos += 35;
+    doc.setFontSize(14);
+    doc.text('Storage Recommendations', 20, yPos);
+    
+    yPos += 10;
+    doc.setFontSize(10);
+    doc.text(`Recommended Tank Capacity: ${recommendedTankSize.toFixed(0)} liters`, 20, yPos);
+    doc.text(`Number of 1000L tanks: ${numTanks}`, 20, yPos + 7);
+    doc.text(`First flush diverters needed: ${diverterCount}`, 20, yPos + 14);
+    
+    // Recharge Recommendations
+    yPos += 30;
+    doc.setFontSize(14);
+    doc.text('Groundwater Recharge Recommendations', 20, yPos);
+    yPos += 10;
+    doc.setFontSize(10);
+    doc.text(`Suggested Structure: ${structure.type}`, 20, yPos);
+    doc.text(`Recommended Count: ${structure.count}`, 20, yPos + 7);
+    doc.text(`Typical Dimensions: ${structure.size}`, 20, yPos + 14);
+    doc.text(`Aquifer (approx.): ${hydroProfile.aquifer}`, 20, yPos + 21);
+    doc.text(`Depth to Water Table (approx.): ${hydroProfile.gwDepth}`, 20, yPos + 28);
+    
+    // Monthly Analysis
+    yPos += 30;
+    doc.setFontSize(14);
+    doc.text('Monthly Water Balance', 20, yPos);
+    
+    yPos += 10;
+    doc.setFontSize(9);
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    for (let i = 0; i < 12; i++) {
+        const monthlyHarvest = area * rainfallData[i] * coefficient * 0.001 * 1000;
+        const monthlyDemand = numDwellers * perCapitaDemand * 30;
+        const balance = monthlyHarvest - monthlyDemand;
+        
+        const xPos = 20 + (i % 3) * 60;
+        const yOffset = Math.floor(i / 3) * 7;
+        
+        doc.text(`${monthNames[i]}: ${balance > 0 ? '+' : ''}${balance.toFixed(0)}L`, xPos, yPos + yOffset);
+    }
+    
+    // Costs & Benefits
+    yPos += 40;
+    doc.setFontSize(14);
+    doc.text('Cost Estimation & Benefits', 20, yPos);
+    
+    yPos += 10;
+    doc.setFontSize(10);
+    doc.text(`Estimated System Cost: ₹${Math.round(totalCost).toLocaleString()}`, 20, yPos);
+    doc.text(`Estimated Annual Savings: ₹${Math.round(annualSavings).toLocaleString()}`, 20, yPos + 7);
+    doc.text(`Approximate ROI: ${roiYears.toFixed(1)} years`, 20, yPos + 14);
+    
+    // Priority Actions
+    yPos += 25;
+    doc.setFontSize(14);
+    doc.text('Priority Actions', 20, yPos);
+    
+    yPos += 10;
+    doc.setFontSize(10);
+    
+    if (percentageMet > 75) {
+        doc.text('• Excellent potential! Install recommended tank system', 20, yPos);
+        doc.text('• Set up recharge system for excess water', 20, yPos + 7);
+    } else if (percentageMet > 50) {
+        doc.text('• Good potential! Start with partial tank installation', 20, yPos);
+        doc.text('• Focus on monsoon storage (Jun-Sep)', 20, yPos + 7);
+    } else if (percentageMet > 25) {
+        doc.text('• Moderate potential. Consider supplementary sources', 20, yPos);
+        doc.text('• Optimize for peak rainfall months', 20, yPos + 7);
+    } else {
+        doc.text('• Limited potential. Combine with other water sources', 20, yPos);
+        doc.text('• Focus on water conservation measures', 20, yPos + 7);
+    }
+    
+    doc.text('• Get quotes from local contractors', 20, yPos + 14);
+    doc.text('• Plan installation before monsoon season', 20, yPos + 21);
+    
+    // Footer
+    doc.setFontSize(8);
+    doc.setTextColor(100, 100, 100);
+    doc.text('BlueSprout - Empowering sustainable water management', 20, 280);
+    
+    // Save the PDF
+    doc.save(`BlueSprout_Assessment_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+}
+
+// Mobile menu
+document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+    const navMenu = document.getElementById('navMenu');
+    navMenu.classList.toggle('show');
+});
+
+// Background animation
+function createRaindrop() {
+    const raindrop = document.createElement('div');
+    raindrop.classList.add('raindrop');
+    
+    const size = Math.random() * 5 + 2;
+    const left = Math.random() * 100;
+    const duration = Math.random() * 3 + 2;
+    
+    raindrop.style.width = `${size}px`;
+    raindrop.style.height = `${size}px`;
+    raindrop.style.left = `${left}%`;
+    raindrop.style.animationDuration = `${duration}s`;
+    
+    document.getElementById('backgroundAnimation').appendChild(raindrop);
+    
+    setTimeout(() => {
+        raindrop.remove();
+    }, duration * 1000);
+}
+
+// Initialize everything
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize rainfall inputs
+    initializeRainfallInputs();
+    
+    // Add event listener for compute button
+    document.getElementById('computePlan').addEventListener('click', computeAssessment);
+    
+    // Add event listener for PDF download
+    document.getElementById('downloadPdf').addEventListener('click', generatePDF);
+    
+    // Create raindrops periodically
+    setInterval(createRaindrop, 200);
+    
+    // Remove auto-filled class when user manually edits
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.addEventListener('input', function() {
+            if (this.classList.contains('auto-filled')) {
+                this.classList.remove('auto-filled');
+            }
+        });
+    });
+    
+    console.log('BlueSprout AI Assessment initialized successfully!');
+});
+
+</script>
+</body>
+</html>
